@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Hotel - Blue Mountain Travel</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h1 class="logo">Blue Mountain Travel</h1>
+                <p class="tagline">Elevate Your Business Journey</p>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="flights.html">Flights</a></li>
+                <li><a href="hotels.html" class="active">Hotels</a></li>
+                <li><a href="bookings.html">My Bookings</a></li>
+                <li><a href="profile.html">Profile</a></li>
+                <li><a href="login.html" class="btn-login">Sign In</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <h1>Complete Your Hotel Booking</h1>
+            <p>Please fill in your details to confirm your reservation</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="hotels-container">
+        <div class="container">
+            <div style="display: grid; grid-template-columns: 1fr 400px; gap: 2rem;">
+                <!-- Booking Form -->
+                <div class="profile-card">
+                    <h2 style="margin-bottom: 2rem; color: var(--primary-color);">Guest Information</h2>
+                    <form id="booking-form">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                            <div class="form-group">
+                                <label for="firstName" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">First Name *</label>
+                                <input type="text" id="firstName" name="firstName" required 
+                                    style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem;">
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Last Name *</label>
+                                <input type="text" id="lastName" name="lastName" required 
+                                    style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem;">
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem;">
+                            <div class="form-group">
+                                <label for="email" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Email Address *</label>
+                                <input type="email" id="email" name="email" required 
+                                    style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem;">
+                            </div>
+                            <div class="form-group">
+                                <label for="phone" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Phone Number *</label>
+                                <input type="tel" id="phone" name="phone" required 
+                                    style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem;">
+                            </div>
+                        </div>
+
+                        <h3 style="margin-top: 2rem; margin-bottom: 1rem; color: var(--primary-color);">Stay Details</h3>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                            <div class="form-group">
+                                <label for="checkInDate" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Check-in Date *</label>
+                                <input type="date" id="checkInDate" name="checkInDate" required 
+                                    style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem;">
+                            </div>
+                            <div class="form-group">
+                                <label for="checkOutDate" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Check-out Date *</label>
+                                <input type="date" id="checkOutDate" name="checkOutDate" required 
+                                    style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem;">
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem;">
+                            <div class="form-group">
+                                <label for="numGuests" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Number of Guests *</label>
+                                <select id="numGuests" name="numGuests" required 
+                                    style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem;">
+                                    <option value="1">1 Guest</option>
+                                    <option value="2" selected>2 Guests</option>
+                                    <option value="3">3 Guests</option>
+                                    <option value="4">4 Guests</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="numRooms" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Number of Rooms *</label>
+                                <select id="numRooms" name="numRooms" required 
+                                    style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem;">
+                                    <option value="1" selected>1 Room</option>
+                                    <option value="2">2 Rooms</option>
+                                    <option value="3">3 Rooms</option>
+                                    <option value="4">4 Rooms</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <h3 style="margin-top: 2rem; margin-bottom: 1rem; color: var(--primary-color);">Additional Preferences</h3>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                            <div class="form-group">
+                                <label for="bedType" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Bed Type Preference</label>
+                                <select id="bedType" name="bedType" 
+                                    style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem;">
+                                    <option value="no-preference">No Preference</option>
+                                    <option value="king">King Bed</option>
+                                    <option value="queen">Queen Bed</option>
+                                    <option value="twin">Twin Beds</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="floorPreference" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Floor Preference</label>
+                                <select id="floorPreference" name="floorPreference" 
+                                    style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem;">
+                                    <option value="no-preference">No Preference</option>
+                                    <option value="low">Lower Floor</option>
+                                    <option value="high">Higher Floor</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-top: 1.5rem;">
+                            <label for="arrivalTime" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Estimated Arrival Time</label>
+                            <input type="time" id="arrivalTime" name="arrivalTime" 
+                                style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem;">
+                        </div>
+
+                        <div class="form-group" style="margin-top: 1.5rem;">
+                            <label for="specialRequests" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Special Requests</label>
+                            <textarea id="specialRequests" name="specialRequests" rows="3" 
+                                style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem; resize: vertical;"
+                                placeholder="Any special requirements or requests (e.g., late check-out, extra pillows, etc.)..."></textarea>
+                        </div>
+
+                        <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+                            <button type="submit" class="btn-book" style="flex: 1;">Confirm Booking</button>
+                            <a href="hotels.html" class="btn-search" style="text-decoration: none; text-align: center;">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Hotel Summary -->
+                <div>
+                    <div class="profile-card" id="hotel-summary">
+                        <h3 style="margin-bottom: 1.5rem; color: var(--primary-color);">Booking Summary</h3>
+                        <div id="hotel-details">
+                            <p>Loading hotel details...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Blue Mountain Travel</h4>
+                    <p>Your trusted partner in business travel since 1995.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="flights.html">Flights</a></li>
+                        <li><a href="hotels.html">Hotels</a></li>
+                        <li><a href="bookings.html">My Bookings</a></li>
+                        <li><a href="profile.html">Profile</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Corporate Accounts</a></li>
+                        <li><a href="#">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <p>24/7 Support: <strong>1-800-BLUE-MTN</strong></p>
+                    <p>Email: <strong>support@bluemountaintravel.com</strong></p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Blue Mountain Travel. All rights reserved.</p>
+                <p class="security-notice">⚠️ This is a demonstration website with intentional security vulnerabilities for training purposes.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/book-hotel.js"></script>
+</body>
+</html>
