@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blue Mountain Travel - Discover Your Next Adventure</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo">
+                    <h1>🏔️ Blue Mountain Travel</h1>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#destinations">Destinations</a></li>
+                    <li><a href="#packages">Packages</a></li>
+                    <li><a href="#experiences">Experiences</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact" class="btn-primary">Book Now</a></li>
+                </ul>
+                <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-background"></div>
+        <div class="container">
+            <div class="hero-content glass-card">
+                <h2 class="hero-title">Discover Your Next Adventure</h2>
+                <p class="hero-subtitle">Experience the world's most breathtaking destinations with expertly crafted travel packages</p>
+                <div class="hero-cta">
+                    <a href="#packages" class="btn-primary btn-large">Explore Destinations</a>
+                    <a href="#contact" class="btn-secondary btn-large">Plan Your Trip</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search Bar -->
+    <section class="search-section">
+        <div class="container">
+            <div class="search-card glass-card">
+                <div class="search-grid">
+                    <div class="search-item">
+                        <label for="destination">Destination</label>
+                        <input type="text" id="destination" placeholder="Where do you want to go?">
+                    </div>
+                    <div class="search-item">
+                        <label for="checkin">Check-in</label>
+                        <input type="date" id="checkin">
+                    </div>
+                    <div class="search-item">
+                        <label for="checkout">Check-out</label>
+                        <input type="date" id="checkout">
+                    </div>
+                    <div class="search-item">
+                        <label for="travelers">Travelers</label>
+                        <select id="travelers">
+                            <option>1 Traveler</option>
+                            <option>2 Travelers</option>
+                            <option>3 Travelers</option>
+                            <option>4+ Travelers</option>
+                        </select>
+                    </div>
+                    <div class="search-item search-button">
+                        <button class="btn-primary btn-large">Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Destinations -->
+    <section id="destinations" class="destinations-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Featured Destinations</h2>
+                <p class="section-subtitle">Handpicked locations for unforgettable experiences</p>
+            </div>
+            <div class="destinations-grid">
+                <div class="destination-card glass-card">
+                    <div class="destination-image" style="background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 400 300\'%3E%3Crect fill=\'%234A90E2\' width=\'400\' height=\'300\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' font-size=\'24\' fill=\'white\' text-anchor=\'middle\' dominant-baseline=\'middle\'%3EAlps%3C/text%3E%3C/svg%3E') center/cover;">
+                        <span class="destination-badge">Popular</span>
+                    </div>
+                    <div class="destination-info">
+                        <h3>Swiss Alps</h3>
+                        <p>Experience the majestic peaks and pristine valleys</p>
+                        <div class="destination-meta">
+                            <span class="price">From €1,299</span>
+                            <span class="duration">7 days</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="destination-card glass-card">
+                    <div class="destination-image" style="background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 400 300\'%3E%3Crect fill=\'%2350C878\' width=\'400\' height=\'300\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' font-size=\'24\' fill=\'white\' text-anchor=\'middle\' dominant-baseline=\'middle\'%3EBali%3C/text%3E%3C/svg%3E') center/cover;">
+                        <span class="destination-badge">New</span>
+                    </div>
+                    <div class="destination-info">
+                        <h3>Bali, Indonesia</h3>
+                        <p>Tropical paradise with rich culture and stunning beaches</p>
+                        <div class="destination-meta">
+                            <span class="price">From €899</span>
+                            <span class="duration">10 days</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="destination-card glass-card">
+                    <div class="destination-image" style="background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 400 300\'%3E%3Crect fill=\'%23E67E22\' width=\'400\' height=\'300\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' font-size=\'24\' fill=\'white\' text-anchor=\'middle\' dominant-baseline=\'middle\'%3ESantorini%3C/text%3E%3C/svg%3E') center/cover;">
+                    </div>
+                    <div class="destination-info">
+                        <h3>Santorini, Greece</h3>
+                        <p>Iconic white buildings and breathtaking sunsets</p>
+                        <div class="destination-meta">
+                            <span class="price">From €1,099</span>
+                            <span class="duration">5 days</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="destination-card glass-card">
+                    <div class="destination-image" style="background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 400 300\'%3E%3Crect fill=\'%239B59B6\' width=\'400\' height=\'300\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' font-size=\'24\' fill=\'white\' text-anchor=\'middle\' dominant-baseline=\'middle\'%3EIceland%3C/text%3E%3C/svg%3E') center/cover;">
+                        <span class="destination-badge">Adventure</span>
+                    </div>
+                    <div class="destination-info">
+                        <h3>Iceland</h3>
+                        <p>Land of fire and ice with stunning natural wonders</p>
+                        <div class="destination-meta">
+                            <span class="price">From €1,499</span>
+                            <span class="duration">8 days</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Why Choose Blue Mountain Travel</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card glass-card">
+                    <div class="feature-icon">✈️</div>
+                    <h3>Expert Planning</h3>
+                    <p>Professional travel consultants with years of experience crafting perfect itineraries</p>
+                </div>
+                <div class="feature-card glass-card">
+                    <div class="feature-icon">💎</div>
+                    <h3>Best Value</h3>
+                    <p>Competitive prices with exclusive deals and packages you won't find anywhere else</p>
+                </div>
+                <div class="feature-card glass-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>Safe & Secure</h3>
+                    <p>Full travel insurance and 24/7 support throughout your journey</p>
+                </div>
+                <div class="feature-card glass-card">
+                    <div class="feature-icon">🌟</div>
+                    <h3>Personalized Service</h3>
+                    <p>Tailored experiences designed around your preferences and interests</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Packages Section -->
+    <section id="packages" class="packages-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Popular Travel Packages</h2>
+                <p class="section-subtitle">All-inclusive deals for unforgettable adventures</p>
+            </div>
+            <div class="packages-grid">
+                <div class="package-card glass-card">
+                    <div class="package-header">
+                        <h3>European Grand Tour</h3>
+                        <div class="package-price">
+                            <span class="price-amount">€2,499</span>
+                            <span class="price-per">per person</span>
+                        </div>
+                    </div>
+                    <ul class="package-features">
+                        <li>✓ 14 days across 6 countries</li>
+                        <li>✓ 4-star hotels included</li>
+                        <li>✓ Daily breakfast & guided tours</li>
+                        <li>✓ All transportation included</li>
+                        <li>✓ Travel insurance</li>
+                    </ul>
+                    <button class="btn-primary btn-full">Book Now</button>
+                </div>
+                <div class="package-card glass-card featured-package">
+                    <div class="package-badge">Most Popular</div>
+                    <div class="package-header">
+                        <h3>Tropical Paradise Escape</h3>
+                        <div class="package-price">
+                            <span class="price-amount">€1,799</span>
+                            <span class="price-per">per person</span>
+                        </div>
+                    </div>
+                    <ul class="package-features">
+                        <li>✓ 10 days in luxury resort</li>
+                        <li>✓ All-inclusive dining</li>
+                        <li>✓ Private beach access</li>
+                        <li>✓ Water sports & activities</li>
+                        <li>✓ Spa treatments included</li>
+                    </ul>
+                    <button class="btn-primary btn-full">Book Now</button>
+                </div>
+                <div class="package-card glass-card">
+                    <div class="package-header">
+                        <h3>Mountain Adventure</h3>
+                        <div class="package-price">
+                            <span class="price-amount">€1,999</span>
+                            <span class="price-per">per person</span>
+                        </div>
+                    </div>
+                    <ul class="package-features">
+                        <li>✓ 7 days hiking & exploration</li>
+                        <li>✓ Mountain lodge accommodation</li>
+                        <li>✓ Professional guide service</li>
+                        <li>✓ Equipment rental included</li>
+                        <li>✓ Wellness & recovery spa</li>
+                    </ul>
+                    <button class="btn-primary btn-full">Book Now</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">What Our Travelers Say</h2>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card glass-card">
+                    <div class="rating">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"An absolutely incredible experience! Blue Mountain Travel planned every detail perfectly. The Swiss Alps tour exceeded all our expectations."</p>
+                    <div class="testimonial-author">
+                        <strong>Sarah Johnson</strong>
+                        <span>Switzerland Tour, 2024</span>
+                    </div>
+                </div>
+                <div class="testimonial-card glass-card">
+                    <div class="rating">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"Professional service from start to finish. The team was always available and made our Bali vacation stress-free and magical."</p>
+                    <div class="testimonial-author">
+                        <strong>Michael Chen</strong>
+                        <span>Bali Package, 2024</span>
+                    </div>
+                </div>
+                <div class="testimonial-card glass-card">
+                    <div class="rating">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"Best travel agency we've worked with. Great value, amazing destinations, and the customer support is outstanding."</p>
+                    <div class="testimonial-author">
+                        <strong>Emma Williams</strong>
+                        <span>European Tour, 2024</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter-section">
+        <div class="container">
+            <div class="newsletter-card glass-card">
+                <h2>Get Travel Inspiration</h2>
+                <p>Subscribe to receive exclusive deals and travel tips</p>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Enter your email" required>
+                    <button type="submit" class="btn-primary">Subscribe</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3>🏔️ Blue Mountain Travel</h3>
+                    <p>Your trusted partner for unforgettable travel experiences since 2020.</p>
+                </div>
+                <div class="footer-column">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#destinations">Destinations</a></li>
+                        <li><a href="#packages">Packages</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Travel Insurance</a></li>
+                        <li><a href="#">Terms & Conditions</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Contact Us</h4>
+                    <ul>
+                        <li>📧 info@bluemountaintravel.com</li>
+                        <li>📞 +31 20 123 4567</li>
+                        <li>📍 Amsterdam, Netherlands</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Blue Mountain Travel. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
