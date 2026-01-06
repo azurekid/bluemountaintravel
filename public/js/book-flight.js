@@ -86,14 +86,52 @@ function displayFlightError(message) {
 function prefillUserData() {
     const user = window.getCurrentUser ? getCurrentUser() : null;
     
+    // ⚠️ SECURITY FIX: Don't prefill sensitive user data by default
+    // Let users enter their information manually for better security
+    
+    if (user) {
+        // Only prefill non-sensitive basic information if user explicitly requests it
+        console.log('User data available but not auto-filled for security reasons');
+        console.log('User can choose to autofill from their profile if needed');
+        
+        // Make autofill button available
+        addAutofillButton(user);
+    }
+}
+
+// Add button to allow users to optionally autofill their data
+function addAutofillButton(user) {
+    const form = document.getElementById('booking-form');
+    if (!form) return;
+    
+    const buttonHtml = `
+        <div style="margin-bottom: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 4px; border-left: 4px solid var(--primary-color);">
+            <p style="margin: 0 0 0.5rem 0; font-weight: 600;">Quick Fill</p>
+            <p style="margin: 0 0 0.5rem 0; font-size: 0.9rem; color: #666;">You can autofill your information from your profile</p>
+            <button type="button" onclick="autofillUserData()" class="btn-search" style="padding: 0.5rem 1rem; font-size: 0.9rem;">Autofill My Data</button>
+        </div>
+    `;
+    
+    form.insertAdjacentHTML('afterbegin', buttonHtml);
+}
+
+// Function to autofill data when user clicks the button
+function autofillUserData() {
+    const user = window.getCurrentUser ? getCurrentUser() : null;
+    
     if (user) {
         document.getElementById('firstName').value = user.firstName || '';
         document.getElementById('lastName').value = user.lastName || '';
         document.getElementById('email').value = user.email || '';
         document.getElementById('phone').value = user.phone || '';
         document.getElementById('dateOfBirth').value = user.dateOfBirth || '';
+        
+        console.log('User data autofilled from profile');
     }
 }
+
+// Make autofill function available globally
+window.autofillUserData = autofillUserData;
 
 // Initialize booking form
 function initializeBookingForm() {
