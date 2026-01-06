@@ -110,7 +110,7 @@
         <!-- Arbitrary SQL Execution (⚠️ Critical Vulnerability) -->
         <div class="test-section">
             <h2>7. ⚠️ Arbitrary SQL Execution</h2>
-            <textarea id="sql-query" rows="4" style="width:100%; padding:10px; font-family:monospace;">SELECT * FROM Users</textarea>
+            <textarea id="sql-query" rows="4" style="width:100%; padding:10px; font-family:monospace;">SELECT COUNT(*) as TotalUsers FROM Users</textarea>
             <button class="test-button" onclick="testArbitrarySQL()">Execute SQL Query</button>
             <div id="sql-result" class="test-result" style="display:none;"></div>
         </div>

@@ -151,7 +151,7 @@ app.post('/api/register', async (req, res) => {
         const { email, password, firstName, lastName, phone } = req.body;
         
         // Generate UserID
-        const userIdQuery = 'SELECT MAX(CAST(SUBSTRING(UserID, 4, 10) AS INT)) as MaxId FROM Users';
+        const userIdQuery = 'SELECT MAX(CAST(SUBSTRING(UserID, 4, 3) AS INT)) as MaxId FROM Users';
         const idResult = await pool.request().query(userIdQuery);
         const nextId = (idResult.recordset[0].MaxId || 0) + 1;
         const userId = `USR${String(nextId).padStart(3, '0')}`;
