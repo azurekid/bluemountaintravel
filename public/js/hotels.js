@@ -17,30 +17,52 @@ function displayHotels() {
         return;
     }
     
+    // Hotel image URLs from Unsplash - realistic hotel photos
+    const hotelImages = {
+        'HT001': 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800&q=80', // Grand Hyatt New York
+        'HT002': 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80', // The Ritz-Carlton London
+        'HT003': 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&q=80', // Park Hyatt Tokyo
+        'HT004': 'https://images.unsplash.com/photo-1455587734955-081b22074882?w=800&q=80', // Four Seasons George V Paris
+        'HT005': 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80', // Burj Al Arab Jumeirah
+        'HT006': 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&q=80'  // Marina Bay Sands
+    };
+    
     let html = '<h2 class="text-primary mb-2">Available Hotels</h2>';
     
     hotels.forEach(hotel => {
         const stars = '⭐'.repeat(hotel.rating);
-        const amenitiesList = hotel.amenities.join(', ');
+        const imageUrl = hotelImages[hotel.id] || 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80';
+        
+        // Create amenity badges
+        const amenitiesBadges = hotel.amenities.map(amenity => 
+            `<span class="amenity-badge">${amenity}</span>`
+        ).join('');
         
         html += `
             <div class="hotel-card" data-hotel-id="${hotel.id}">
-                <div class="hotel-header">
-                    <div>
-                        <h3 class="hotel-name">${hotel.name}</h3>
-                        <p class="text-muted">${stars} | ${hotel.location}</p>
-                    </div>
-                    <div class="price-section">
-                        <div class="price">$${hotel.price}</div>
-                        <div class="price-label">per night</div>
-                        <button class="btn-book" onclick="bookHotel('${hotel.id}')">Book Now</button>
-                    </div>
+                <div class="hotel-image">
+                    <img src="${imageUrl}" alt="${hotel.name}" loading="lazy" />
+                    <div class="hotel-rating">${stars} ${hotel.rating} Star</div>
                 </div>
-                <div class="hotel-details">
-                    <div class="hotel-info">
+                <div class="hotel-content">
+                    <div class="hotel-header">
+                        <h3 class="hotel-name">${hotel.name}</h3>
+                        <p class="hotel-location">📍 ${hotel.location}</p>
+                    </div>
+                    <div class="hotel-details">
                         <p><strong>Room Type:</strong> ${hotel.roomType}</p>
-                        <p><strong>Amenities:</strong> ${amenitiesList}</p>
-                        <p><strong>Status:</strong> <span style="color: var(--success-color);">Available</span></p>
+                        <p><strong>Amenities:</strong></p>
+                        <div class="hotel-amenities">
+                            ${amenitiesBadges}
+                        </div>
+                        <p><strong>Status:</strong> <span class="status-available">✓ Available</span></p>
+                    </div>
+                    <div class="hotel-footer">
+                        <div class="hotel-price">
+                            <span class="price-amount">$${hotel.price}</span>
+                            <span class="price-label">per night</span>
+                        </div>
+                        <button class="btn-book" onclick="bookHotel('${hotel.id}')">Book Now</button>
                     </div>
                 </div>
             </div>
@@ -76,16 +98,26 @@ function applyFilters() {
         
         // Apply price filter
         if (priceFilters.length > 0) {
-            const price = parseInt(card.querySelector('.price').textContent.replace('$', ''));
-            show = priceFilters.some(filter => {
-                if (filter === '0-300') return price < 300;
-                if (filter === '300-500') return price >= 300 && price <= 500;
-                if (filter === '500+') return price > 500;
-                return true;
-            });
+            const priceElement = card.querySelector('.price-amount');
+            if (priceElement) {
+                const priceText = priceElement.textContent.replace('$', '').trim();
+                const price = parseInt(priceText, 10);
+                if (!isNaN(price)) {
+                    show = priceFilters.some(filter => {
+                        if (filter === '0-300') return price < 300;
+                        if (filter === '300-500') return price >= 300 && price <= 500;
+                        if (filter === '500+') return price > 500;
+                        return true;
+                    });
+                }
+            }
         }
         
-        card.style.display = show ? 'block' : 'none';
+        if (show) {
+            card.style.display = '';
+        } else {
+            card.style.display = 'none';
+        }
     });
 }
 
