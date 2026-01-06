@@ -39,6 +39,34 @@
     <!-- Main Content -->
     <div class="flights-container">
         <div class="container">
+            <!-- Flight Search Form -->
+            <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 2rem;">
+                <h3 style="margin-bottom: 1.5rem; color: var(--primary-color);">Search Flights</h3>
+                <form id="flight-search-form" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div class="form-group">
+                        <label for="search-from" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">From</label>
+                        <select id="search-from" name="from" style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px;">
+                            <option value="">All Airports</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="search-to" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">To</label>
+                        <select id="search-to" name="to" style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px;">
+                            <option value="">All Airports</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="search-airline" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Airline</label>
+                        <select id="search-airline" name="airline" style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px;">
+                            <option value="">All Airlines</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="display: flex; align-items: flex-end;">
+                        <button type="submit" class="btn-search" style="width: 100%; padding: 0.75rem;">Search Flights</button>
+                    </div>
+                </form>
+            </div>
+
             <!-- Filters -->
             <div class="filters-sidebar">
                 <h3>Filter Results</h3>

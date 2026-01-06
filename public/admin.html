@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Blue Mountain Travel</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h1 class="logo">Blue Mountain Travel - Admin</h1>
+                <p class="tagline">Administrative Control Panel</p>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="admin.html" class="active">Admin</a></li>
+                <li><a href="profile.html">Profile</a></li>
+                <li><a href="#" onclick="logout()">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);">
+        <div class="container">
+            <h1>🔐 Administrator Panel</h1>
+            <p>Full system access and control</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="admin-container" style="padding: 3rem 0; min-height: 70vh;">
+        <div class="container">
+            <!-- Access Warning -->
+            <div style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem;">
+                <h3 style="color: #856404; margin-bottom: 0.5rem;">⚠️ Privileged Access</h3>
+                <p style="color: #856404; margin: 0;">You are accessing the administrative control panel. All actions are logged.</p>
+            </div>
+
+            <!-- Admin Sections -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                <!-- System Information -->
+                <div class="admin-card" style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                    <h3 style="color: var(--primary-color); margin-bottom: 1rem;">🖥️ System Information</h3>
+                    <div style="font-size: 0.9rem; line-height: 1.8;">
+                        <p><strong>Environment:</strong> Production</p>
+                        <p><strong>Version:</strong> 2.1.5</p>
+                        <p><strong>Database:</strong> bluemountaintravel.database.windows.net</p>
+                        <p><strong>Storage Account:</strong> bluemountaintravel</p>
+                        <p style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #eee;">
+                            <strong>Admin Key:</strong><br/>
+                            <code style="background: #f8f9fa; padding: 0.5rem; display: block; margin-top: 0.5rem; word-break: break-all;">BMT-ADMIN-KEY-2024-PROD-abc123xyz789</code>
+                        </p>
+                        <!-- FLAG{admin_key_exposed_in_panel} -->
+                    </div>
+                </div>
+
+                <!-- Azure Resources -->
+                <div class="admin-card" style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                    <h3 style="color: var(--primary-color); margin-bottom: 1rem;">☁️ Azure Resources</h3>
+                    <div style="font-size: 0.9rem; line-height: 1.8;">
+                        <p><strong>Subscription ID:</strong><br/>
+                        <code style="font-size: 0.85rem;">12345678-1234-1234-1234-123456789012</code></p>
+                        <p><strong>Tenant ID:</strong><br/>
+                        <code style="font-size: 0.85rem;">87654321-4321-4321-4321-210987654321</code></p>
+                        <p><strong>Resource Group:</strong> bluemountain-rg</p>
+                        <p><strong>Region:</strong> East US 2</p>
+                        <button onclick="showAzureCredentials()" class="btn-search" style="margin-top: 1rem; width: 100%;">View Credentials</button>
+                    </div>
+                </div>
+
+                <!-- Database Access -->
+                <div class="admin-card" style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                    <h3 style="color: var(--primary-color); margin-bottom: 1rem;">🗄️ Database Access</h3>
+                    <div style="font-size: 0.9rem; line-height: 1.8;">
+                        <p><strong>Server:</strong> bluemountaintravel.database.windows.net</p>
+                        <p><strong>Database:</strong> TravelDB</p>
+                        <p><strong>Username:</strong> admin</p>
+                        <p><strong>Password:</strong> P@ssw0rd123!</p>
+                        <p><strong>Port:</strong> 1433</p>
+                        <button onclick="showConnectionString()" class="btn-search" style="margin-top: 1rem; width: 100%;">Show Connection String</button>
+                        <!-- FLAG{database_credentials_in_admin_panel} -->
+                    </div>
+                </div>
+
+                <!-- User Management -->
+                <div class="admin-card" style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                    <h3 style="color: var(--primary-color); margin-bottom: 1rem;">👥 User Management</h3>
+                    <div style="font-size: 0.9rem;">
+                        <p id="user-count">Loading users...</p>
+                        <button onclick="viewAllUsers()" class="btn-search" style="margin-top: 1rem; width: 100%;">View All Users</button>
+                        <button onclick="exportUserData()" class="btn-search" style="margin-top: 0.5rem; width: 100%; background: #6c757d;">Export User Data</button>
+                    </div>
+                </div>
+
+                <!-- Storage Access -->
+                <div class="admin-card" style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                    <h3 style="color: var(--primary-color); margin-bottom: 1rem;">📦 Storage Access</h3>
+                    <div style="font-size: 0.9rem; line-height: 1.8;">
+                        <p><strong>Account:</strong> bluemountaintravel</p>
+                        <p><strong>Containers:</strong></p>
+                        <ul style="margin-left: 1.5rem;">
+                            <li>bookings (public)</li>
+                            <li>profiles (public)</li>
+                            <li>documents (public)</li>
+                        </ul>
+                        <button onclick="showSASToken()" class="btn-search" style="margin-top: 1rem; width: 100%;">Show SAS Token</button>
+                    </div>
+                </div>
+
+                <!-- API Configuration -->
+                <div class="admin-card" style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                    <h3 style="color: var(--primary-color); margin-bottom: 1rem;">🔌 API Configuration</h3>
+                    <div style="font-size: 0.9rem; line-height: 1.8;">
+                        <p><strong>Endpoint:</strong><br/>
+                        <code style="font-size: 0.85rem;">https://bluemountaintravel.azurewebsites.net/api</code></p>
+                        <p><strong>Primary Key:</strong> fake-api-key-12345</p>
+                        <p><strong>Secondary Key:</strong> fake-api-key-67890</p>
+                        <button onclick="regenerateKeys()" class="btn-search" style="margin-top: 1rem; width: 100%; background: #dc3545;">Regenerate Keys</button>
+                        <!-- FLAG{api_keys_accessible_to_admin} -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Entra ID Access -->
+            <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-top: 2rem;">
+                <h3 style="color: var(--primary-color); margin-bottom: 1rem;">🔐 Microsoft Entra ID (Azure AD) Access</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div>
+                        <h4>Global Administrator</h4>
+                        <p><strong>Username:</strong> admin@bluemountain.onmicrosoft.com</p>
+                        <p><strong>Password:</strong> AzureAdmin2024!@#</p>
+                        <p><strong>Tenant:</strong> bluemountain.onmicrosoft.com</p>
+                        <p><strong>Tenant ID:</strong> 87654321-4321-4321-4321-210987654321</p>
+                        <!-- FLAG{entra_global_admin_credentials_exposed} -->
+                    </div>
+                    <div>
+                        <h4>Service Principal</h4>
+                        <p><strong>Application ID:</strong> a1b2c3d4-e5f6-7890-abcd-ef1234567890</p>
+                        <p><strong>Client Secret:</strong> SuperSecret123!@#$%</p>
+                        <p><strong>Object ID:</strong> 12345678-abcd-ef12-3456-789012345678</p>
+                        <button onclick="showServicePrincipalDetails()" class="btn-search" style="margin-top: 1rem; width: 100%;">View Full Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Flags -->
+            <div style="background: #f8f9fa; padding: 2rem; border-radius: 8px; margin-top: 2rem; border: 2px dashed #6c757d;">
+                <h3 style="color: #495057; margin-bottom: 1rem;">🚩 Security Training Flags</h3>
+                <p style="margin-bottom: 1rem;">If you found this page, you've discovered several security issues:</p>
+                <ul style="margin-left: 2rem; line-height: 2;">
+                    <li>FLAG{admin_panel_without_authentication}</li>
+                    <li>FLAG{exposed_azure_subscription_credentials}</li>
+                    <li>FLAG{database_connection_strings_in_ui}</li>
+                    <li>FLAG{service_principal_secret_exposed}</li>
+                </ul>
+                <p style="margin-top: 1rem; font-style: italic;">Congratulations! You've successfully escalated privileges.</p>
+            </div>
+
+            <!-- Hidden Comment Flags -->
+            <!-- FLAG{admin_html_source_contains_secrets} -->
+            <!-- Azure Portal: https://portal.azure.com/#@bluemountain.onmicrosoft.com -->
+            <!-- Service Principal can be used for: az login --service-principal -u <app-id> -p <client-secret> --tenant <tenant-id> -->
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 Blue Mountain Travel. All rights reserved.</p>
+                <p class="security-notice">⚠️ ADMIN PANEL - Intentionally Vulnerable for Training</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>

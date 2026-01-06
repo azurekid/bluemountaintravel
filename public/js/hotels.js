@@ -39,7 +39,7 @@ function displayHotels() {
         ).join('');
         
         html += `
-            <div class="hotel-card" data-hotel-id="${hotel.id}">
+            <div class="hotel-card" data-hotel-id="${hotel.id}" style="cursor: pointer;" onclick="window.location.href='hotel-detail.html?id=${hotel.id}'">
                 <div class="hotel-image">
                     <img src="${imageUrl}" alt="${hotel.name}" loading="lazy" />
                     <div class="hotel-rating">${stars} ${hotel.rating} Star</div>
@@ -62,7 +62,8 @@ function displayHotels() {
                             <span class="price-amount">$${hotel.price}</span>
                             <span class="price-label">per night</span>
                         </div>
-                        <button class="btn-book" onclick="bookHotel('${hotel.id}')">Book Now</button>
+                        <button class="btn-book" onclick="event.stopPropagation(); bookHotel('${hotel.id}')">Book Now</button>
+                        <button class="btn-search" onclick="event.stopPropagation(); window.location.href='hotel-detail.html?id=${hotel.id}'" style="margin-left: 0.5rem;">View Details</button>
                     </div>
                 </div>
             </div>
