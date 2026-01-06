@@ -109,6 +109,11 @@ function showCreateProfileModal() {
     const modal = document.getElementById('create-profile-modal');
     if (modal) {
         modal.style.display = 'flex';
+        // Focus on first input for accessibility
+        const firstInput = document.getElementById('new-firstName');
+        if (firstInput) {
+            setTimeout(() => firstInput.focus(), 100);
+        }
     }
 }
 
