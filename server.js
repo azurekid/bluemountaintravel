@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 3000;
 const dbConfig = {
     server: process.env.DB_SERVER || 'bluemountaintravel.database.windows.net',
     database: process.env.DB_NAME || 'TravelDB',
-    user: process.env.DB_USER || 'admin',
+    user: process.env.DB_USER || 'dbadmin',
     password: process.env.DB_PASSWORD || 'P@ssw0rd123!',
     port: 1433,
     options: {

@@ -15,15 +15,31 @@ This directory contains SQL scripts to initialize the Azure SQL Database for Blu
 
 ### 1. Create Database Schema
 
-Run the schema creation script:
+You can run the schema creation script using Azure Portal or Azure CloudShell:
 
+**Option A: Using Azure Portal Query Editor**
+1. Navigate to your Azure SQL Database in the Azure Portal
+2. Select "Query editor" from the left menu
+3. Login with your database credentials (user: `dbadmin`, password: `P@ssw0rd123!`)
+4. Open `schema.sql` in a text editor and copy its contents
+5. Paste the SQL script into the query editor
+6. Click "Run" to execute the schema creation
+
+**Option B: Using Azure CloudShell**
+1. Open Azure CloudShell in the Azure Portal (Bash or PowerShell)
+2. Upload `schema.sql` to CloudShell (use the upload button)
+3. Run the following command:
 ```bash
-# Using sqlcmd (if installed locally)
-sqlcmd -S bluemountaintravel.database.windows.net -d TravelDB -U admin -P 'P@ssw0rd123!' -i schema.sql
-
-# Or using Azure Data Studio / SSMS
-# Open schema.sql and execute against TravelDB
+# Using sqlcmd in CloudShell
+sqlcmd -S bluemountaintravel.database.windows.net -d TravelDB -U dbadmin -P 'P@ssw0rd123!' -i schema.sql
 ```
+
+**Option C: Using Azure Data Studio / SSMS (if available locally)**
+1. Open schema.sql in Azure Data Studio or SQL Server Management Studio
+2. Connect to `bluemountaintravel.database.windows.net`
+3. Use database: `TravelDB`
+4. Login as: `dbadmin` with password `P@ssw0rd123!`
+5. Execute the script
 
 ### 2. Seed Sample Data
 
@@ -62,7 +78,7 @@ The Node.js backend (`server.js`) connects using:
 const dbConfig = {
     server: 'bluemountaintravel.database.windows.net',
     database: 'TravelDB',
-    user: 'admin',
+    user: 'dbadmin',
     password: 'P@ssw0rd123!',
     // ...
 };
@@ -75,7 +91,7 @@ For production (though this is a training app), set:
 ```bash
 export DB_SERVER=bluemountaintravel.database.windows.net
 export DB_NAME=TravelDB
-export DB_USER=admin
+export DB_USER=dbadmin
 export DB_PASSWORD='P@ssw0rd123!'
 ```
 
