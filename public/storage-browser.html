@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure Storage Browser - Blue Mountain Travel</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h1 class="logo">Azure Storage Browser</h1>
+                <p class="tagline">Document Management System</p>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="admin.html">Admin</a></li>
+                <li><a href="storage-browser.html" class="active">Storage</a></li>
+                <li><a href="profile.html">Profile</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <h1>☁️ Azure Blob Storage Browser</h1>
+            <p>Access corporate documents and employee files</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div style="padding: 3rem 0; min-height: 70vh;">
+        <div class="container">
+            <!-- Storage Account Info -->
+            <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+                <h3 style="margin-bottom: 1rem;">Storage Account Information</h3>
+                <p><strong>Account Name:</strong> bluemountaintravel</p>
+                <p><strong>Endpoint:</strong> https://bluemountaintravel.blob.core.windows.net/</p>
+                <p><strong>Access:</strong> SAS Token (Full Permissions)</p>
+                <p style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #dee2e6;">
+                    <strong>SAS Token:</strong><br/>
+                    <code style="font-size: 0.8rem; word-break: break-all; display: block; background: white; padding: 0.5rem; border-radius: 4px; margin-top: 0.5rem;">
+                        ?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T23:59:59Z&st=2024-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==
+                    </code>
+                </p>
+                <!-- FLAG{storage_browser_exposes_sas_token} -->
+            </div>
+
+            <!-- Container List -->
+            <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 2rem;">
+                <h3 style="margin-bottom: 1.5rem;">Available Containers</h3>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                    <!-- Passports Container -->
+                    <div class="storage-container" style="border: 2px solid #dc3545; border-radius: 8px; padding: 1.5rem; cursor: pointer;" onclick="window.location.href='passport-viewer.html'">
+                        <h4 style="color: #dc3545; margin-bottom: 0.5rem;">📄 passports</h4>
+                        <p style="font-size: 0.9rem; color: #666; margin-bottom: 1rem;">Employee passport scans and travel documents</p>
+                        <p style="font-size: 0.85rem;"><strong>Access:</strong> Public (SAS)</p>
+                        <p style="font-size: 0.85rem;"><strong>Files:</strong> 6 documents + photos</p>
+                        <button class="btn-search" style="width: 100%; margin-top: 1rem;">View Passports</button>
+                    </div>
+
+                    <!-- Profiles Container -->
+                    <div class="storage-container" style="border: 2px solid #ffc107; border-radius: 8px; padding: 1.5rem; cursor: pointer;" onclick="browseContainer('profiles')">
+                        <h4 style="color: #ffc107; margin-bottom: 0.5rem;">👤 profiles</h4>
+                        <p style="font-size: 0.9rem; color: #666; margin-bottom: 1rem;">User profile data and preferences</p>
+                        <p style="font-size: 0.85rem;"><strong>Access:</strong> Public (SAS)</p>
+                        <p style="font-size: 0.85rem;"><strong>Files:</strong> Multiple JSON</p>
+                        <button class="btn-search" style="width: 100%; margin-top: 1rem;">Browse</button>
+                    </div>
+
+                    <!-- Bookings Container -->
+                    <div class="storage-container" style="border: 2px solid #28a745; border-radius: 8px; padding: 1.5rem; cursor: pointer;" onclick="browseContainer('bookings')">
+                        <h4 style="color: #28a745; margin-bottom: 0.5rem;">🎫 bookings</h4>
+                        <p style="font-size: 0.9rem; color: #666; margin-bottom: 1rem;">Travel booking confirmations and itineraries</p>
+                        <p style="font-size: 0.85rem;"><strong>Access:</strong> Public (SAS)</p>
+                        <p style="font-size: 0.85rem;"><strong>Files:</strong> PDF documents</p>
+                        <button class="btn-search" style="width: 100%; margin-top: 1rem;">Browse</button>
+                    </div>
+
+                    <!-- Documents Container -->
+                    <div class="storage-container" style="border: 2px solid #007bff; border-radius: 8px; padding: 1.5rem; cursor: pointer;" onclick="browseContainer('documents')">
+                        <h4 style="color: #007bff; margin-bottom: 0.5rem;">📁 documents</h4>
+                        <p style="font-size: 0.9rem; color: #666; margin-bottom: 1rem;">Corporate documents and configurations</p>
+                        <p style="font-size: 0.85rem;"><strong>Access:</strong> Public (SAS)</p>
+                        <p style="font-size: 0.85rem;"><strong>Files:</strong> JSON, PDF, DOCX</p>
+                        <button class="btn-search" style="width: 100%; margin-top: 1rem;">Browse</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Container Browser -->
+            <div id="container-browser" style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: none;">
+                <h3 id="container-title" style="margin-bottom: 1.5rem;">Container Contents</h3>
+                <div id="file-list"></div>
+                <button onclick="closeContainer()" class="btn-search" style="margin-top: 1.5rem;">← Back to Containers</button>
+            </div>
+
+            <!-- Access Instructions -->
+            <div style="background: #e7f3ff; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #007bff; margin-top: 2rem;">
+                <h4 style="margin-bottom: 1rem;">💡 Access via Azure CLI</h4>
+                <pre style="background: #f8f9fa; padding: 1rem; border-radius: 4px; overflow-x: auto; font-size: 0.85rem;">
+# List all containers
+az storage container list --account-name bluemountaintravel --sas-token "&lt;token&gt;"
+
+# List files in passports container
+az storage blob list --account-name bluemountaintravel --container-name passports --sas-token "&lt;token&gt;"
+
+# Download a passport file
+az storage blob download --account-name bluemountaintravel --container-name passports --name US123456789-passport.pdf --file passport.pdf --sas-token "&lt;token&gt;"
+                </pre>
+            </div>
+
+            <!-- Lateral Movement Hints -->
+            <div style="background: #fff3cd; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #ffc107; margin-top: 2rem;">
+                <h4 style="margin-bottom: 1rem;">🔐 Lateral Movement Opportunities</h4>
+                <ul style="margin-left: 1.5rem; line-height: 2;">
+                    <li>Database credentials can access employee/passport metadata</li>
+                    <li>Service principal in app-registrations.json has Key Vault access</li>
+                    <li>Key Vault contains storage account keys (full access)</li>
+                    <li>Storage account keys bypass SAS token limitations</li>
+                    <li>Documents container may contain additional credentials</li>
+                </ul>
+            </div>
+
+            <!-- Hidden Flags -->
+            <!-- FLAG{storage_browser_publicly_accessible} -->
+            <!-- FLAG{passport_container_no_authentication} -->
+            <!-- Hint: Check app-registrations.json for service principal credentials -->
+            <!-- Hint: Use lateralMovementFromDatabase() function in console -->
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 Blue Mountain Travel. All rights reserved.</p>
+                <p class="security-notice">⚠️ Storage Browser - Intentionally Vulnerable for Training</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/passport-db.js"></script>
+    <script src="js/storage-browser.js"></script>
+</body>
+</html>

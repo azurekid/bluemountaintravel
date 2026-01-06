@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passport Viewer - Blue Mountain Travel</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        .passport-image {
+            max-width: 100%;
+            border: 3px solid #8b0000;
+            border-radius: 4px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .passport-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        .passport-watermark {
+            position: relative;
+            background: linear-gradient(45deg, #f8f9fa 25%, transparent 25%, transparent 75%, #f8f9fa 75%, #f8f9fa),
+                        linear-gradient(45deg, #f8f9fa 25%, transparent 25%, transparent 75%, #f8f9fa 75%, #f8f9fa);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            padding: 1rem;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h1 class="logo">Passport Viewer</h1>
+                <p class="tagline">Employee Travel Documents</p>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="admin.html">Admin</a></li>
+                <li><a href="storage-browser.html">Storage</a></li>
+                <li><a href="passport-viewer.html" class="active">Passports</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header" style="background: linear-gradient(135deg, #8b0000 0%, #dc143c 100%);">
+        <div class="container">
+            <h1>📘 International Passport Database</h1>
+            <p>⚠️ CONFIDENTIAL - Employee Travel Documents</p>
+        </div>
+    </div>
+
+    <!-- Warning Banner -->
+    <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 1rem; margin: 2rem 0;">
+        <div class="container">
+            <strong>⚠️ SECURITY WARNING:</strong> This page displays sensitive passport images and personal information. Access should be restricted to authorized HR personnel only.
+            <br/>
+            <!-- FLAG{passport_viewer_no_authentication} -->
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div style="padding: 3rem 0; min-height: 70vh;">
+        <div class="container">
+            <!-- Access Information -->
+            <div style="background: #e7f3ff; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+                <h3>📍 Storage Location</h3>
+                <p><strong>Container:</strong> passports</p>
+                <p><strong>URL:</strong> https://bluemountaintravel.blob.core.windows.net/passports/</p>
+                <p><strong>Access Method:</strong> SAS Token (Full Permissions)</p>
+                <button onclick="showAllPassportUrls()" class="btn-search" style="margin-top: 1rem;">Show All Download URLs</button>
+            </div>
+
+            <!-- Passport Gallery -->
+            <div id="passport-gallery">
+                <h2 style="margin-bottom: 2rem;">Employee Passports</h2>
+                
+                <!-- John Smith - US Passport -->
+                <div class="passport-card">
+                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+                        <div>
+                            <div class="passport-watermark">
+                                <img src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=800&q=80" 
+                                     alt="John Smith Passport Photo" 
+                                     class="passport-image" />
+                            </div>
+                        </div>
+                        <div>
+                            <h3 style="color: #8b0000;">🇺🇸 United States Passport</h3>
+                            <h4>SMITH, JOHN MICHAEL</h4>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+                                <div>
+                                    <p><strong>Passport No:</strong> US123456789</p>
+                                    <p><strong>Nationality:</strong> USA</p>
+                                    <p><strong>Date of Birth:</strong> 15 MAR 1985</p>
+                                    <p><strong>Sex:</strong> M</p>
+                                </div>
+                                <div>
+                                    <p><strong>Issue Date:</strong> 15 JAN 2022</p>
+                                    <p><strong>Expiry Date:</strong> 14 JAN 2032</p>
+                                    <p><strong>Employee ID:</strong> EMP001</p>
+                                    <p><strong>Place of Birth:</strong> Boston, MA</p>
+                                </div>
+                            </div>
+                            <div style="margin-top: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 4px;">
+                                <strong>Download Links:</strong><br/>
+                                <a href="https://bluemountaintravel.blob.core.windows.net/passports/US123456789-passport.pdf?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T23:59:59Z&st=2024-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==" 
+                   target="_blank" style="font-size: 0.9rem;">
+                                    📄 Full Passport PDF
+                                </a><br/>
+                                <a href="https://bluemountaintravel.blob.core.windows.net/passports/US123456789-photo.jpg?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T23:59:59Z&st=2024-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==" 
+                                   target="_blank" style="font-size: 0.9rem;">
+                                    📷 Passport Photo (High-Res)
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sarah Johnson - US Passport -->
+                <div class="passport-card">
+                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+                        <div>
+                            <div class="passport-watermark">
+                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800&q=80" 
+                                     alt="Sarah Johnson Passport Photo" 
+                                     class="passport-image" />
+                            </div>
+                        </div>
+                        <div>
+                            <h3 style="color: #8b0000;">🇺🇸 United States Passport</h3>
+                            <h4>JOHNSON, SARAH ELIZABETH</h4>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+                                <div>
+                                    <p><strong>Passport No:</strong> US234567890</p>
+                                    <p><strong>Nationality:</strong> USA</p>
+                                    <p><strong>Date of Birth:</strong> 22 JUL 1990</p>
+                                    <p><strong>Sex:</strong> F</p>
+                                </div>
+                                <div>
+                                    <p><strong>Issue Date:</strong> 10 JUN 2021</p>
+                                    <p><strong>Expiry Date:</strong> 09 JUN 2031</p>
+                                    <p><strong>Employee ID:</strong> EMP002</p>
+                                    <p><strong>Place of Birth:</strong> Seattle, WA</p>
+                                </div>
+                            </div>
+                            <div style="margin-top: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 4px;">
+                                <strong>Download Links:</strong><br/>
+                                <a href="https://bluemountaintravel.blob.core.windows.net/passports/US234567890-passport.pdf?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T23:59:59Z&st=2024-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==" 
+                                   target="_blank" style="font-size: 0.9rem;">
+                                    📄 Full Passport PDF
+                                </a><br/>
+                                <a href="https://bluemountaintravel.blob.core.windows.net/passports/US234567890-photo.jpg?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T23:59:59Z&st=2024-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==" 
+                                   target="_blank" style="font-size: 0.9rem;">
+                                    📷 Passport Photo (High-Res)
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Michael Chen - Chinese Passport -->
+                <div class="passport-card">
+                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+                        <div>
+                            <div class="passport-watermark">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80" 
+                                     alt="Michael Chen Passport Photo" 
+                                     class="passport-image" />
+                            </div>
+                        </div>
+                        <div>
+                            <h3 style="color: #8b0000;">🇨🇳 People's Republic of China Passport</h3>
+                            <h4>CHEN, MICHAEL WEI / 陈伟</h4>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+                                <div>
+                                    <p><strong>Passport No:</strong> CN567890123</p>
+                                    <p><strong>Nationality:</strong> Chinese</p>
+                                    <p><strong>Date of Birth:</strong> 30 NOV 1988</p>
+                                    <p><strong>Sex:</strong> M</p>
+                                </div>
+                                <div>
+                                    <p><strong>Issue Date:</strong> 10 MAR 2020</p>
+                                    <p><strong>Expiry Date:</strong> 09 MAR 2030</p>
+                                    <p><strong>Employee ID:</strong> EMP003</p>
+                                    <p><strong>Place of Birth:</strong> Vancouver, BC</p>
+                                </div>
+                            </div>
+                            <div style="margin-top: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 4px;">
+                                <strong>Download Links:</strong><br/>
+                                <a href="https://bluemountaintravel.blob.core.windows.net/passports/CN567890123-passport.pdf?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T23:59:59Z&st=2024-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==" 
+                                   target="_blank" style="font-size: 0.9rem;">
+                                    📄 Full Passport PDF
+                                </a><br/>
+                                <a href="https://bluemountaintravel.blob.core.windows.net/passports/CN567890123-photo.jpg?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T23:59:59Z&st=2024-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==" 
+                                   target="_blank" style="font-size: 0.9rem;">
+                                    📷 Passport Photo (High-Res)
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Emma Williams - UK Passport -->
+                <div class="passport-card">
+                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+                        <div>
+                            <div class="passport-watermark">
+                                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=800&q=80" 
+                                     alt="Emma Williams Passport Photo" 
+                                     class="passport-image" />
+                            </div>
+                        </div>
+                        <div>
+                            <h3 style="color: #8b0000;">🇬🇧 United Kingdom Passport</h3>
+                            <h4>WILLIAMS, EMMA CHARLOTTE</h4>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+                                <div>
+                                    <p><strong>Passport No:</strong> GB789012345</p>
+                                    <p><strong>Nationality:</strong> British Citizen</p>
+                                    <p><strong>Date of Birth:</strong> 18 MAY 1992</p>
+                                    <p><strong>Sex:</strong> F</p>
+                                </div>
+                                <div>
+                                    <p><strong>Issue Date:</strong> 20 AUG 2022</p>
+                                    <p><strong>Expiry Date:</strong> 19 AUG 2032</p>
+                                    <p><strong>Employee ID:</strong> EMP004</p>
+                                    <p><strong>Place of Birth:</strong> London, England</p>
+                                </div>
+                            </div>
+                            <div style="margin-top: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 4px;">
+                                <strong>Download Links:</strong><br/>
+                                <a href="https://bluemountaintravel.blob.core.windows.net/passports/GB789012345-passport.pdf?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T23:59:59Z&st=2024-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==" 
+                                   target="_blank" style="font-size: 0.9rem;">
+                                    📄 Full Passport PDF
+                                </a><br/>
+                                <a href="https://bluemountaintravel.blob.core.windows.net/passports/GB789012345-photo.jpg?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T23:59:59Z&st=2024-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==" 
+                                   target="_blank" style="font-size: 0.9rem;">
+                                    📷 Passport Photo (High-Res)
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- David Martinez - Mexican Passport -->
+                <div class="passport-card">
+                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+                        <div>
+                            <div class="passport-watermark">
+                                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&q=80" 
+                                     alt="David Martinez Passport Photo" 
+                                     class="passport-image" />
+                            </div>
+                        </div>
+                        <div>
+                            <h3 style="color: #8b0000;">🇲🇽 Mexican Passport</h3>
+                            <h4>MARTINEZ, DAVID ALEJANDRO</h4>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+                                <div>
+                                    <p><strong>Passport No:</strong> MX890123456</p>
+                                    <p><strong>Nationality:</strong> Mexican</p>
+                                    <p><strong>Date of Birth:</strong> 25 SEP 1987</p>
+                                    <p><strong>Sex:</strong> M</p>
+                                </div>
+                                <div>
+                                    <p><strong>Issue Date:</strong> 05 APR 2021</p>
+                                    <p><strong>Expiry Date:</strong> 04 APR 2031</p>
+                                    <p><strong>Employee ID:</strong> EMP005</p>
+                                    <p><strong>Place of Birth:</strong> Miami, FL, USA</p>
+                                </div>
+                            </div>
+                            <div style="margin-top: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 4px;">
+                                <strong>Download Links:</strong><br/>
+                                <a href="https://bluemountaintravel.blob.core.windows.net/passports/MX890123456-passport.pdf?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T23:59:59Z&st=2024-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==" 
+                                   target="_blank" style="font-size: 0.9rem;">
+                                    📄 Full Passport PDF
+                                </a><br/>
+                                <a href="https://bluemountaintravel.blob.core.windows.net/passports/MX890123456-photo.jpg?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T23:59:59Z&st=2024-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==" 
+                                   target="_blank" style="font-size: 0.9rem;">
+                                    📷 Passport Photo (High-Res)
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Admin - Diplomatic Passport -->
+                <div class="passport-card" style="border: 3px solid #dc3545;">
+                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+                        <div>
+                            <div class="passport-watermark">
+                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=800&q=80" 
+                                     alt="Admin Diplomatic Passport Photo" 
+                                     class="passport-image" />
+                            </div>
+                        </div>
+                        <div>
+                            <h3 style="color: #dc3545;">🇺🇸 US Diplomatic Passport</h3>
+                            <h4>ADMINISTRATOR, SYSTEM ROOT</h4>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+                                <div>
+                                    <p><strong>Passport No:</strong> US000000001</p>
+                                    <p><strong>Type:</strong> DIPLOMATIC</p>
+                                    <p><strong>Date of Birth:</strong> 01 JAN 1980</p>
+                                    <p><strong>Sex:</strong> M</p>
+                                </div>
+                                <div>
+                                    <p><strong>Issue Date:</strong> 01 JAN 2020</p>
+                                    <p><strong>Expiry Date:</strong> 01 JAN 2030</p>
+                                    <p><strong>Employee ID:</strong> ADMIN</p>
+                                    <p><strong>Place of Birth:</strong> Washington, D.C.</p>
+                                </div>
+                            </div>
+                            <div style="margin-top: 1rem; padding: 1rem; background: #fff3cd; border-radius: 4px; border: 2px solid #ffc107;">
+                                <strong>⚠️ SPECIAL ACCESS REQUIRED</strong><br/>
+                                <a href="https://bluemountaintravel.blob.core.windows.net/passports/US000000001-diplomatic.pdf?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T23:59:59Z&st=2024-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==" 
+                                   target="_blank" style="font-size: 0.9rem; color: #dc3545;">
+                                    📄 Diplomatic Passport PDF (CLASSIFIED)
+                                </a><br/>
+                                <a href="https://bluemountaintravel.blob.core.windows.net/passports/US000000001-photo.jpg?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T23:59:59Z&st=2024-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==" 
+                                   target="_blank" style="font-size: 0.9rem; color: #dc3545;">
+                                    📷 Passport Photo (CLASSIFIED)
+                                </a>
+                                <p style="margin-top: 0.5rem; font-size: 0.85rem; color: #856404;">
+                                    FLAG{admin_diplomatic_passport_with_photo}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bulk Download Instructions -->
+            <div style="background: #f8d7da; border-left: 4px solid #dc3545; padding: 1.5rem; border-radius: 4px; margin-top: 2rem;">
+                <h4>🚨 Bulk Download All Passports</h4>
+                <p>Use Azure CLI to download all passport files:</p>
+                <pre style="background: white; padding: 1rem; border-radius: 4px; overflow-x: auto; font-size: 0.85rem;">
+# Download all passport PDFs
+az storage blob download-batch \
+  --account-name bluemountaintravel \
+  --source passports \
+  --destination ./passports \
+  --pattern "*.pdf" \
+  --sas-token "sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31..."
+
+# Or using curl to list all files
+curl "https://bluemountaintravel.blob.core.windows.net/passports?restype=container&comp=list&sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T23:59:59Z&st=2024-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789=="
+                </pre>
+                <p style="margin-top: 1rem; font-weight: bold;">FLAG{bulk_passport_download_via_sas_token}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 Blue Mountain Travel. All rights reserved.</p>
+                <p class="security-notice">⚠️ CONFIDENTIAL - Passport Images Publicly Accessible</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Hidden Flags -->
+    <!-- FLAG{passport_images_no_auth_required} -->
+    <!-- FLAG{international_passports_in_public_blob} -->
+    <!-- FLAG{passport_photo_urls_with_sas_tokens} -->
+
+    <script src="js/main.js"></script>
+    <script src="js/passport-db.js"></script>
+    <script>
+        function showAllPassportUrls() {
+            const urls = window.listAllPassportUrls();
+            console.log('All passport URLs exported to console');
+            alert('All passport download URLs have been logged to the console.\n\nOpen Developer Tools (F12) to view them.\n\nTotal passports: ' + urls.length);
+        }
+    </script>
+</body>
+</html>
