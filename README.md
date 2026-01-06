@@ -71,6 +71,23 @@ The application will automatically log you in with a default user account:
 - **Email**: john.smith@company.com
 - **Password**: password123 (visible in browser console)
 
+## Application Architecture
+
+### Important: Static Web Application
+
+This is a **static web application** that runs entirely client-side:
+- **No backend server** - All data is hardcoded in JavaScript or stored in browser localStorage
+- **No database connections** - Despite SQL database references, no actual database is used
+- **Client-side only** - All operations happen in the user's browser
+
+### Data Storage
+
+1. **JavaScript Objects** (`/public/js/main.js`) - Contains hardcoded sample data for flights, hotels, and users
+2. **Browser localStorage** - Stores user sessions and bookings (⚠️ intentionally insecure)
+3. **No Backend Database** - The Azure SQL Database references are for educational demonstration only
+
+> 📖 **See [Database Architecture Documentation](docs/DATABASE_ARCHITECTURE.md)** for detailed explanation of why the database is not actively used and how data is actually stored.
+
 ## Project Structure
 
 ```
@@ -224,6 +241,7 @@ MIT License - See LICENSE file for details
 
 For detailed information about this security training application:
 
+- **[Database Architecture](docs/DATABASE_ARCHITECTURE.md)** - Explains how data is stored and clarifies that the Azure SQL Database is not actively used by the application
 - **[Complete Vulnerabilities Reference](docs/VULNERABILITIES_REFERENCE.md)** - Comprehensive catalog of all 68 security vulnerabilities with exploitation details and remediation guidance
 - **[Azure Resources and Data Mapping](docs/AZURE_RESOURCES_DATA_MAP.md)** - Complete mapping of Azure resources and what data is stored where
 - **[Security Guide](docs/SECURITY_GUIDE.md)** - Detailed guide to major security vulnerabilities
