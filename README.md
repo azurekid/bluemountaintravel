@@ -55,50 +55,90 @@ cd bluemountaintravel
 npm install
 ```
 
-3. Start the development server:
+3. Set up the Azure SQL Database:
+```bash
+# See database/README.md for detailed setup instructions
+# Run database/schema.sql against your Azure SQL Database instance
+```
+
+4. Configure environment variables (optional):
+```bash
+# Copy the example file
+cp .env.example .env
+
+# Edit .env with your Azure credentials (or use the defaults for demo)
+```
+
+5. Start the backend server:
 ```bash
 npm start
 ```
 
-4. Open your browser and navigate to:
+6. Open your browser and navigate to:
 ```
-http://localhost:8080
+http://localhost:3000
 ```
 
 ### Quick Start
 
-The application will automatically log you in with a default user account:
-- **Email**: john.smith@company.com
-- **Password**: password123 (visible in browser console)
+The backend server serves the static files and provides API endpoints:
+- **Frontend**: http://localhost:3000
+- **API Health**: http://localhost:3000/api/health
+- **API Docs**: See `server.js` for available endpoints
 
 ## Application Architecture
 
-### Important: Static Web Application
+### Backend + Frontend Architecture
 
-This is a **static web application** that runs entirely client-side:
-- **No backend server** - All data is hardcoded in JavaScript or stored in browser localStorage
-- **No database connections** - Despite SQL database references, no actual database is used
-- **Client-side only** - All operations happen in the user's browser
+This application uses a **vulnerable-by-design** backend architecture:
+- **Node.js/Express Backend** - REST API server with intentional security vulnerabilities
+- **Azure SQL Database** - Stores user data, bookings, flights, and hotels
+- **Azure Storage** - Stores files (booking PDFs, profiles, documents)
+- **Frontend** - JavaScript-based UI that calls backend APIs
 
 ### Data Storage
 
-1. **JavaScript Objects** (`/public/js/main.js`) - Contains hardcoded sample data for flights, hotels, and users
-2. **Browser localStorage** - Stores user sessions and bookings (⚠️ intentionally insecure)
-3. **No Backend Database** - The Azure SQL Database references are for educational demonstration only
+1. **Azure SQL Database (`TravelDB`)** - Primary data store
+   - Users table (passwords in plain text ⚠️)
+   - Flights and Hotels inventory
+   - Bookings and transactions
+   - Employee data with PII
 
-> 📖 **See [Database Architecture Documentation](docs/DATABASE_ARCHITECTURE.md)** for detailed explanation of why the database is not actively used and how data is actually stored.
+2. **Azure Blob Storage** - File storage
+   - Booking confirmation PDFs
+   - User profile documents
+   - Passport scans
+   - Configuration files
+
+3. **Client-Side (Browser)** - Temporary session data
+   - localStorage for current user session
+   - Browser cache for API responses
+
+### Security Model (Vulnerable by Design)
+
+⚠️ **This application is intentionally insecure for training:**
+- SQL injection vulnerabilities in API endpoints
+- Exposed database credentials in code
+- No authentication/authorization
+- IDOR (Insecure Direct Object Reference) vulnerabilities
+- Exposed SAS tokens for storage access
+- Plain text password storage
 
 ## Project Structure
 
 ```
 bluemountaintravel/
+├── server.js                    # ⚠️ Vulnerable Node.js/Express backend
+├── database/
+│   ├── schema.sql              # Database schema creation script
+│   └── README.md               # Database setup instructions
 ├── config/
 │   └── azure-config.json       # Azure configuration with exposed credentials
 ├── public/
 │   ├── css/
 │   │   └── styles.css          # Professional styling
 │   ├── js/
-│   │   ├── main.js             # Main app logic with vulnerabilities
+│   │   ├── main.js             # Main app logic (now calls backend APIs)
 │   │   ├── flights.js          # Flight booking functionality
 │   │   ├── hotels.js           # Hotel booking functionality
 │   │   ├── bookings.js         # Booking management
@@ -113,8 +153,8 @@ bluemountaintravel/
 │   ├── SECURITY_GUIDE.md       # Security vulnerabilities guide
 │   ├── VULNERABILITIES_REFERENCE.md  # Complete vulnerabilities catalog
 │   └── AZURE_RESOURCES_DATA_MAP.md   # Azure resources and data mapping
-├── package.json                # Node.js dependencies
-└── README.md                   # This file
+├── .env.example                # Environment variables template
+└── package.json                # Node.js dependencies
 ```
 
 ## Security Vulnerabilities Guide
