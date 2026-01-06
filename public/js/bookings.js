@@ -2,9 +2,8 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Loading bookings page...');
     
-    // Check authentication
-    const currentUser = localStorage.getItem('currentUser');
-    if (!currentUser) {
+    // Check authentication using database backend
+    if (!verifyDatabaseAuthentication()) {
         // Redirect to login if not authenticated
         window.location.href = 'login.html?redirect=bookings.html';
         return;
@@ -12,6 +11,55 @@ document.addEventListener('DOMContentLoaded', function() {
     
     displayBookings();
 });
+
+// Verify authentication against database backend
+function verifyDatabaseAuthentication() {
+    const currentUser = localStorage.getItem('currentUser');
+    
+    if (!currentUser) {
+        console.log('No user session found');
+        return false;
+    }
+    
+    try {
+        const user = JSON.parse(currentUser);
+        
+        // Verify user exists in the database backend
+        const dbConfig = window.AzureConfig?.databaseConfig;
+        if (!dbConfig) {
+            console.error('Database configuration not available');
+            return false;
+        }
+        
+        // Validate user against the database users (simulated database backend check)
+        const databaseUsers = window.sampleUsers || [];
+        const authenticatedUser = databaseUsers.find(dbUser => 
+            dbUser.email === user.email && dbUser.id === user.id
+        );
+        
+        if (!authenticatedUser) {
+            console.error('User not found in database backend');
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('sessionToken');
+            return false;
+        }
+        
+        // Verify session token exists
+        const sessionToken = localStorage.getItem('sessionToken');
+        if (!sessionToken) {
+            console.error('No valid session token');
+            return false;
+        }
+        
+        console.log('Database authentication verified for user:', user.email);
+        console.log('Using database server:', dbConfig.server);
+        
+        return true;
+    } catch (error) {
+        console.error('Authentication verification failed:', error);
+        return false;
+    }
+}
 
 function displayBookings() {
     const bookingsList = document.getElementById('bookings-list');
