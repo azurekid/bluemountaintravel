@@ -104,14 +104,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Load configuration and display connection status (for demo purposes)
+    // Load configuration for client-side features
+    // Note: In production, sensitive credentials should be handled server-side
     fetch('config.json')
         .then(response => response.json())
         .then(config => {
             console.log('Configuration loaded successfully');
-            console.log('Database username:', config.database.username);
-            console.log('Storage account:', config.storage.accountName);
-            // In production, you would use this configuration for API calls
+            // Configuration is available for use in API calls
+            // Credentials should only be used in server-side API endpoints
         })
         .catch(error => {
             console.error('Error loading configuration:', error);

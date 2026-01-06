@@ -38,6 +38,9 @@
     --spacing-lg: 3rem;
     --spacing-xl: 4rem;
     
+    /* Layout */
+    --navbar-height: 80px;
+    
     /* Typography */
     --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --font-display: 'Playfair Display', Georgia, serif;
@@ -774,7 +777,7 @@ body {
 
 /* Smooth scrolling offset for fixed header */
 html {
-    scroll-padding-top: 80px;
+    scroll-padding-top: var(--navbar-height);
 }
 
 /* Loading state for images */
