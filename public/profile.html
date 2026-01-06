@@ -39,6 +39,32 @@
     <!-- Main Content -->
     <div class="profile-container">
         <div class="container">
+            <!-- Multiple Profiles Section -->
+            <div class="profile-card" style="margin-bottom: 2rem;">
+                <h3 style="color: var(--primary-color); margin-bottom: 1rem;">👤 Manage Profiles</h3>
+                <p class="text-muted" style="margin-bottom: 1rem;">Switch between profiles or create new ones</p>
+                
+                <!-- Profile Selector -->
+                <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem;">
+                    <label for="profile-selector" style="font-weight: 500;">Select Profile:</label>
+                    <select id="profile-selector" style="padding: 0.5rem 1rem; border: 1px solid #ddd; border-radius: 4px; min-width: 250px; font-size: 1rem;">
+                        <option value="">Loading profiles...</option>
+                    </select>
+                    <button class="btn-search" onclick="switchProfile()" style="padding: 0.5rem 1rem;">Switch</button>
+                </div>
+                
+                <!-- Profile List -->
+                <div id="profiles-list" style="margin-top: 1.5rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem;">
+                    <!-- Profiles will be loaded here -->
+                </div>
+                
+                <!-- Add New Profile Button -->
+                <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid #eee;">
+                    <button class="btn-search" onclick="showCreateProfileModal()" style="background: #28a745;">+ Create New Profile</button>
+                    <button class="btn-search" onclick="deleteCurrentProfile()" style="background: #dc3545; margin-left: 0.5rem;">Delete Current Profile</button>
+                </div>
+            </div>
+
             <div class="profile-card">
                 <div class="profile-header">
                     <div class="profile-avatar" id="profile-avatar">JS</div>
@@ -161,6 +187,45 @@
                     <button class="btn-search" onclick="showAzureConfig()">View Azure Configuration</button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Create Profile Modal -->
+    <div id="create-profile-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; justify-content: center; align-items: center;">
+        <div style="background: white; padding: 2rem; border-radius: 8px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto;">
+            <h2 style="color: var(--primary-color); margin-bottom: 1.5rem;">Create New Profile</h2>
+            <form id="create-profile-form" style="display: flex; flex-direction: column; gap: 1rem;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div>
+                        <label for="new-firstName" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">First Name</label>
+                        <input type="text" id="new-firstName" required style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                    </div>
+                    <div>
+                        <label for="new-lastName" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Last Name</label>
+                        <input type="text" id="new-lastName" required style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                    </div>
+                </div>
+                <div>
+                    <label for="new-email" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Email</label>
+                    <input type="email" id="new-email" required style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                </div>
+                <div>
+                    <label for="new-password" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Password</label>
+                    <input type="password" id="new-password" required style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                </div>
+                <div>
+                    <label for="new-phone" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Phone</label>
+                    <input type="tel" id="new-phone" style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                </div>
+                <div>
+                    <label for="new-company" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Company</label>
+                    <input type="text" id="new-company" style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                </div>
+                <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                    <button type="submit" class="btn-search" style="flex: 1;">Create Profile</button>
+                    <button type="button" class="btn-search" onclick="hideCreateProfileModal()" style="flex: 1; background: #6c757d;">Cancel</button>
+                </div>
+            </form>
         </div>
     </div>
 
