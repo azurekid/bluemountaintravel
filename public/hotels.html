@@ -39,6 +39,28 @@
     <!-- Main Content -->
     <div class="hotels-container">
         <div class="container">
+            <!-- Hotel Search Form -->
+            <div style="background: white; padding: 2rem; border-radius: 4px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 2rem;">
+                <h3 style="margin-bottom: 1.5rem; color: #1a1a1a; font-weight: 700; letter-spacing: 0.5px;">Search Hotels</h3>
+                <form id="hotel-search-form" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div class="form-group">
+                        <label for="search-location" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #1a1a1a;">Location</label>
+                        <input type="text" id="search-location" name="location" placeholder="City or Hotel Name" style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 2px; font-size: 0.95rem;">
+                    </div>
+                    <div class="form-group">
+                        <label for="search-checkin" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #1a1a1a;">Check-in Date</label>
+                        <input type="date" id="search-checkin" name="checkIn" style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 2px; font-size: 0.95rem;">
+                    </div>
+                    <div class="form-group">
+                        <label for="search-checkout" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #1a1a1a;">Check-out Date</label>
+                        <input type="date" id="search-checkout" name="checkOut" style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 2px; font-size: 0.95rem;">
+                    </div>
+                    <div class="form-group" style="display: flex; align-items: flex-end;">
+                        <button type="submit" class="btn-search" style="width: 100%; padding: 0.75rem;">Search Hotels</button>
+                    </div>
+                </form>
+            </div>
+
             <div class="content-with-sidebar">
                 <!-- Filters Sidebar -->
                 <aside class="filters-sidebar">
@@ -131,5 +153,6 @@
 
     <script src="js/main.js"></script>
     <script src="js/hotels.js"></script>
+    <script src="js/sql-injection-demo.js"></script>
 </body>
 </html>

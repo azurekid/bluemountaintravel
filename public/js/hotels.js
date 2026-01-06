@@ -1,16 +1,134 @@
 // Hotels page functionality
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Loading hotels page...');
+    initializeDateFields();
+    initializeHotelSearch();
     displayHotels();
     initializeFilters();
 });
 
-function displayHotels() {
+// Initialize date fields with minimum dates
+function initializeDateFields() {
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const nextWeek = new Date(today);
+    nextWeek.setDate(nextWeek.getDate() + 7);
+    
+    const formatDate = (date) => {
+        return date.toISOString().split('T')[0];
+    };
+    
+    const checkInField = document.getElementById('search-checkin');
+    const checkOutField = document.getElementById('search-checkout');
+    
+    if (checkInField) {
+        checkInField.min = formatDate(today);
+        checkInField.value = formatDate(tomorrow);
+    }
+    if (checkOutField) {
+        checkOutField.min = formatDate(tomorrow);
+        checkOutField.value = formatDate(nextWeek);
+    }
+    
+    // Update check-out date minimum when check-in date changes
+    if (checkInField && checkOutField) {
+        checkInField.addEventListener('change', function() {
+            const checkInDate = new Date(this.value);
+            const minCheckOut = new Date(checkInDate);
+            minCheckOut.setDate(minCheckOut.getDate() + 1);
+            checkOutField.min = formatDate(minCheckOut);
+            
+            // If check-out date is before new check-in date, update it
+            if (checkOutField.value && new Date(checkOutField.value) <= checkInDate) {
+                checkOutField.value = formatDate(minCheckOut);
+            }
+        });
+    }
+}
+
+// Initialize hotel search form with SQL injection vulnerability
+function initializeHotelSearch() {
+    const searchForm = document.getElementById('hotel-search-form');
+    if (searchForm) {
+        searchForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            searchHotels();
+        });
+    }
+}
+
+// ⚠️ VULNERABILITY: Search hotels with SQL injection
+function searchHotels() {
+    const location = document.getElementById('search-location')?.value || '';
+    const checkIn = document.getElementById('search-checkin')?.value || '';
+    const checkOut = document.getElementById('search-checkout')?.value || '';
+    
+    console.log('Searching hotels:', { location, checkIn, checkOut });
+    
+    // ⚠️ VULNERABILITY: Constructing SQL query with user input (simulated)
+    const sqlQuery = buildVulnerableHotelSQLQuery(location, checkIn, checkOut);
+    console.log('⚠️ VULNERABLE SQL QUERY:', sqlQuery);
+    console.log('⚠️ This query is vulnerable to SQL injection!');
+    console.log('FLAG{sql_injection_in_hotel_search}');
+    
+    // Simulate executing the vulnerable query
+    let filteredHotels = executeVulnerableHotelQuery(sqlQuery);
+    
+    console.log(`Found ${filteredHotels.length} hotels matching criteria`);
+    displayHotels(filteredHotels);
+}
+
+// ⚠️ VULNERABILITY: Building SQL query without parameterization
+function buildVulnerableHotelSQLQuery(location, checkIn, checkOut) {
+    // This simulates a vulnerable backend SQL query construction
+    let query = "SELECT * FROM Hotels WHERE available = 1";
+    
+    if (location) {
+        // ⚠️ Direct string concatenation - SQL injection vulnerability!
+        query += ` AND (city LIKE '%${location}%' OR name LIKE '%${location}%')`;
+    }
+    if (checkIn) {
+        // ⚠️ Direct string concatenation - SQL injection vulnerability!
+        query += ` AND check_in_date >= '${checkIn}'`;
+    }
+    if (checkOut) {
+        // ⚠️ Direct string concatenation - SQL injection vulnerability!
+        query += ` AND check_out_date <= '${checkOut}'`;
+    }
+    
+    query += " ORDER BY rating DESC";
+    
+    return query;
+}
+
+// ⚠️ VULNERABILITY: Simulated vulnerable query execution
+function executeVulnerableHotelQuery(sqlQuery) {
+    console.log('Executing vulnerable query against database...');
+    console.log('Connection string:', window.AzureConfig?.databaseConfig?.connectionString || 'bluemountaintravel.database.windows.net');
+    
+    let filteredHotels = window.HotelData || [];
+    
+    // Extract search parameters from the SQL query (simulation)
+    const locationMatch = sqlQuery.match(/LIKE '%([^%]*)%'/);
+    
+    if (locationMatch && locationMatch[1]) {
+        const searchTerm = locationMatch[1].toLowerCase();
+        filteredHotels = filteredHotels.filter(h => 
+            h.location.toLowerCase().includes(searchTerm) || 
+            h.name.toLowerCase().includes(searchTerm)
+        );
+    }
+    
+    return filteredHotels;
+}
+
+function displayHotels(hotelsToDisplay) {
     const hotelResults = document.getElementById('hotel-results');
     
     if (!hotelResults) return;
     
-    const hotels = window.HotelData || [];
+    const hotels = hotelsToDisplay || window.HotelData || [];
     
     if (hotels.length === 0) {
         hotelResults.innerHTML = '<p>No hotels available at this time.</p>';
