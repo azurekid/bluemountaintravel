@@ -5,17 +5,20 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🔐 Admin Panel Loaded');
     
-    // ⚠️ VULNERABILITY: No authentication check
+    // Check authentication
     const currentUser = getCurrentUser();
     
     if (!currentUser) {
-        console.warn('No user logged in, but admin panel is accessible!');
-        // Should redirect to login, but doesn't for vulnerability demo
-        // window.location.href = 'login.html';
+        console.warn('No user logged in, redirecting to login page');
+        alert('Please log in to access the admin panel.');
+        window.location.href = 'login.html';
+        return;
     } else if (currentUser.membershipTier !== 'Admin') {
-        console.warn('Non-admin user accessing admin panel!');
+        console.warn('Non-admin user attempting to access admin panel');
         console.log('Current user tier:', currentUser.membershipTier);
-        // Should deny access, but doesn't for vulnerability demo
+        alert('Access denied. Admin privileges required.');
+        window.location.href = 'index.html';
+        return;
     }
     
     // Log all admin credentials on page load

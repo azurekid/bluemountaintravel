@@ -41,6 +41,9 @@ app.use((req, res, next) => {
 // Database connection pool
 let pool;
 
+// ⚠️ VULNERABILITY: In-memory user storage as fallback (insecure)
+let inMemoryUsers = [];
+
 // Initialize database connection
 async function initializeDatabase() {
     try {
@@ -54,6 +57,7 @@ async function initializeDatabase() {
         return pool;
     } catch (err) {
         console.error('Database connection error:', err);
+        console.log('⚠️ Using in-memory storage as fallback');
         // Continue without database for demo purposes
         return null;
     }
@@ -65,7 +69,25 @@ app.get('/api/users', async (req, res) => {
         const { email, password } = req.query;
         
         if (!pool) {
-            return res.status(503).json({ error: 'Database not connected' });
+            // ⚠️ VULNERABILITY: Fallback to in-memory storage
+            console.log('Using in-memory user storage');
+            let users = inMemoryUsers;
+            
+            if (email || password) {
+                users = users.filter(user => {
+                    let match = true;
+                    if (email && user.Email !== email) {
+                        match = false;
+                    }
+                    if (password && user.PasswordHash !== password) {
+                        match = false;
+                    }
+                    return match;
+                });
+            }
+            
+            console.log('Found users:', users.length);
+            return res.json(users);
         }
         
         // ⚠️ VULNERABILITY: SQL Injection vulnerability
@@ -144,11 +166,45 @@ app.get('/api/hotels', async (req, res) => {
 // ⚠️ VULNERABILITY: No authentication, stores passwords in plain text
 app.post('/api/register', async (req, res) => {
     try {
-        if (!pool) {
-            return res.status(503).json({ error: 'Database not connected' });
-        }
-        
         const { email, password, firstName, lastName, phone } = req.body;
+        
+        if (!pool) {
+            // ⚠️ VULNERABILITY: Fallback to in-memory storage
+            console.log('Using in-memory user storage for registration');
+            
+            // Check if user already exists
+            const existingUser = inMemoryUsers.find(u => u.Email === email);
+            if (existingUser) {
+                return res.status(400).json({ error: 'User with this email already exists' });
+            }
+            
+            // Generate UserID
+            const nextId = inMemoryUsers.length + 1;
+            const userId = `USR${String(nextId).padStart(3, '0')}`;
+            
+            // ⚠️ VULNERABILITY: Store password in plain text
+            const newUser = {
+                UserID: userId,
+                Email: email,
+                PasswordHash: password,
+                FirstName: firstName,
+                LastName: lastName,
+                Phone: phone || '+1-555-0000',
+                CreatedDate: new Date().toISOString(),
+                IsActive: 1
+            };
+            
+            inMemoryUsers.push(newUser);
+            
+            console.log('User registered:', newUser);
+            console.log('⚠️ Password stored in plain text:', password);
+            
+            return res.json({ 
+                success: true, 
+                userId,
+                message: 'User registered successfully'
+            });
+        }
         
         // Generate UserID
         const userIdQuery = 'SELECT MAX(CAST(SUBSTRING(UserID, 4, 3) AS INT)) as MaxId FROM Users';

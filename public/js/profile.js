@@ -2,6 +2,16 @@
 // ⚠️ VULNERABILITY: Multiple profiles stored in localStorage with all sensitive data
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Loading profile page...');
+    
+    // Check if user is logged in
+    const currentUser = localStorage.getItem('currentUser');
+    if (!currentUser) {
+        console.log('No user logged in, redirecting to login page');
+        alert('Please log in to view your profile.');
+        window.location.href = 'login.html';
+        return;
+    }
+    
     initializeMultipleProfiles();
     loadProfile();
     loadProfilesList();
