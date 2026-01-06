@@ -1,0 +1,173 @@
+{
+  "comment": "⚠️ THIS FILE SHOULD NOT BE PUBLICLY ACCESSIBLE",
+  "flag": "FLAG{app_registration_credentials_in_public_storage}",
+  "environment": "production",
+  "lastUpdated": "2024-01-15T10:30:00Z",
+  "azureAppRegistrations": [
+    {
+      "name": "BlueMountainTravel-WebApp",
+      "applicationId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "objectId": "12345678-abcd-ef12-3456-789012345678",
+      "tenantId": "87654321-4321-4321-4321-210987654321",
+      "displayName": "Blue Mountain Travel Web Application",
+      "description": "Main web application service principal",
+      "credentials": {
+        "clientSecret": "SuperSecret123!@#$%",
+        "clientSecretId": "secret-id-12345",
+        "certificateThumbprint": null,
+        "expirationDate": "2025-12-31T23:59:59Z"
+      },
+      "permissions": {
+        "microsoftGraph": [
+          "User.Read.All",
+          "Group.Read.All",
+          "Directory.Read.All",
+          "Application.Read.All"
+        ],
+        "azureManagement": [
+          "user_impersonation"
+        ]
+      },
+      "roles": [
+        {
+          "scope": "/subscriptions/12345678-1234-1234-1234-123456789012",
+          "role": "Contributor"
+        },
+        {
+          "scope": "/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/bluemountain-rg",
+          "role": "Owner"
+        }
+      ],
+      "redirectUris": [
+        "https://bluemountaintravel.azurewebsites.net/auth/callback",
+        "http://localhost:8080/auth/callback"
+      ],
+      "flag": "FLAG{service_principal_full_contributor_access}"
+    },
+    {
+      "name": "BlueMountainTravel-BackupService",
+      "applicationId": "b2c3d4e5-f6a7-8901-bcde-f23456789012",
+      "objectId": "23456789-bcde-f123-4567-890123456789",
+      "tenantId": "87654321-4321-4321-4321-210987654321",
+      "displayName": "Blue Mountain Travel Backup Service",
+      "description": "Automated backup service principal",
+      "credentials": {
+        "clientSecret": "BackupSecret2024!@#",
+        "clientSecretId": "secret-id-67890",
+        "certificateThumbprint": null,
+        "expirationDate": "2025-12-31T23:59:59Z"
+      },
+      "permissions": {
+        "storage": [
+          "Storage Blob Data Contributor",
+          "Storage Queue Data Contributor"
+        ]
+      },
+      "roles": [
+        {
+          "scope": "/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/bluemountain-rg/providers/Microsoft.Storage/storageAccounts/bluemountaintravel",
+          "role": "Storage Blob Data Owner"
+        }
+      ]
+    },
+    {
+      "name": "BlueMountainTravel-DataSync",
+      "applicationId": "c3d4e5f6-a7b8-9012-cdef-345678901234",
+      "objectId": "34567890-cdef-1234-5678-901234567890",
+      "tenantId": "87654321-4321-4321-4321-210987654321",
+      "displayName": "Blue Mountain Travel Data Sync",
+      "description": "Database synchronization service",
+      "credentials": {
+        "clientSecret": "DataSync2024Pass!@#",
+        "clientSecretId": "secret-id-24680",
+        "certificateThumbprint": null,
+        "expirationDate": "2025-06-30T23:59:59Z"
+      },
+      "permissions": {
+        "sql": [
+          "SQL DB Contributor"
+        ]
+      },
+      "roles": [
+        {
+          "scope": "/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/bluemountain-rg/providers/Microsoft.Sql/servers/bluemountaintravel",
+          "role": "SQL DB Contributor"
+        }
+      ],
+      "databaseConnectionStrings": {
+        "primary": "Server=tcp:bluemountaintravel.database.windows.net,1433;Initial Catalog=TravelDB;User ID=datasync-sp;Authentication=Active Directory Service Principal;Encrypt=True;",
+        "servicePrincipalAuth": "Use Application ID and Client Secret for authentication"
+      },
+      "flag": "FLAG{database_access_via_service_principal}"
+    }
+  ],
+  "managedIdentities": [
+    {
+      "name": "bluemountain-webapp-identity",
+      "principalId": "d4e5f6a7-b8c9-0123-def0-456789012345",
+      "clientId": "e5f6a7b8-c9d0-1234-ef01-567890123456",
+      "type": "SystemAssigned",
+      "assignedTo": "Web App Service",
+      "roles": [
+        {
+          "scope": "/subscriptions/12345678-1234-1234-1234-123456789012",
+          "role": "Reader"
+        },
+        {
+          "scope": "/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/bluemountain-rg/providers/Microsoft.KeyVault/vaults/bluemountain-kv",
+          "role": "Key Vault Secrets User"
+        }
+      ]
+    }
+  ],
+  "keyVaultSecrets": {
+    "vaultName": "bluemountain-kv",
+    "vaultUri": "https://bluemountain-kv.vault.azure.net/",
+    "secrets": [
+      {
+        "name": "DatabasePassword",
+        "description": "SQL Database admin password",
+        "hint": "Can be accessed using service principal or managed identity"
+      },
+      {
+        "name": "StorageAccountKey",
+        "description": "Storage account access key",
+        "hint": "Primary key for bluemountaintravel storage account"
+      },
+      {
+        "name": "ApiKey",
+        "description": "API authentication key",
+        "value": "fake-api-key-12345",
+        "comment": "⚠️ This should not be in plain text!",
+        "flag": "FLAG{api_key_in_config_file}"
+      }
+    ]
+  },
+  "azureCLICommands": {
+    "comment": "Commands for accessing resources using service principal",
+    "loginCommand": "az login --service-principal -u a1b2c3d4-e5f6-7890-abcd-ef1234567890 -p SuperSecret123!@#$% --tenant 87654321-4321-4321-4321-210987654321",
+    "listResources": "az resource list --subscription 12345678-1234-1234-1234-123456789012",
+    "accessKeyVault": "az keyvault secret show --vault-name bluemountain-kv --name DatabasePassword",
+    "listStorageContainers": "az storage container list --account-name bluemountaintravel",
+    "flag": "FLAG{azure_cli_commands_with_credentials}"
+  },
+  "powershellCommands": {
+    "comment": "PowerShell commands for Azure access",
+    "loginCommand": "$password = ConvertTo-SecureString 'SuperSecret123!@#$%' -AsPlainText -Force; $credential = New-Object System.Management.Automation.PSCredential('a1b2c3d4-e5f6-7890-abcd-ef1234567890', $password); Connect-AzAccount -ServicePrincipal -Credential $credential -Tenant '87654321-4321-4321-4321-210987654321'",
+    "getSecrets": "Get-AzKeyVaultSecret -VaultName 'bluemountain-kv'"
+  },
+  "additionalNotes": [
+    "All service principals have been granted excessive permissions",
+    "No IP restrictions or conditional access policies are configured",
+    "Secrets do not have expiration monitoring",
+    "No audit logging for secret access",
+    "Service principal credentials are shared across teams"
+  ],
+  "vulnerabilities": [
+    "Service principal secrets stored in configuration files",
+    "Overly permissive role assignments",
+    "No secret rotation policy",
+    "Configuration file accessible via public blob storage",
+    "No network restrictions on service principal usage"
+  ]
+}

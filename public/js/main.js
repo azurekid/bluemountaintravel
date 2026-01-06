@@ -1421,6 +1421,8 @@ function getDocumentUrl(documentId) {
 if (typeof window !== 'undefined') {
     window.FlightData = flightData;
     window.HotelData = hotelData;
+    window.sampleUsers = sampleUsers;  // ⚠️ VULNERABILITY: Exposing all users globally
+    // FLAG{all_user_data_accessible_via_window_object}
     window.AzureConfig = {
         storageAccount: STORAGE_ACCOUNT_NAME,
         sasToken: AZURE_STORAGE_SAS_TOKEN,
@@ -1460,4 +1462,27 @@ console.log('3. Database connection strings in JavaScript');
 console.log('4. Sensitive data in localStorage');
 console.log('5. Public blob storage URLs');
 console.log('6. Detailed error logging with sensitive information');
+console.log('===============================================');
+console.log('');
+console.log('🚩 CTF FLAGS - Find these throughout the application:');
+console.log('- FLAG{exposed_flight_data_in_client_side_code}');
+console.log('- FLAG{user_pii_data_in_plain_text_storage}');
+console.log('- FLAG{azure_credentials_john_smith}');
+console.log('- FLAG{admin_password_found}');
+console.log('- FLAG{azure_admin_access_key_exposed}');
+console.log('- And many more hidden in the application...');
+console.log('');
+console.log('💡 HINTS:');
+console.log('- Check localStorage for sensitive data');
+console.log('- View source code for hidden comments');
+console.log('- Inspect network requests for credentials');
+console.log('- Look for admin endpoints');
+console.log('- Try IDOR attacks with predictable IDs');
+console.log('===============================================');
+console.log('');
+console.log('Quick Access to User Data:');
+console.log('window.sampleUsers - All system users with passwords');
+console.log('window.FlightData - All flight data');
+console.log('window.HotelData - All hotel data with details');
+console.log('window.AzureConfig - Azure credentials and keys');
 console.log('===============================================');
