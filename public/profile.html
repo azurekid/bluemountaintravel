@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Blue Mountain Travel</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h1 class="logo">Blue Mountain Travel</h1>
+                <p class="tagline">Elevate Your Business Journey</p>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="flights.html">Flights</a></li>
+                <li><a href="hotels.html">Hotels</a></li>
+                <li><a href="bookings.html">My Bookings</a></li>
+                <li><a href="profile.html" class="active">Profile</a></li>
+                <li><a href="#" class="btn-login">Sign In</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <h1>My Profile</h1>
+            <p>Manage your account and preferences</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="profile-container">
+        <div class="container">
+            <div class="profile-card">
+                <div class="profile-header">
+                    <div class="profile-avatar" id="profile-avatar">JS</div>
+                    <div class="profile-info">
+                        <h2 id="profile-name">John Smith</h2>
+                        <p id="profile-email">john.smith@company.com</p>
+                        <p><strong id="profile-tier">Platinum Member</strong></p>
+                    </div>
+                </div>
+                
+                <div class="profile-section">
+                    <h3>Personal Information</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">First Name</span>
+                            <span class="info-value" id="info-firstname">John</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Last Name</span>
+                            <span class="info-value" id="info-lastname">Smith</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Email</span>
+                            <span class="info-value" id="info-email">john.smith@company.com</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Phone</span>
+                            <span class="info-value" id="info-phone">+1-555-0123</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Company</span>
+                            <span class="info-value" id="info-company">Tech Corp</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Member ID</span>
+                            <span class="info-value" id="info-userid">USR001</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <h3>Account Details</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Membership Tier</span>
+                            <span class="info-value" id="info-tier">Platinum</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Member Since</span>
+                            <span class="info-value">January 2020</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Total Bookings</span>
+                            <span class="info-value" id="total-bookings">0</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Reward Points</span>
+                            <span class="info-value">15,420</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <h3>Payment Information</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Credit Card</span>
+                            <span class="info-value" id="info-card">•••• •••• •••• 9012</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Card Type</span>
+                            <span class="info-value">Visa Business</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <h3>Security Information</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Password</span>
+                            <span class="info-value" id="info-password">••••••••</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Two-Factor Auth</span>
+                            <span class="info-value" style="color: var(--danger-color);">Disabled</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <h3>Azure Storage Access</h3>
+                    <p class="text-muted">Your documents are stored in Azure Blob Storage</p>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Storage Account</span>
+                            <span class="info-value" id="storage-account">bluemountaintravel</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Profile Container</span>
+                            <span class="info-value"><a href="#" id="profile-container-url" target="_blank">View Container</a></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Documents Container</span>
+                            <span class="info-value"><a href="#" id="documents-container-url" target="_blank">View Container</a></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">SAS Token Expiry</span>
+                            <span class="info-value">December 31, 2025</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" style="margin-top: 2rem;">
+                <h3 class="text-primary">Developer Tools</h3>
+                <p class="text-muted">These tools expose sensitive data for security training purposes</p>
+                <div style="margin-top: 1rem;">
+                    <button class="btn-search" onclick="showRawUserData()" style="margin-right: 1rem;">View Raw User Data</button>
+                    <button class="btn-search" onclick="showAzureConfig()">View Azure Configuration</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Blue Mountain Travel</h4>
+                    <p>Your trusted partner in business travel since 1995.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="flights.html">Flights</a></li>
+                        <li><a href="hotels.html">Hotels</a></li>
+                        <li><a href="bookings.html">My Bookings</a></li>
+                        <li><a href="profile.html">Profile</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Corporate Accounts</a></li>
+                        <li><a href="#">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <p>24/7 Support: <strong>1-800-BLUE-MTN</strong></p>
+                    <p>Email: <strong>support@bluemountaintravel.com</strong></p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Blue Mountain Travel. All rights reserved.</p>
+                <p class="security-notice">⚠️ This is a demonstration website with intentional security vulnerabilities for training purposes.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/profile.js"></script>
+</body>
+</html>

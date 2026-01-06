@@ -1,0 +1,56 @@
+{
+  "azure": {
+    "storageAccount": {
+      "name": "bluemountaintravel",
+      "connectionString": "DefaultEndpointsProtocol=https;AccountName=bluemountaintravel;AccountKey=FAKE_KEY_FOR_DEMO_abc123XYZ==;EndpointSuffix=core.windows.net",
+      "sasToken": "?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T23:59:59Z&st=2024-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==",
+      "containers": {
+        "bookings": {
+          "url": "https://bluemountaintravel.blob.core.windows.net/bookings",
+          "publicAccess": true
+        },
+        "profiles": {
+          "url": "https://bluemountaintravel.blob.core.windows.net/profiles",
+          "publicAccess": true
+        },
+        "documents": {
+          "url": "https://bluemountaintravel.blob.core.windows.net/documents",
+          "publicAccess": true
+        }
+      }
+    },
+    "database": {
+      "server": "bluemountaintravel.database.windows.net",
+      "database": "TravelDB",
+      "username": "admin",
+      "password": "P@ssw0rd123!",
+      "port": 1433,
+      "connectionString": "Server=tcp:bluemountaintravel.database.windows.net,1433;Initial Catalog=TravelDB;Persist Security Info=False;User ID=admin;Password=P@ssw0rd123!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+    },
+    "cosmosDb": {
+      "endpoint": "https://bluemountaintravel.documents.azure.com:443/",
+      "key": "FAKE_COSMOS_KEY_abc123XYZ789==",
+      "database": "TravelBookings",
+      "container": "bookings"
+    }
+  },
+  "api": {
+    "baseUrl": "https://bluemountaintravel.azurewebsites.net/api",
+    "keys": {
+      "primary": "fake-api-key-12345",
+      "secondary": "fake-api-key-67890"
+    }
+  },
+  "vulnerabilities": {
+    "NOTE": "This configuration intentionally contains security vulnerabilities for training purposes",
+    "issues": [
+      "Hardcoded credentials in source control",
+      "Exposed SAS tokens with excessive permissions",
+      "Default admin username and password",
+      "Public blob storage access enabled",
+      "Connection strings in client-accessible files",
+      "Long-lived SAS tokens",
+      "API keys in plain text"
+    ]
+  }
+}

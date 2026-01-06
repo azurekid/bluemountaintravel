@@ -1,0 +1,21 @@
+{
+  "name": "bluemountain-travel",
+  "version": "1.0.0",
+  "description": "Blue Mountain Travel - Business Travel Agency Website (Security Training Demo)",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx http-server public -p 8080",
+    "dev": "npx http-server public -p 8080 -o"
+  },
+  "keywords": [
+    "travel",
+    "azure",
+    "static-website",
+    "security-training"
+  ],
+  "author": "Blue Mountain Travel",
+  "license": "MIT",
+  "dependencies": {
+    "http-server": "^14.1.1"
+  }
+}
