@@ -92,6 +92,10 @@ bluemountaintravel/
 │   ├── bookings.html           # Bookings page
 │   └── profile.html            # User profile
 ├── docs/                       # Documentation
+│   ├── DEPLOYMENT.md           # Azure deployment guide
+│   ├── SECURITY_GUIDE.md       # Security vulnerabilities guide
+│   ├── VULNERABILITIES_REFERENCE.md  # Complete vulnerabilities catalog
+│   └── AZURE_RESOURCES_DATA_MAP.md   # Azure resources and data mapping
 ├── package.json                # Node.js dependencies
 └── README.md                   # This file
 ```
@@ -215,6 +219,16 @@ This application is for educational purposes only. The authors are not responsib
 ## License
 
 MIT License - See LICENSE file for details
+
+## Documentation
+
+For detailed information about this security training application:
+
+- **[Complete Vulnerabilities Reference](docs/VULNERABILITIES_REFERENCE.md)** - Comprehensive catalog of all 68 security vulnerabilities with exploitation details and remediation guidance
+- **[Azure Resources and Data Mapping](docs/AZURE_RESOURCES_DATA_MAP.md)** - Complete mapping of Azure resources and what data is stored where
+- **[Security Guide](docs/SECURITY_GUIDE.md)** - Detailed guide to major security vulnerabilities
+- **[Deployment Guide](docs/DEPLOYMENT.md)** - Azure deployment instructions
+- **[Vulnerability Guide](VULNERABILITY_GUIDE.md)** - CTF flags and vulnerability walkthrough
 
 ## Resources
 
