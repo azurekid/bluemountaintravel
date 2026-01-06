@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Blue Mountain Travel</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">Blue Mountain Travel</div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="destinations.html">Destinations</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Tropical Background -->
+    <section class="hero tropical-background">
+        <div class="hero-content">
+            <h1>Get in Touch</h1>
+            <p>Let us help you plan your next adventure</p>
+        </div>
+    </section>
+
+    <!-- Contact Form Section -->
+    <section class="why-choose-us">
+        <div class="container">
+            <h2>Contact Us</h2>
+            <div style="max-width: 600px; margin: 0 auto;">
+                <form style="display: flex; flex-direction: column; gap: 1rem;">
+                    <div>
+                        <label for="name" style="display: block; margin-bottom: 0.5rem; font-weight: bold;">Name</label>
+                        <input type="text" id="name" name="name" required 
+                               style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem;">
+                    </div>
+                    <div>
+                        <label for="email" style="display: block; margin-bottom: 0.5rem; font-weight: bold;">Email</label>
+                        <input type="email" id="email" name="email" required 
+                               style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem;">
+                    </div>
+                    <div>
+                        <label for="destination" style="display: block; margin-bottom: 0.5rem; font-weight: bold;">Interested Destination</label>
+                        <select id="destination" name="destination" 
+                                style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem;">
+                            <option value="">Select a destination</option>
+                            <option value="tropical">Tropical Paradise</option>
+                            <option value="city">Urban Adventures</option>
+                            <option value="mountain">Mountain Escapes</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="message" style="display: block; margin-bottom: 0.5rem; font-weight: bold;">Message</label>
+                        <textarea id="message" name="message" rows="5" required 
+                                  style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem; resize: vertical;"></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary" style="cursor: pointer; border: none;">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Information with Photos -->
+    <section class="featured-destinations">
+        <div class="container">
+            <h2>Visit Our Offices</h2>
+            <div class="destinations-grid">
+                <div class="destination-card">
+                    <div class="destination-image city-photo"></div>
+                    <div class="destination-info">
+                        <h3>New York Office</h3>
+                        <p>123 Travel Avenue<br>New York, NY 10001<br>Phone: (555) 123-4567</p>
+                    </div>
+                </div>
+                <div class="destination-card">
+                    <div class="destination-image tropical-photo"></div>
+                    <div class="destination-info">
+                        <h3>Miami Office</h3>
+                        <p>456 Ocean Drive<br>Miami, FL 33139<br>Phone: (555) 987-6543</p>
+                    </div>
+                </div>
+                <div class="destination-card">
+                    <div class="destination-image mountain-photo"></div>
+                    <div class="destination-info">
+                        <h3>Denver Office</h3>
+                        <p>789 Mountain Road<br>Denver, CO 80202<br>Phone: (555) 456-7890</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Blue Mountain Travel. All rights reserved.</p>
+            <p>Your adventure awaits with Blue Mountain Travel</p>
+        </div>
+    </footer>
+</body>
+</html>
