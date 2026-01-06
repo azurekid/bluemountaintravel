@@ -98,14 +98,19 @@ function applyFilters() {
         
         // Apply price filter
         if (priceFilters.length > 0) {
-            const priceText = card.querySelector('.price-amount').textContent.replace('$', '');
-            const price = parseInt(priceText);
-            show = priceFilters.some(filter => {
-                if (filter === '0-300') return price < 300;
-                if (filter === '300-500') return price >= 300 && price <= 500;
-                if (filter === '500+') return price > 500;
-                return true;
-            });
+            const priceElement = card.querySelector('.price-amount');
+            if (priceElement) {
+                const priceText = priceElement.textContent.replace('$', '').trim();
+                const price = parseInt(priceText, 10);
+                if (!isNaN(price)) {
+                    show = priceFilters.some(filter => {
+                        if (filter === '0-300') return price < 300;
+                        if (filter === '300-500') return price >= 300 && price <= 500;
+                        if (filter === '500+') return price > 500;
+                        return true;
+                    });
+                }
+            }
         }
         
         card.style.display = show ? 'grid' : 'none';
