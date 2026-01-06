@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backend API Test - Blue Mountain Travel</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .test-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-button {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #0056b3;
+        }
+        .test-result {
+            background: #f8f9fa;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        .success { color: #28a745; }
+        .error { color: #dc3545; }
+        .warning { color: #ffc107; }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">Blue Mountain Travel - API Test</div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="backend-test.html" class="active">Backend Test</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="test-container">
+        <h1>Backend API Testing Console</h1>
+        <p class="warning">⚠️ This page tests the vulnerable backend APIs for training purposes.</p>
+
+        <!-- Health Check -->
+        <div class="test-section">
+            <h2>1. Health Check</h2>
+            <button class="test-button" onclick="testHealth()">Check Server Health</button>
+            <div id="health-result" class="test-result" style="display:none;"></div>
+        </div>
+
+        <!-- Database Connection -->
+        <div class="test-section">
+            <h2>2. Database Connection</h2>
+            <button class="test-button" onclick="testDatabaseConnection()">Test Database</button>
+            <div id="db-result" class="test-result" style="display:none;"></div>
+        </div>
+
+        <!-- Config Exposure (⚠️ Critical Vulnerability) -->
+        <div class="test-section">
+            <h2>3. ⚠️ Configuration Exposure</h2>
+            <button class="test-button" onclick="testConfig()">Get Config (Exposes Credentials)</button>
+            <div id="config-result" class="test-result" style="display:none;"></div>
+        </div>
+
+        <!-- User APIs -->
+        <div class="test-section">
+            <h2>4. User APIs</h2>
+            <button class="test-button" onclick="testGetUsers()">Get All Users</button>
+            <button class="test-button" onclick="testSqlInjection()">⚠️ Test SQL Injection</button>
+            <div id="users-result" class="test-result" style="display:none;"></div>
+        </div>
+
+        <!-- Flight APIs -->
+        <div class="test-section">
+            <h2>5. Flight APIs</h2>
+            <button class="test-button" onclick="testGetFlights()">Get All Flights</button>
+            <button class="test-button" onclick="testFlightSearch()">Search Flights (JFK)</button>
+            <div id="flights-result" class="test-result" style="display:none;"></div>
+        </div>
+
+        <!-- Hotel APIs -->
+        <div class="test-section">
+            <h2>6. Hotel APIs</h2>
+            <button class="test-button" onclick="testGetHotels()">Get All Hotels</button>
+            <button class="test-button" onclick="testHotelSearch()">Search Hotels (London)</button>
+            <div id="hotels-result" class="test-result" style="display:none;"></div>
+        </div>
+
+        <!-- Arbitrary SQL Execution (⚠️ Critical Vulnerability) -->
+        <div class="test-section">
+            <h2>7. ⚠️ Arbitrary SQL Execution</h2>
+            <textarea id="sql-query" rows="4" style="width:100%; padding:10px; font-family:monospace;">SELECT COUNT(*) as TotalUsers FROM Users</textarea>
+            <button class="test-button" onclick="testArbitrarySQL()">Execute SQL Query</button>
+            <div id="sql-result" class="test-result" style="display:none;"></div>
+        </div>
+    </div>
+
+    <script src="js/api-client.js"></script>
+    <script>
+        // Helper function to display results
+        function displayResult(elementId, data, isError = false) {
+            const element = document.getElementById(elementId);
+            element.style.display = 'block';
+            element.className = `test-result ${isError ? 'error' : 'success'}`;
+            element.textContent = JSON.stringify(data, null, 2);
+        }
+
+        // Test health check
+        async function testHealth() {
+            try {
+                const result = await apiClient.health();
+                displayResult('health-result', result);
+            } catch (error) {
+                displayResult('health-result', { error: error.message }, true);
+            }
+        }
+
+        // Test database connection
+        async function testDatabaseConnection() {
+            try {
+                // Try to get health which includes DB status
+                const result = await apiClient.health();
+                displayResult('db-result', {
+                    message: 'Database connection test',
+                    status: result.database,
+                    details: result
+                });
+            } catch (error) {
+                displayResult('db-result', { error: error.message }, true);
+            }
+        }
+
+        // Test config exposure (⚠️ Vulnerability)
+        async function testConfig() {
+            try {
+                const result = await apiClient.getConfig();
+                displayResult('config-result', {
+                    warning: '⚠️ CRITICAL: Configuration exposed!',
+                    credentials: result
+                });
+            } catch (error) {
+                displayResult('config-result', { error: error.message }, true);
+            }
+        }
+
+        // Test get users
+        async function testGetUsers() {
+            try {
+                const result = await apiClient.getUsers();
+                displayResult('users-result', {
+                    message: 'Users retrieved',
+                    count: result.length,
+                    users: result
+                });
+            } catch (error) {
+                displayResult('users-result', { error: error.message }, true);
+            }
+        }
+
+        // Test SQL injection
+        async function testSqlInjection() {
+            try {
+                // SQL injection payload
+                const result = await apiClient.getUsers("' OR '1'='1", null);
+                displayResult('users-result', {
+                    warning: '⚠️ SQL Injection successful!',
+                    payload: "email=' OR '1'='1",
+                    result: result
+                });
+            } catch (error) {
+                displayResult('users-result', { error: error.message }, true);
+            }
+        }
+
+        // Test get flights
+        async function testGetFlights() {
+            try {
+                const result = await apiClient.getFlights();
+                displayResult('flights-result', {
+                    message: 'Flights retrieved',
+                    count: result.length,
+                    flights: result.slice(0, 5) // Show first 5
+                });
+            } catch (error) {
+                displayResult('flights-result', { error: error.message }, true);
+            }
+        }
+
+        // Test flight search
+        async function testFlightSearch() {
+            try {
+                const result = await apiClient.getFlights('JFK', null);
+                displayResult('flights-result', {
+                    message: 'Flight search results',
+                    query: 'from=JFK',
+                    count: result.length,
+                    flights: result
+                });
+            } catch (error) {
+                displayResult('flights-result', { error: error.message }, true);
+            }
+        }
+
+        // Test get hotels
+        async function testGetHotels() {
+            try {
+                const result = await apiClient.getHotels();
+                displayResult('hotels-result', {
+                    message: 'Hotels retrieved',
+                    count: result.length,
+                    hotels: result.slice(0, 5) // Show first 5
+                });
+            } catch (error) {
+                displayResult('hotels-result', { error: error.message }, true);
+            }
+        }
+
+        // Test hotel search
+        async function testHotelSearch() {
+            try {
+                const result = await apiClient.getHotels('London');
+                displayResult('hotels-result', {
+                    message: 'Hotel search results',
+                    query: 'city=London',
+                    count: result.length,
+                    hotels: result
+                });
+            } catch (error) {
+                displayResult('hotels-result', { error: error.message }, true);
+            }
+        }
+
+        // Test arbitrary SQL execution (⚠️ Critical Vulnerability)
+        async function testArbitrarySQL() {
+            try {
+                const query = document.getElementById('sql-query').value;
+                const result = await apiClient.executeSql(query);
+                displayResult('sql-result', {
+                    warning: '⚠️ CRITICAL: Arbitrary SQL execution!',
+                    query: query,
+                    result: result
+                });
+            } catch (error) {
+                displayResult('sql-result', { error: error.message }, true);
+            }
+        }
+
+        // Auto-run health check on load
+        window.addEventListener('load', () => {
+            console.log('Backend Test Page Loaded');
+            testHealth();
+        });
+    </script>
+</body>
+</html>

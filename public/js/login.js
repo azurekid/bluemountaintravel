@@ -5,9 +5,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Login page loaded');
     
-    // ⚠️ VULNERABILITY: Logging loaded user data
-    console.log('Available users in system:', window.sampleUsers || []);
-    
     // Check if already logged in
     const currentUser = localStorage.getItem('currentUser');
     if (currentUser) {
@@ -40,8 +37,8 @@ function loadRememberedCredentials() {
     }
 }
 
-// ⚠️ VULNERABILITY: Client-side authentication without server verification
-function handleLogin(event) {
+// ⚠️ VULNERABILITY: Client-side authentication without proper security
+async function handleLogin(event) {
     event.preventDefault();
     
     const email = document.getElementById('email').value;
@@ -54,150 +51,89 @@ function handleLogin(event) {
         timestamp: new Date().toISOString()
     });
     
-    // ⚠️ VULNERABILITY: Client-side authentication logic
-    const user = authenticateUser(email, password);
-    
-    if (user) {
-        console.log('Authentication successful for user:', user);
+    try {
+        // ⚠️ VULNERABILITY: Password sent via GET query parameters
+        // Query database through backend API
+        const response = await fetch(`/api/users?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`);
         
-        // ⚠️ VULNERABILITY: Storing sensitive user data in localStorage
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        localStorage.setItem('sessionToken', generateFakeSessionToken(user));
-        localStorage.setItem('loginTimestamp', new Date().toISOString());
-        
-        // ⚠️ VULNERABILITY: Remember me functionality stores plain text password
-        if (remember) {
-            localStorage.setItem('rememberedEmail', email);
-            localStorage.setItem('rememberedPassword', password);  // ⚠️ Plain text password
-            console.log('Credentials saved for future login');
-        } else {
-            localStorage.removeItem('rememberedEmail');
-            localStorage.removeItem('rememberedPassword');
+        if (!response.ok) {
+            console.error('Login failed:', response.statusText);
+            alert('Login failed. Please check your credentials.');
+            return;
         }
         
-        // ⚠️ VULNERABILITY: Making API call with exposed credentials
-        makeLoginApiCall(user, email, password);
+        const users = await response.json();
         
-        // Check if user is admin
-        if (user.membershipTier === 'Admin') {
-            console.log('🔑 ADMIN ACCESS GRANTED 🔑');
-            console.log('Admin access key:', user.adminAccessKey);
-            console.log('Azure Subscription ID:', user.azureSubscriptionId);
-            console.log('Azure Tenant ID:', user.azureTenantId);
-            // FLAG{admin_console_output_reveals_secrets}
-            alert('Welcome Administrator!\n\nAdmin Panel: /admin.html\nAccess Key: ' + user.adminAccessKey);
+        if (users && users.length > 0) {
+            const user = users[0];
+            console.log('Authentication successful for user:', user);
+            console.log('⚠️ VULNERABILITY: Full user record including password returned from API');
+            
+            // ⚠️ VULNERABILITY: Storing sensitive user data in localStorage
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            localStorage.setItem('sessionToken', generateFakeSessionToken(user));
+            localStorage.setItem('loginTimestamp', new Date().toISOString());
+            
+            // ⚠️ VULNERABILITY: Remember me functionality stores plain text password
+            if (remember) {
+                localStorage.setItem('rememberedEmail', email);
+                localStorage.setItem('rememberedPassword', password);  // ⚠️ Plain text password
+                console.log('Credentials saved for future login');
+            } else {
+                localStorage.removeItem('rememberedEmail');
+                localStorage.removeItem('rememberedPassword');
+            }
+            
+            // Update last login date
+            updateLastLogin(user.UserID);
+            
+            showMessage('Login successful! Redirecting...', 'success');
+            
             setTimeout(() => {
-                window.location.href = 'admin.html';
-            }, 2000);
-        } else {
-            alert('Login successful!\n\nWelcome back, ' + user.firstName + '!');
-            setTimeout(() => {
-                window.location.href = 'profile.html';
+                window.location.href = 'index.html';
             }, 1000);
-        }
-    } else {
-        console.error('Authentication failed for:', email);
-        // ⚠️ VULNERABILITY: Detailed error messages reveal user existence
-        const userExists = checkUserExists(email);
-        if (userExists) {
-            alert('Login failed: Incorrect password');
-            console.log('User exists but password incorrect');
         } else {
-            alert('Login failed: User not found');
-            console.log('User does not exist in system');
+            console.log('Authentication failed: Invalid credentials');
+            alert('Invalid email or password. Please try again.');
         }
+    } catch (error) {
+        console.error('Login error:', error);
+        alert('Login error: ' + error.message);
     }
 }
 
-// ⚠️ VULNERABILITY: Authentication logic in client-side JavaScript
-function authenticateUser(email, password) {
-    // Get users from global scope
-    const users = window.sampleUsers || [];
-    
-    console.log('Authenticating against', users.length, 'users');
-    
-    // ⚠️ VULNERABILITY: Simple string comparison, no hashing
-    const user = users.find(u => u.email === email && u.password === password);
-    
-    if (user) {
-        console.log('User authenticated:', {
-            id: user.id,
-            name: user.firstName + ' ' + user.lastName,
-            tier: user.membershipTier,
-            // ⚠️ VULNERABILITY: Logging sensitive data
-            creditCard: user.creditCard,
-            ssn: user.ssn,
-            azureUsername: user.azureUsername,
-            azurePassword: user.azurePassword
-        });
+// ⚠️ VULNERABILITY: Update last login date via backend API
+async function updateLastLogin(userId) {
+    try {
+        // This would normally update the LastLoginDate in the database
+        console.log('Updating last login for user:', userId);
+    } catch (error) {
+        console.error('Failed to update last login:', error);
     }
-    
-    return user;
 }
 
-// ⚠️ VULNERABILITY: Information disclosure about user existence
-function checkUserExists(email) {
-    const users = window.sampleUsers || [];
-    return users.some(u => u.email === email);
+// Show message helper
+function showMessage(message, type) {
+    console.log(`[${type}] ${message}`);
 }
 
 // ⚠️ VULNERABILITY: Predictable session token generation
 function generateFakeSessionToken(user) {
     // ⚠️ VULNERABILITY: Weak token generation
-    const token = 'BMT-' + user.id + '-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+    const token = 'BMT-' + user.UserID + '-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
     console.log('Generated session token:', token);
     // FLAG{predictable_session_token_generation}
     return token;
 }
 
-// ⚠️ VULNERABILITY: Making API call with credentials in headers
-function makeLoginApiCall(user, email, password) {
-    const apiEndpoint = window.AzureConfig.apiConfig.endpoint + '/auth/login';
-    
-    const loginData = {
-        email: email,
-        password: password,  // ⚠️ Plain text password in request
-        deviceInfo: {
-            userAgent: navigator.userAgent,
-            platform: navigator.platform,
-            language: navigator.language
-        },
-        timestamp: new Date().toISOString()
-    };
-    
-    console.log('Sending login request to:', apiEndpoint);
-    console.log('Login payload:', loginData);
-    
-    // ⚠️ VULNERABILITY: Exposed API key and credentials in headers
-    fetch(apiEndpoint, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-API-Key': window.AzureConfig.apiConfig.primaryKey,
-            'X-Database-Connection': window.AzureConfig.databaseConfig.connectionString,
-            'X-SAS-Token': window.AzureConfig.sasToken
-        },
-        body: JSON.stringify(loginData)
-    }).then(response => {
-        console.log('Login API response:', response);
-        return response.json();
-    }).then(data => {
-        console.log('Login API data:', data);
-    }).catch(error => {
-        console.log('Login API call failed (expected for demo):', error);
-    });
-}
-
 // ⚠️ VULNERABILITY: Expose functions globally for console access
-window.authenticateUser = authenticateUser;
-window.checkUserExists = checkUserExists;
 window.generateFakeSessionToken = generateFakeSessionToken;
 
 console.log('=== Login Page Security Issues ===');
-console.log('1. Client-side authentication');
-console.log('2. Plain text passwords in localStorage');
+console.log('1. Password sent via GET query parameters (visible in logs)');
+console.log('2. Plain text passwords in localStorage and database');
 console.log('3. No rate limiting on login attempts');
-console.log('4. User enumeration through error messages');
+console.log('4. Full user record including password returned from API');
 console.log('5. Predictable session token generation');
-console.log('6. Exposed API credentials in requests');
+console.log('6. SQL injection vulnerability in backend');
 console.log('====================================');
