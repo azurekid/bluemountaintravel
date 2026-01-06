@@ -39,51 +39,53 @@
     <!-- Main Content -->
     <div class="hotels-container">
         <div class="container">
-            <!-- Filters -->
-            <div class="filters-sidebar">
-                <h3>Filter Results</h3>
-                
-                <div class="filter-group">
-                    <h4>Price Range</h4>
-                    <div class="checkbox-group">
-                        <label><input type="checkbox" name="price" value="0-300"> Under $300</label>
-                        <label><input type="checkbox" name="price" value="300-500"> $300 - $500</label>
-                        <label><input type="checkbox" name="price" value="500+"> $500+</label>
+            <div class="content-with-sidebar">
+                <!-- Filters Sidebar -->
+                <aside class="filters-sidebar">
+                    <h3>Refine Search</h3>
+                    
+                    <div class="filter-group">
+                        <h4>Price Range</h4>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" name="price" value="0-300"> Under $300</label>
+                            <label><input type="checkbox" name="price" value="300-500"> $300 - $500</label>
+                            <label><input type="checkbox" name="price" value="500+"> $500+</label>
+                        </div>
                     </div>
-                </div>
 
-                <div class="filter-group">
-                    <h4>Star Rating</h4>
-                    <div class="checkbox-group">
-                        <label><input type="checkbox" name="rating" value="5"> ⭐⭐⭐⭐⭐ (5 Star)</label>
-                        <label><input type="checkbox" name="rating" value="4"> ⭐⭐⭐⭐ (4 Star)</label>
+                    <div class="filter-group">
+                        <h4>Star Rating</h4>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" name="rating" value="5"> ⭐⭐⭐⭐⭐ (5 Star)</label>
+                            <label><input type="checkbox" name="rating" value="4"> ⭐⭐⭐⭐ (4 Star)</label>
+                        </div>
                     </div>
-                </div>
 
-                <div class="filter-group">
-                    <h4>Amenities</h4>
-                    <div class="checkbox-group">
-                        <label><input type="checkbox" name="amenity" value="wifi"> Free WiFi</label>
-                        <label><input type="checkbox" name="amenity" value="breakfast"> Breakfast Included</label>
-                        <label><input type="checkbox" name="amenity" value="gym"> Fitness Center</label>
-                        <label><input type="checkbox" name="amenity" value="pool"> Swimming Pool</label>
-                        <label><input type="checkbox" name="amenity" value="spa"> Spa Services</label>
+                    <div class="filter-group">
+                        <h4>Amenities</h4>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" name="amenity" value="wifi"> Free WiFi</label>
+                            <label><input type="checkbox" name="amenity" value="breakfast"> Breakfast Included</label>
+                            <label><input type="checkbox" name="amenity" value="gym"> Fitness Center</label>
+                            <label><input type="checkbox" name="amenity" value="pool"> Swimming Pool</label>
+                            <label><input type="checkbox" name="amenity" value="spa"> Spa Services</label>
+                        </div>
                     </div>
-                </div>
 
-                <div class="filter-group">
-                    <h4>Location</h4>
-                    <div class="checkbox-group">
-                        <label><input type="checkbox" name="location" value="city"> City Center</label>
-                        <label><input type="checkbox" name="location" value="airport"> Near Airport</label>
-                        <label><input type="checkbox" name="location" value="business"> Business District</label>
+                    <div class="filter-group">
+                        <h4>Location</h4>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" name="location" value="city"> City Center</label>
+                            <label><input type="checkbox" name="location" value="airport"> Near Airport</label>
+                            <label><input type="checkbox" name="location" value="business"> Business District</label>
+                        </div>
                     </div>
-                </div>
-            </div>
+                </aside>
 
-            <!-- Hotel Results -->
-            <div id="hotel-results" class="mt-2">
-                <!-- Hotel cards will be inserted here by JavaScript -->
+                <!-- Hotel Results -->
+                <div id="hotel-results">
+                    <!-- Hotel cards will be inserted here by JavaScript -->
+                </div>
             </div>
         </div>
     </div>
