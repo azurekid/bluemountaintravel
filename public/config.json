@@ -1,0 +1,11 @@
+{
+  "database": {
+    "username": "dbadmin",
+    "host": "bluemountaintravel-db.database.windows.net",
+    "database": "travelbookings"
+  },
+  "storage": {
+    "sasToken": "se=2025-12-31T23%3A59%3A59Z&sp=rwdxylacupfti&spr=https&sv=2022-11-02&ss=qtfb&srt=sco&sig=wuYLqRtZyq8O1gVkvQj0Y/o2eHrj1dF7OwuGAw9EAUQ%3D",
+    "accountName": "bluemountaintravel"
+  }
+}
