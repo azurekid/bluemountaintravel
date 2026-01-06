@@ -1,8 +1,243 @@
 // Profile page functionality
+// ⚠️ VULNERABILITY: Multiple profiles stored in localStorage with all sensitive data
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Loading profile page...');
+    initializeMultipleProfiles();
     loadProfile();
+    loadProfilesList();
+    setupCreateProfileForm();
 });
+
+// ⚠️ VULNERABILITY: Initialize multiple profiles from sample users
+function initializeMultipleProfiles() {
+    let profiles = localStorage.getItem('userProfiles');
+    
+    if (!profiles) {
+        // ⚠️ VULNERABILITY: Storing all sample users including sensitive data
+        const sampleUsers = window.sampleUsers || [];
+        localStorage.setItem('userProfiles', JSON.stringify(sampleUsers));
+        console.log('Initialized user profiles with sample data:', sampleUsers);
+        console.log('⚠️ All user data including passwords stored in localStorage');
+    }
+}
+
+// ⚠️ VULNERABILITY: Get all profiles from localStorage
+function getAllProfiles() {
+    let profiles = localStorage.getItem('userProfiles');
+    return profiles ? JSON.parse(profiles) : [];
+}
+
+// ⚠️ VULNERABILITY: Load and display all profiles
+function loadProfilesList() {
+    const profiles = getAllProfiles();
+    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    
+    // Update profile selector dropdown
+    const selector = document.getElementById('profile-selector');
+    if (selector) {
+        selector.innerHTML = profiles.map(p => 
+            `<option value="${p.id}" ${p.id === currentUser.id ? 'selected' : ''}>
+                ${p.firstName} ${p.lastName} (${p.email})
+            </option>`
+        ).join('');
+    }
+    
+    // Update profiles grid
+    const profilesList = document.getElementById('profiles-list');
+    if (profilesList) {
+        profilesList.innerHTML = profiles.map(p => `
+            <div style="background: ${p.id === currentUser.id ? '#e3f2fd' : '#f8f9fa'}; 
+                        padding: 1rem; 
+                        border-radius: 8px; 
+                        border: 2px solid ${p.id === currentUser.id ? 'var(--primary-color)' : '#ddd'};
+                        cursor: pointer;
+                        transition: all 0.2s ease;"
+                 onclick="selectProfile('${p.id}')"
+                 onmouseover="this.style.transform='translateY(-2px)'"
+                 onmouseout="this.style.transform='translateY(0)'">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary-color); 
+                                color: white; display: flex; align-items: center; justify-content: center; 
+                                font-weight: bold; font-size: 0.9rem;">
+                        ${p.firstName.charAt(0)}${p.lastName.charAt(0)}
+                    </div>
+                    <div style="flex: 1; overflow: hidden;">
+                        <div style="font-weight: 600; font-size: 0.95rem;">${p.firstName} ${p.lastName}</div>
+                        <div style="font-size: 0.8rem; color: #666; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            ${p.email}
+                        </div>
+                        <div style="font-size: 0.75rem; color: var(--primary-color);">${p.membershipTier}</div>
+                    </div>
+                </div>
+                ${p.id === currentUser.id ? '<div style="font-size: 0.7rem; color: #28a745; margin-top: 0.5rem; text-align: center;">✓ Active</div>' : ''}
+            </div>
+        `).join('');
+    }
+    
+    console.log('Loaded', profiles.length, 'profiles');
+    // ⚠️ VULNERABILITY: Logging all profiles including sensitive data
+    console.log('All profiles:', profiles);
+}
+
+// ⚠️ VULNERABILITY: Select and switch to a different profile
+function selectProfile(profileId) {
+    const profiles = getAllProfiles();
+    const profile = profiles.find(p => p.id === profileId);
+    
+    if (profile) {
+        // ⚠️ VULNERABILITY: Storing complete profile with sensitive data
+        localStorage.setItem('currentUser', JSON.stringify(profile));
+        console.log('Switched to profile:', profile);
+        console.log('⚠️ Password:', profile.password);
+        console.log('⚠️ Credit Card:', profile.creditCard);
+        
+        // Reload the page to show new profile
+        window.location.reload();
+    }
+}
+
+// Switch profile from dropdown
+function switchProfile() {
+    const selector = document.getElementById('profile-selector');
+    if (selector && selector.value) {
+        selectProfile(selector.value);
+    }
+}
+
+// Show create profile modal
+function showCreateProfileModal() {
+    const modal = document.getElementById('create-profile-modal');
+    if (modal) {
+        modal.style.display = 'flex';
+        // Focus on first input for accessibility
+        const firstInput = document.getElementById('new-firstName');
+        if (firstInput) {
+            setTimeout(() => firstInput.focus(), 100);
+        }
+    }
+}
+
+// Hide create profile modal
+function hideCreateProfileModal() {
+    const modal = document.getElementById('create-profile-modal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+    // Clear form
+    document.getElementById('create-profile-form').reset();
+}
+
+// Setup create profile form
+function setupCreateProfileForm() {
+    const form = document.getElementById('create-profile-form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            createNewProfile();
+        });
+    }
+}
+
+// ⚠️ VULNERABILITY: Create new profile with sensitive data stored in plain text
+function createNewProfile() {
+    const newProfile = {
+        id: 'USR' + Date.now(),
+        firstName: document.getElementById('new-firstName').value,
+        lastName: document.getElementById('new-lastName').value,
+        email: document.getElementById('new-email').value,
+        // ⚠️ VULNERABILITY: Password stored in plain text
+        password: document.getElementById('new-password').value,
+        phone: document.getElementById('new-phone').value || '+1-555-0000',
+        company: document.getElementById('new-company').value || 'N/A',
+        membershipTier: 'Silver',
+        // ⚠️ VULNERABILITY: Default sensitive data
+        creditCard: '4111-1111-1111-' + Math.floor(1000 + Math.random() * 9000),
+        cvv: String(Math.floor(100 + Math.random() * 900)),
+        cardExpiry: '12/28',
+        ssn: '000-00-' + String(Math.floor(1000 + Math.random() * 9000)),
+        dateOfBirth: '1990-01-01',
+        address: '123 New User St',
+        // ⚠️ VULNERABILITY: Auto-generated Azure credentials
+        azureUsername: document.getElementById('new-email').value.split('@')[0] + '@bluemountain.onmicrosoft.com',
+        azurePassword: 'Welcome2024!',
+        entraId: generateUUID(),
+        createdDate: new Date().toISOString()
+    };
+    
+    // ⚠️ VULNERABILITY: Logging new profile with all sensitive data
+    console.log('Creating new profile:', newProfile);
+    console.log('⚠️ Password:', newProfile.password);
+    console.log('⚠️ Credit Card:', newProfile.creditCard);
+    
+    // Add to profiles list
+    const profiles = getAllProfiles();
+    profiles.push(newProfile);
+    localStorage.setItem('userProfiles', JSON.stringify(profiles));
+    
+    // Set as current user
+    localStorage.setItem('currentUser', JSON.stringify(newProfile));
+    
+    // Hide modal and reload
+    hideCreateProfileModal();
+    alert('Profile created successfully!\n\nWelcome, ' + newProfile.firstName + '!');
+    window.location.reload();
+}
+
+// ⚠️ VULNERABILITY: Delete current profile
+function deleteCurrentProfile() {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    
+    if (!currentUser.id) {
+        alert('No profile selected to delete.');
+        return;
+    }
+    
+    // Don't allow deleting the admin
+    if (currentUser.membershipTier === 'Admin') {
+        alert('Cannot delete admin profile.');
+        return;
+    }
+    
+    if (!confirm('Are you sure you want to delete the profile for ' + currentUser.firstName + ' ' + currentUser.lastName + '?\n\nThis action cannot be undone.')) {
+        return;
+    }
+    
+    // Remove from profiles list
+    let profiles = getAllProfiles();
+    profiles = profiles.filter(p => p.id !== currentUser.id);
+    localStorage.setItem('userProfiles', JSON.stringify(profiles));
+    
+    console.log('Deleted profile:', currentUser);
+    
+    // Switch to first available profile or clear
+    if (profiles.length > 0) {
+        localStorage.setItem('currentUser', JSON.stringify(profiles[0]));
+        alert('Profile deleted. Switched to ' + profiles[0].firstName + ' ' + profiles[0].lastName);
+    } else {
+        localStorage.removeItem('currentUser');
+        alert('Profile deleted. No profiles remaining.');
+    }
+    
+    window.location.reload();
+}
+
+// Generate UUID for Entra ID
+function generateUUID() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0;
+        const v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
+// Make functions available globally
+window.switchProfile = switchProfile;
+window.selectProfile = selectProfile;
+window.showCreateProfileModal = showCreateProfileModal;
+window.hideCreateProfileModal = hideCreateProfileModal;
+window.createNewProfile = createNewProfile;
+window.deleteCurrentProfile = deleteCurrentProfile;
+window.getAllProfiles = getAllProfiles;
 
 function loadProfile() {
     // ⚠️ VULNERABILITY: Reading sensitive user data from localStorage
