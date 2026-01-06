@@ -1,6 +1,15 @@
 // Bookings page functionality
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Loading bookings page...');
+    
+    // Check authentication
+    const currentUser = localStorage.getItem('currentUser');
+    if (!currentUser) {
+        // Redirect to login if not authenticated
+        window.location.href = 'login.html?redirect=bookings.html';
+        return;
+    }
+    
     displayBookings();
 });
 
@@ -10,6 +19,16 @@ function displayBookings() {
     if (!bookingsList) return;
     
     // ⚠️ VULNERABILITY: Reading sensitive booking data from localStorage
+    // TODO: In production, fetch from database using dbadmin credentials
+    const dbConfig = window.AzureConfig?.databaseConfig || {
+        server: "bluemountaintravel.database.windows.net",
+        database: "TravelDB",
+        username: "dbadmin",  // Using dbadmin as SQL admin account
+        password: "P@ssw0rd123!"
+    };
+    
+    console.log('Database connection would use:', dbConfig.username + '@' + dbConfig.server);
+    
     let bookings = localStorage.getItem('bookings');
     bookings = bookings ? JSON.parse(bookings) : [];
     
