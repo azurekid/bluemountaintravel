@@ -83,6 +83,9 @@ function displayBookings() {
                             <p><strong>Document:</strong> <a href="${booking.documentUrl}" target="_blank">View Ticket</a></p>
                         </div>
                     </div>
+                    <div class="booking-actions">
+                        <button class="btn-cancel" onclick="removeBooking('${booking.bookingId}')">Cancel Booking</button>
+                    </div>
                 </div>
             `;
         } else {
@@ -114,6 +117,9 @@ function displayBookings() {
                             <p><strong>Card:</strong> ${booking.payment.cardNumber}</p>
                             <p><strong>Confirmation:</strong> <a href="${booking.confirmationUrl}" target="_blank">View Document</a></p>
                         </div>
+                    </div>
+                    <div class="booking-actions">
+                        <button class="btn-cancel" onclick="removeBooking('${booking.bookingId}')">Cancel Booking</button>
                     </div>
                 </div>
             `;
@@ -158,3 +164,32 @@ function exportBookingsData() {
 
 // Make function available globally
 window.exportBookingsData = exportBookingsData;
+
+// Remove a booking by its ID
+function removeBooking(bookingId) {
+    if (!confirm('Are you sure you want to cancel this booking? This action cannot be undone.')) {
+        return;
+    }
+    
+    let bookings = localStorage.getItem('bookings');
+    bookings = bookings ? JSON.parse(bookings) : [];
+    
+    const initialLength = bookings.length;
+    bookings = bookings.filter(booking => booking.bookingId !== bookingId);
+    
+    if (bookings.length < initialLength) {
+        localStorage.setItem('bookings', JSON.stringify(bookings));
+        console.log('Booking removed:', bookingId);
+        
+        // Refresh the bookings display
+        displayBookings();
+        
+        alert('Booking has been cancelled successfully.');
+    } else {
+        console.log('Booking not found:', bookingId);
+        alert('Booking not found.');
+    }
+}
+
+// Make removeBooking available globally
+window.removeBooking = removeBooking;
