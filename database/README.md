@@ -43,12 +43,32 @@ sqlcmd -S bluemountaintravel.database.windows.net -d TravelDB -U dbadmin -P 'P@s
 
 ### 2. Seed Sample Data
 
-The application will initially load data from the backend API, which queries the database.
+After creating the schema, populate the database with realistic sample data using `seed-data.sql`:
 
-To populate with sample data:
-- Use the Azure Portal Query Editor
-- Or run the seed.sql script (when created)
-- Or use the `/api/execute` endpoint to insert data (⚠️ vulnerable by design)
+**Option A: Using Azure Portal Query Editor** (Recommended)
+1. In Azure Portal, navigate to your SQL Database → Query editor
+2. Open `seed-data.sql` in a text editor and copy its contents
+3. Paste the SQL script into the query editor
+4. Click "Run" to execute the data insertion
+
+**Option B: Using Azure CloudShell**
+```bash
+# Upload seed-data.sql to CloudShell
+sqlcmd -S bluemountaintravel.database.windows.net -d TravelDB -U dbadmin -P 'P@ssw0rd123!' -i seed-data.sql
+```
+
+**Option C: Using `/api/execute` endpoint** (Alternative, ⚠️ vulnerable by design)
+- Start the backend server: `npm start`
+- Use the backend test page at http://localhost:3000/backend-test.html
+- Copy sections from seed-data.sql and execute via the SQL execution interface
+
+**Sample Data Included:**
+- **11 Users** (10 regular + 1 admin) with realistic names, emails, addresses
+- **20 Flights** covering major routes (US-Europe, US-Asia, Domestic)
+- **12 Hotels** in major cities worldwide with detailed amenities
+- **22 Bookings** showing realistic booking history (confirmed, completed, cancelled)
+
+All data looks authentic but is fake and intentionally vulnerable for training.
 
 ## Database Tables
 
