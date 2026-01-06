@@ -179,7 +179,7 @@ function applyFilters() {
     });
 }
 
-// ⚠️ VULNERABILITY: Booking function that exposes sensitive data
+// Redirect to booking page to fill in user details
 function bookFlight(flightId) {
     const flight = window.FlightData.find(f => f.id === flightId);
     
@@ -188,58 +188,8 @@ function bookFlight(flightId) {
         return;
     }
     
-    const user = window.getCurrentUser ? getCurrentUser() : null;
-    
-    // ⚠️ VULNERABILITY: Creating booking with exposed SAS token
-    const bookingData = {
-        bookingId: 'BK' + Date.now(),
-        flightId: flight.id,
-        flight: flight,
-        user: user, // ⚠️ Contains sensitive user data
-        bookingDate: new Date().toISOString(),
-        status: 'confirmed',
-        // ⚠️ VULNERABILITY: Payment info in booking object
-        payment: {
-            method: 'credit_card',
-            cardNumber: user ? user.creditCard : '****-****-****-****',
-            amount: flight.price
-        },
-        // ⚠️ VULNERABILITY: Direct blob storage URL with SAS token
-        documentUrl: `${window.AzureConfig.storageUrls.bookings}/${Date.now()}-booking.pdf`,
-        confirmationUrl: `${window.AzureConfig.storageUrls.documents}/confirmation-${Date.now()}.pdf`
-    };
-    
-    console.log('Creating booking:', bookingData);
-    
-    // ⚠️ VULNERABILITY: Storing booking data in localStorage with sensitive info
-    let bookings = localStorage.getItem('bookings');
-    bookings = bookings ? JSON.parse(bookings) : [];
-    bookings.push(bookingData);
-    localStorage.setItem('bookings', JSON.stringify(bookings));
-    
-    // ⚠️ VULNERABILITY: Making API call with exposed credentials
-    fetch(`${window.AzureConfig.apiConfig.endpoint}/bookings`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            // ⚠️ VULNERABILITY: API key in header
-            'X-API-Key': window.AzureConfig.apiConfig.primaryKey,
-            // ⚠️ VULNERABILITY: Database credentials in custom header
-            'X-Database-Connection': window.AzureConfig.databaseConfig.connectionString
-        },
-        body: JSON.stringify(bookingData)
-    }).then(response => {
-        console.log('Booking response:', response);
-    }).catch(error => {
-        console.error('Booking error:', error);
-    });
-    
-    alert(`Flight booked successfully!\n\nBooking ID: ${bookingData.bookingId}\nFlight: ${flight.airline} ${flight.flightNumber}\nRoute: ${flight.from} → ${flight.to}\nPrice: $${flight.price}\n\nCheck "My Bookings" to view details.`);
-    
-    // Redirect to bookings page
-    setTimeout(() => {
-        window.location.href = 'bookings.html';
-    }, 2000);
+    // Redirect to the booking page with flight ID
+    window.location.href = `book-flight.html?id=${flightId}`;
 }
 
 // Make bookFlight available globally

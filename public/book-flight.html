@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Flight - Blue Mountain Travel</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h1 class="logo">Blue Mountain Travel</h1>
+                <p class="tagline">Elevate Your Business Journey</p>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="flights.html" class="active">Flights</a></li>
+                <li><a href="hotels.html">Hotels</a></li>
+                <li><a href="bookings.html">My Bookings</a></li>
+                <li><a href="profile.html">Profile</a></li>
+                <li><a href="login.html" class="btn-login">Sign In</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <h1>Complete Your Flight Booking</h1>
+            <p>Please fill in your details to confirm your reservation</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flights-container">
+        <div class="container">
+            <div style="display: grid; grid-template-columns: 1fr 400px; gap: 2rem;">
+                <!-- Booking Form -->
+                <div class="profile-card">
+                    <h2 style="margin-bottom: 2rem; color: var(--primary-color);">Passenger Information</h2>
+                    <form id="booking-form">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                            <div class="form-group">
+                                <label for="firstName" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">First Name *</label>
+                                <input type="text" id="firstName" name="firstName" required 
+                                    style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem;">
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Last Name *</label>
+                                <input type="text" id="lastName" name="lastName" required 
+                                    style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem;">
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem;">
+                            <div class="form-group">
+                                <label for="email" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Email Address *</label>
+                                <input type="email" id="email" name="email" required 
+                                    style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem;">
+                            </div>
+                            <div class="form-group">
+                                <label for="phone" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Phone Number *</label>
+                                <input type="tel" id="phone" name="phone" required 
+                                    style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem;">
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem;">
+                            <div class="form-group">
+                                <label for="dateOfBirth" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Date of Birth *</label>
+                                <input type="date" id="dateOfBirth" name="dateOfBirth" required 
+                                    style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem;">
+                            </div>
+                            <div class="form-group">
+                                <label for="passportNumber" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Passport Number *</label>
+                                <input type="text" id="passportNumber" name="passportNumber" required 
+                                    style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem;">
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem;">
+                            <div class="form-group">
+                                <label for="nationality" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Nationality *</label>
+                                <input type="text" id="nationality" name="nationality" required 
+                                    style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem;">
+                            </div>
+                            <div class="form-group">
+                                <label for="passportExpiry" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Passport Expiry Date *</label>
+                                <input type="date" id="passportExpiry" name="passportExpiry" required 
+                                    style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem;">
+                            </div>
+                        </div>
+
+                        <h3 style="margin-top: 2rem; margin-bottom: 1rem; color: var(--primary-color);">Additional Preferences</h3>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                            <div class="form-group">
+                                <label for="seatPreference" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Seat Preference</label>
+                                <select id="seatPreference" name="seatPreference" 
+                                    style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem;">
+                                    <option value="no-preference">No Preference</option>
+                                    <option value="window">Window</option>
+                                    <option value="aisle">Aisle</option>
+                                    <option value="middle">Middle</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="mealPreference" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Meal Preference</label>
+                                <select id="mealPreference" name="mealPreference" 
+                                    style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem;">
+                                    <option value="standard">Standard</option>
+                                    <option value="vegetarian">Vegetarian</option>
+                                    <option value="vegan">Vegan</option>
+                                    <option value="halal">Halal</option>
+                                    <option value="kosher">Kosher</option>
+                                    <option value="gluten-free">Gluten Free</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-top: 1.5rem;">
+                            <label for="specialRequests" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Special Requests</label>
+                            <textarea id="specialRequests" name="specialRequests" rows="3" 
+                                style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem; resize: vertical;"
+                                placeholder="Any special assistance or requests..."></textarea>
+                        </div>
+
+                        <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+                            <button type="submit" class="btn-book" style="flex: 1;">Confirm Booking</button>
+                            <a href="flights.html" class="btn-search" style="text-decoration: none; text-align: center;">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Flight Summary -->
+                <div>
+                    <div class="profile-card" id="flight-summary">
+                        <h3 style="margin-bottom: 1.5rem; color: var(--primary-color);">Flight Summary</h3>
+                        <div id="flight-details">
+                            <p>Loading flight details...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Blue Mountain Travel</h4>
+                    <p>Your trusted partner in business travel since 1995.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="flights.html">Flights</a></li>
+                        <li><a href="hotels.html">Hotels</a></li>
+                        <li><a href="bookings.html">My Bookings</a></li>
+                        <li><a href="profile.html">Profile</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Corporate Accounts</a></li>
+                        <li><a href="#">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <p>24/7 Support: <strong>1-800-BLUE-MTN</strong></p>
+                    <p>Email: <strong>support@bluemountaintravel.com</strong></p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Blue Mountain Travel. All rights reserved.</p>
+                <p class="security-notice">⚠️ This is a demonstration website with intentional security vulnerabilities for training purposes.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/book-flight.js"></script>
+</body>
+</html>

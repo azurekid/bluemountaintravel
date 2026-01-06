@@ -167,7 +167,7 @@ function displayError(message) {
     `;
 }
 
-// ⚠️ VULNERABILITY: Booking function without authentication
+// Redirect to booking page to fill in user details
 function bookHotel(hotelId) {
     const hotel = window.HotelData.find(h => h.id === hotelId);
     
@@ -176,41 +176,8 @@ function bookHotel(hotelId) {
         return;
     }
     
-    const user = window.getCurrentUser ? getCurrentUser() : null;
-    
-    // Create booking
-    const bookingData = {
-        bookingId: 'HB' + Date.now(),
-        hotelId: hotel.id,
-        hotel: hotel,
-        user: user,
-        bookingDate: new Date().toISOString(),
-        checkIn: new Date(Date.now() + 86400000).toISOString(),
-        checkOut: new Date(Date.now() + 7 * 86400000).toISOString(),
-        nights: 7,
-        status: 'confirmed',
-        payment: {
-            method: 'credit_card',
-            cardNumber: user ? user.creditCard : '****-****-****-****',
-            amount: hotel.price * 7
-        },
-        documentUrl: `${window.AzureConfig.storageUrls.bookings}/${Date.now()}-hotel-booking.pdf`,
-        confirmationUrl: `${window.AzureConfig.storageUrls.documents}/hotel-confirmation-${Date.now()}.pdf`
-    };
-    
-    console.log('Creating hotel booking:', bookingData);
-    
-    // Store booking
-    let bookings = localStorage.getItem('bookings');
-    bookings = bookings ? JSON.parse(bookings) : [];
-    bookings.push(bookingData);
-    localStorage.setItem('bookings', JSON.stringify(bookings));
-    
-    alert(`Hotel booked successfully!\n\nBooking ID: ${bookingData.bookingId}\nHotel: ${hotel.name}\nLocation: ${hotel.location}\nCheck-in: ${new Date(bookingData.checkIn).toLocaleDateString()}\nCheck-out: ${new Date(bookingData.checkOut).toLocaleDateString()}\nTotal: $${hotel.price * 7}\n\nCheck "My Bookings" to view details.`);
-    
-    setTimeout(() => {
-        window.location.href = 'bookings.html';
-    }, 2000);
+    // Redirect to the booking page with hotel ID
+    window.location.href = `book-hotel.html?id=${hotelId}`;
 }
 
 window.bookHotel = bookHotel;
