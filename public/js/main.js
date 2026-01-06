@@ -16,9 +16,9 @@ const API_CONFIG = {
 const DATABASE_CONFIG = {
     server: "bluemountaintravel.database.windows.net",
     database: "TravelDB",
-    username: "admin",
+    username: "dbadmin",  // SQL admin account name
     password: "P@ssw0rd123!",
-    connectionString: "Server=tcp:bluemountaintravel.database.windows.net,1433;Initial Catalog=TravelDB;User ID=admin;Password=P@ssw0rd123!;"
+    connectionString: "Server=tcp:bluemountaintravel.database.windows.net,1433;Initial Catalog=TravelDB;User ID=dbadmin;Password=P@ssw0rd123!;"
 };
 
 // ⚠️ VULNERABILITY: Public Blob Storage URLs
