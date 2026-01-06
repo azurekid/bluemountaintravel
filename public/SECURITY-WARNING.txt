@@ -1,0 +1,33 @@
+⚠️ SECURITY WARNING ⚠️
+=======================
+
+This configuration file (config.json) contains sensitive credentials that are exposed in client-side code.
+
+CURRENT STATE (DEVELOPMENT/DEMO):
+- Database credentials are in a public JSON file
+- SAS token with broad permissions (rwdxylacupfti) expires 2025-12-31
+- Anyone can view these credentials in their browser
+
+THIS IS ONLY ACCEPTABLE FOR:
+✓ Local development
+✓ Demo environments with no real data
+✓ Proof-of-concept projects
+
+FOR PRODUCTION, YOU MUST:
+❌ Never expose database credentials in client-side code
+❌ Never use long-lived SAS tokens in public files
+❌ Never give broad permissions to public tokens
+
+PRODUCTION RECOMMENDATIONS:
+✅ Move all credentials to server-side environment variables
+✅ Use Azure Key Vault for secret management
+✅ Generate short-lived SAS tokens (< 1 hour) on-demand from backend
+✅ Use minimal permissions for each token
+✅ Implement proper authentication/authorization
+✅ Use Azure AD for database authentication when possible
+
+ARCHITECTURE FOR PRODUCTION:
+Browser → API Gateway/Backend API → Azure Services
+         (No credentials)      (Has credentials)
+
+The client should ONLY talk to your backend API, which then securely accesses Azure services with proper credentials stored in Key Vault or environment variables.

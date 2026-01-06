@@ -104,12 +104,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Load configuration for client-side features
     // Note: In production, sensitive credentials should be handled server-side
+    // This configuration loading is for demonstration purposes only
     fetch('config.json')
         .then(response => response.json())
         .then(config => {
-            console.log('Configuration loaded successfully');
             // Configuration is available for use in API calls
             // Credentials should only be used in server-side API endpoints
         })
