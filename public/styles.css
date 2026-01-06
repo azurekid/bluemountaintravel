@@ -40,6 +40,10 @@
     
     /* Layout */
     --navbar-height: 80px;
+    --hotel-image-width: 350px;
+    
+    /* Status Colors */
+    --status-available: #4CAF50;
     
     /* Typography */
     --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -742,7 +746,7 @@ body {
     padding: var(--spacing-md);
     height: fit-content;
     position: sticky;
-    top: 100px;
+    top: calc(var(--navbar-height) + 20px);
 }
 
 .filters-sidebar h3 {
@@ -819,7 +823,7 @@ body {
     overflow: hidden;
     transition: all var(--transition-medium);
     display: grid;
-    grid-template-columns: 350px 1fr;
+    grid-template-columns: var(--hotel-image-width) 1fr;
 }
 
 .hotel-card:hover {
@@ -966,6 +970,11 @@ body {
 
 .text-muted {
     color: rgba(255, 255, 255, 0.8);
+}
+
+.status-available {
+    color: var(--status-available);
+    font-weight: 600;
 }
 
 /* ========================================

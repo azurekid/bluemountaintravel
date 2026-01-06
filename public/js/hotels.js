@@ -55,7 +55,7 @@ function displayHotels() {
                         <div class="hotel-amenities">
                             ${amenitiesBadges}
                         </div>
-                        <p><strong>Status:</strong> <span style="color: #4CAF50; font-weight: 600;">✓ Available</span></p>
+                        <p><strong>Status:</strong> <span class="status-available">✓ Available</span></p>
                     </div>
                     <div class="hotel-footer">
                         <div class="hotel-price">
