@@ -113,7 +113,11 @@ function applyFilters() {
             }
         }
         
-        card.style.display = show ? 'grid' : 'none';
+        if (show) {
+            card.style.display = '';
+        } else {
+            card.style.display = 'none';
+        }
     });
 }
 
