@@ -218,7 +218,7 @@ This document summarizes all the new features and vulnerabilities added to the B
 ### New Backend (Azure Function App)
 - `/api/host.json`, `/api/package.json`, `/api/local.settings.json` - Function host and local config for Node 18
 - `/api/users/index.js`, `/api/users/function.json` - Login API (`/api/users`) backed by Azure SQL `TravelDB`
-- Front-end override: `/public/js/api-client.js` now honors `window.BMT_API_BASE_URL` to point at the Function host
+- Front-end default: `/public/js/api-client.js` now points to `https://bluemountaintravel-func.azurewebsites.net/api` for non-localhost, and still honors `window.BMT_API_BASE_URL` if you need to override
 
 ### Deployment Docs
 - `/docs/FUNCTIONAPP_DEPLOYMENT.md` - Step-by-step Function App setup and publish guide
