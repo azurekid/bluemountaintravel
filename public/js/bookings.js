@@ -2,6 +2,9 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Loading bookings page...');
     
+    // Update auth button
+    updateAuthButton();
+    
     // Check authentication using database backend
     if (!verifyDatabaseAuthentication()) {
         // Redirect to login if not authenticated
@@ -11,6 +14,24 @@ document.addEventListener('DOMContentLoaded', function() {
     
     displayBookings();
 });
+
+// Update auth button based on login state
+function updateAuthButton() {
+    const authBtn = document.getElementById('auth-btn');
+    const currentUser = localStorage.getItem('currentUser');
+    
+    if (currentUser && authBtn) {
+        authBtn.textContent = 'Logout';
+        authBtn.href = '#';
+        authBtn.onclick = function(e) {
+            e.preventDefault();
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('sessionToken');
+            localStorage.removeItem('loginTimestamp');
+            window.location.href = 'index.html';
+        };
+    }
+}
 
 // Verify authentication against database backend
 function verifyDatabaseAuthentication() {
@@ -40,8 +61,8 @@ function verifyDatabaseAuthentication() {
             return false;
         }
         
-        console.log('Database authentication verified for user:', user.email);
-        console.log('Using database server:', dbConfig.server);
+        console.log('Database authentication verified for user:', user.Email || user.email);
+        console.log('User object:', user);
         
         return true;
     } catch (error) {
