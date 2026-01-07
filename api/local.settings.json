@@ -5,7 +5,7 @@
     "FUNCTIONS_WORKER_RUNTIME": "node",
     "SQL_SERVER": "bluemountaintravel-sql.database.windows.net",
     "SQL_DB": "TravelDB",
-    "SQL_USER": "admin",
+    "SQL_USER": "dbadmin",
     "SQL_PASSWORD": "P@ssw0rd123!"
   }
 }
