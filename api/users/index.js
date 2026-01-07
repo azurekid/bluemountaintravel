@@ -46,14 +46,35 @@ module.exports = async function (context, req) {
       return;
     }
 
+    // Basic diagnostics (logs only)
+    const cfg = buildConfig();
+    try {
+      context.log('Login attempt', {
+        email,
+        usingConnectionString: !!cfg.connectionString,
+        server: cfg.server,
+        database: cfg.database,
+        userConfigured: !!cfg.user
+      });
+    } catch (_) {
+      // Ignore logging errors
+    }
+
     const pool = await getPool();
     const request = pool.request();
     request.input('email', sql.VarChar, email);
     request.input('password', sql.VarChar, password);
 
-    const result = await request.query(
-      'SELECT * FROM Users WHERE Email = @email AND PasswordHash = @password'
-    );
+    // Use trimmed/case-insensitive email match and trimmed password to avoid whitespace/collation surprises
+    const result = await request.query(`
+      SELECT *
+      FROM Users
+      WHERE LTRIM(RTRIM(LOWER(Email))) = LTRIM(RTRIM(LOWER(@email)))
+        AND LTRIM(RTRIM(PasswordHash)) = LTRIM(RTRIM(@password))
+        AND IsActive = 1
+    `);
+
+    context.log('Login query executed', { rows: result?.recordset?.length || 0 });
 
     context.res = {
       status: 200,
