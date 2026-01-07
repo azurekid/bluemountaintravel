@@ -36,7 +36,13 @@ async function handleRegister(event) {
     
     try {
         // ⚠️ VULNERABILITY: Sending plain text password to backend
-        const response = await fetch('/api/register', {
+        const base = (typeof window !== 'undefined' && window.BMT_API_BASE_URL)
+            ? window.BMT_API_BASE_URL
+            : (window.location.origin.includes('localhost')
+                ? 'http://localhost:3000/api'
+                : 'https://bluemountaintravel-func.azurewebsites.net/api');
+
+        const response = await fetch(`${base}/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
