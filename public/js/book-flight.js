@@ -84,7 +84,7 @@ function displayFlightError(message) {
 
 // Prefill form with user data if available
 function prefillUserData() {
-    const user = window.getCurrentUser ? getCurrentUser() : null;
+    const user = window.getCurrentUser ? window.getCurrentUser() : JSON.parse(localStorage.getItem('currentUser') || 'null');
     
     // ⚠️ SECURITY FIX: Don't prefill sensitive user data by default
     // Let users enter their information manually for better security

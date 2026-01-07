@@ -389,6 +389,10 @@ function loadProfile() {
     }
     
     // ⚠️ VULNERABILITY: Direct Azure Storage URLs with SAS tokens
+    let profileUrl = '';
+    let documentsUrl = '';
+    let bookingsUrl = '';
+    
     const azureConfig = window.AzureConfig;
     if (azureConfig) {
         const storageElement = document.getElementById('storage-account');
@@ -397,8 +401,9 @@ function loadProfile() {
         }
         
         // ⚠️ VULNERABILITY: Exposed container URLs with SAS tokens
-        const profileUrl = azureConfig.storageUrls.profiles;
-        const documentsUrl = azureConfig.storageUrls.documents;
+        profileUrl = azureConfig.storageUrls.profiles;
+        documentsUrl = azureConfig.storageUrls.documents;
+        bookingsUrl = azureConfig.storageUrls.bookings;
         
         const profileUrlElement = document.getElementById('profile-container-url');
         if (profileUrlElement) {
@@ -420,7 +425,7 @@ function loadProfile() {
     console.log('Azure Storage URLs:', {
         profiles: profileUrl,
         documents: documentsUrl,
-        bookings: azureConfig.storageUrls.bookings
+        bookings: bookingsUrl
     });
 }
 

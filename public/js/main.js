@@ -1423,6 +1423,7 @@ if (typeof window !== 'undefined') {
     window.FlightData = flightData;
     window.HotelData = hotelData;
     window.sampleUsers = sampleUsers;  // ⚠️ VULNERABILITY: Exposing all users globally
+    window.getCurrentUser = getCurrentUser;  // Export for use in other pages
     // FLAG{all_user_data_accessible_via_window_object}
     window.AzureConfig = {
         storageAccount: STORAGE_ACCOUNT_NAME,
