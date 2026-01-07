@@ -1,11 +1,31 @@
 const sql = require('mssql');
 
+function buildConfig() {
+    const connectionString = process.env.SQL_CONNECTION_STRING;
+    if (connectionString) {
+        return { connectionString };
+    }
+    const server = process.env.SQL_SERVER || 'bluemountaintravel.database.windows.net';
+    const database = process.env.SQL_DB || 'TravelDB';
+    const user = process.env.SQL_USER || 'dbadmin';
+    const password = process.env.SQL_PASSWORD || 'P@ssw0rd123!';
+
+    return {
+        server,
+        database,
+        user,
+        password,
+        options: {
+            encrypt: true,
+            trustServerCertificate: false
+        }
+    };
+}
+
 module.exports = async function (context, req) {
     context.log('Profile API called');
 
-    // Get user email from query parameter
     const email = req.query.email;
-
     if (!email) {
         context.res = {
             status: 400,
@@ -15,23 +35,19 @@ module.exports = async function (context, req) {
         return;
     }
 
-    // ⚠️ VULNERABILITY: Database credentials in environment variables
-    const config = {
-        server: process.env.SQL_SERVER,
-        database: process.env.SQL_DB,
-        user: process.env.SQL_USER,
-        password: process.env.SQL_PASSWORD,
-        options: {
-            encrypt: true,
-            trustServerCertificate: false
-        }
-    };
+    const cfg = buildConfig();
+    try {
+        context.log('Profile DB config', {
+            usingConnectionString: !!cfg.connectionString,
+            server: cfg.server,
+            database: cfg.database,
+            userConfigured: !!cfg.user
+        });
+    } catch (_) {}
 
     try {
-        // Connect to database
-        await sql.connect(config);
-        
-        // ⚠️ SECURITY: Using parameterized query to prevent SQL injection
+        await sql.connect(cfg);
+
         const result = await sql.query`
             SELECT 
                 u.UserID, u.Email, u.FirstName, u.LastName, u.Phone, 
@@ -56,8 +72,6 @@ module.exports = async function (context, req) {
         }
 
         const userData = result.recordset[0];
-        
-        // Build response object
         const profile = {
             userId: userData.UserID,
             email: userData.Email,
@@ -75,7 +89,6 @@ module.exports = async function (context, req) {
             lastLoginDate: userData.LastLoginDate
         };
 
-        // Add passport data if available
         if (userData.PassportID) {
             profile.passport = {
                 passportId: userData.PassportID,
@@ -95,12 +108,11 @@ module.exports = async function (context, req) {
             };
         }
 
-        // ⚠️ VULNERABILITY: Exposing full user profile including sensitive passport data
         context.log('⚠️ Returning full profile with passport data for:', email);
 
         context.res = {
             status: 200,
-            headers: { 
+            headers: {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET, OPTIONS',
@@ -108,7 +120,6 @@ module.exports = async function (context, req) {
             },
             body: JSON.stringify(profile)
         };
-
     } catch (err) {
         context.log.error('Database error:', err);
         context.res = {
