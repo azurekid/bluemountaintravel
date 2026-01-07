@@ -23,9 +23,10 @@ const DATABASE_CONFIG = {
 
 // ⚠️ VULNERABILITY: Public Blob Storage URLs
 const STORAGE_URLS = {
-    bookings: `https://${STORAGE_ACCOUNT_NAME}.blob.core.windows.net/bookings${AZURE_STORAGE_SAS_TOKEN}`,
-    profiles: `https://${STORAGE_ACCOUNT_NAME}.blob.core.windows.net/profiles${AZURE_STORAGE_SAS_TOKEN}`,
-    documents: `https://${STORAGE_ACCOUNT_NAME}.blob.core.windows.net/documents${AZURE_STORAGE_SAS_TOKEN}`
+    bookings: `https://${STORAGE_ACCOUNT_NAME}.blob.core.windows.net/bookings/`,
+    profiles: `https://${STORAGE_ACCOUNT_NAME}.blob.core.windows.net/profiles/`,
+    documents: `https://${STORAGE_ACCOUNT_NAME}.blob.core.windows.net/documents/`,
+    sasToken: AZURE_STORAGE_SAS_TOKEN
 };
 
 // ⚠️ VULNERABILITY: Hidden flag in comments

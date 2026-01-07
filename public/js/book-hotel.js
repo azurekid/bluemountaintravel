@@ -280,8 +280,8 @@ function processHotelBooking() {
             cardNumber: user ? user.creditCard : '****-****-****-****',
             amount: totalPrice
         },
-        documentUrl: `${window.AzureConfig.storageUrls.bookings}/${Date.now()}-hotel-booking.pdf`,
-        confirmationUrl: `${window.AzureConfig.storageUrls.documents}/hotel-confirmation-${Date.now()}.pdf`
+        documentUrl: `${window.AzureConfig.storageUrls.bookings}${Date.now()}-hotel-booking.pdf${window.AzureConfig.sasToken}`,
+        confirmationUrl: `${window.AzureConfig.storageUrls.documents}hotel-confirmation-${Date.now()}.pdf${window.AzureConfig.sasToken}`
     };
     
     console.log('Creating hotel booking:', bookingData);

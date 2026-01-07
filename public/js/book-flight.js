@@ -184,8 +184,8 @@ function processFlightBooking() {
             cardNumber: user ? user.creditCard : '****-****-****-****',
             amount: flight.price
         },
-        documentUrl: `${window.AzureConfig.storageUrls.bookings}/${Date.now()}-booking.pdf`,
-        confirmationUrl: `${window.AzureConfig.storageUrls.documents}/confirmation-${Date.now()}.pdf`
+        documentUrl: `${window.AzureConfig.storageUrls.bookings}${Date.now()}-booking.pdf${window.AzureConfig.sasToken}`,
+        confirmationUrl: `${window.AzureConfig.storageUrls.documents}confirmation-${Date.now()}.pdf${window.AzureConfig.sasToken}`
     };
     
     console.log('Creating booking:', bookingData);
