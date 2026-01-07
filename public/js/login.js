@@ -95,8 +95,12 @@ async function handleLogin(event) {
             
             showMessage('Login successful! Redirecting...', 'success');
             
+            // Check for redirect parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const redirectTo = urlParams.get('redirect') || 'index.html';
+            
             setTimeout(() => {
-                window.location.href = 'index.html';
+                window.location.href = redirectTo;
             }, 1000);
         } else {
             console.log('Authentication failed: Invalid credentials');

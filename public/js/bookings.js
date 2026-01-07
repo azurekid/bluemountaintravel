@@ -24,21 +24,10 @@ function verifyDatabaseAuthentication() {
     try {
         const user = JSON.parse(currentUser);
         
-        // Verify user exists in the database backend
-        const dbConfig = window.AzureConfig?.databaseConfig;
-        if (!dbConfig) {
-            console.error('Database configuration not available');
-            return false;
-        }
-        
-        // Validate user against the database users (simulated database backend check)
-        const databaseUsers = window.sampleUsers || [];
-        const authenticatedUser = databaseUsers.find(dbUser => 
-            dbUser.email === user.email && dbUser.id === user.id
-        );
-        
-        if (!authenticatedUser) {
-            console.error('User not found in database backend');
+        // User from SQL DB has Email (capital E) and UserID fields
+        // Accept user if they have these fields from the Function API response
+        if (!user.Email && !user.email) {
+            console.error('Invalid user object - missing email field');
             localStorage.removeItem('currentUser');
             localStorage.removeItem('sessionToken');
             return false;
@@ -66,6 +55,20 @@ function displayBookings() {
     
     if (!bookingsList) return;
     
+    // Get current user (from SQL DB, has UserID field)
+    const currentUser = localStorage.getItem('currentUser');
+    const user = currentUser ? JSON.parse(currentUser) : null;
+    
+    if (!user) {
+        bookingsList.innerHTML = `
+            <div class="profile-card text-center">
+                <h2>No User Session</h2>
+                <p class="text-muted">Please log in to view your bookings.</p>
+            </div>
+        `;
+        return;
+    }
+    
     // ⚠️ VULNERABILITY: Reading sensitive booking data from localStorage
     // TODO: In production, fetch from database using dbadmin credentials
     const dbConfig = window.AzureConfig?.databaseConfig || {
@@ -76,13 +79,14 @@ function displayBookings() {
     };
     
     console.log('Database connection would use:', dbConfig.username + '@' + dbConfig.server);
+    console.log('Logged in user ID:', user.UserID || user.id);
     
     let bookings = localStorage.getItem('bookings');
     bookings = bookings ? JSON.parse(bookings) : [];
     
     // ⚠️ VULNERABILITY: Logging sensitive booking information
     console.log('User bookings:', bookings);
-    console.log('Storage URLs:', window.AzureConfig.storageUrls);
+    console.log('Storage URLs:', window.AzureConfig?.storageUrls);
     
     if (bookings.length === 0) {
         bookingsList.innerHTML = `
