@@ -10,7 +10,7 @@ function buildConfig() {
 
   const server = process.env.SQL_SERVER || 'bluemountaintravel-sql.database.windows.net';
   const database = process.env.SQL_DB || 'TravelDB';
-  const user = process.env.SQL_USER || 'admin';
+  const user = process.env.SQL_USER || 'dbadmin';
   const password = process.env.SQL_PASSWORD || 'P@ssw0rd123!';
 
   return {
