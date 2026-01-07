@@ -2,7 +2,6 @@
 // ⚠️ WARNING: This client connects to intentionally vulnerable backend APIs
 
 const API_BASE_URL = (() => {
-    // baked-in default for the hosted Function App so SWA works without manual overrides
     const hostedDefault = 'https://bluemountaintravel-func.azurewebsites.net/api';
 
     if (typeof window !== 'undefined' && window.BMT_API_BASE_URL) {
@@ -11,7 +10,7 @@ const API_BASE_URL = (() => {
     if (typeof window !== 'undefined' && window.location.origin.includes('localhost')) {
         return 'http://localhost:3000/api';
     }
-    return hostedDefault;
+    return hostedDefault; // default to direct Function host for SWA and other hosts
 })();
 
 // ⚠️ VULNERABILITY: API client with no authentication

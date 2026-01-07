@@ -1,0 +1,8 @@
+{
+  "routes": [
+    {
+      "route": "/api/*",
+      "rewrite": "https://bluemountaintravel-func.azurewebsites.net/api/{*path}"
+    }
+  ]
+}
