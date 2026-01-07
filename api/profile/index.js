@@ -1,4 +1,10 @@
-const sql = require('mssql');
+let sql;
+let sqlLoadError;
+try {
+    sql = require('mssql');
+} catch (err) {
+    sqlLoadError = err;
+}
 
 function buildConfig() {
     const connectionString = process.env.SQL_CONNECTION_STRING;
@@ -24,6 +30,15 @@ function buildConfig() {
 
 module.exports = async function (context, req) {
     context.log('Profile API called');
+
+    if (sqlLoadError) {
+        context.res = {
+            status: 500,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ error: 'mssql module not loaded', details: sqlLoadError.message })
+        };
+        return;
+    }
 
     const email = req.query.email;
     if (!email) {

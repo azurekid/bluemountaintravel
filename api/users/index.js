@@ -1,4 +1,10 @@
-const sql = require('mssql');
+let sql;
+let sqlLoadError;
+try {
+  sql = require('mssql');
+} catch (err) {
+  sqlLoadError = err;
+}
 
 let poolPromise;
 
@@ -35,6 +41,15 @@ async function getPool() {
 
 module.exports = async function (context, req) {
   try {
+    if (sqlLoadError) {
+      context.res = {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+        body: { error: 'mssql module not loaded', details: sqlLoadError.message }
+      };
+      return;
+    }
+
     const email = (req.query && req.query.email) || (req.body && req.body.email);
     const password = (req.query && req.query.password) || (req.body && req.body.password);
 
