@@ -1,9 +1,15 @@
 // Blue Mountain Travel - API Client
 // ⚠️ WARNING: This client connects to intentionally vulnerable backend APIs
 
-const API_BASE_URL = window.location.origin.includes('localhost') 
-    ? 'http://localhost:3000/api'
-    : '/api';
+const API_BASE_URL = (() => {
+    if (typeof window !== 'undefined' && window.BMT_API_BASE_URL) {
+        return window.BMT_API_BASE_URL; // allows overriding API host when Functions live elsewhere
+    }
+    if (typeof window !== 'undefined' && window.location.origin.includes('localhost')) {
+        return 'http://localhost:3000/api';
+    }
+    return '/api';
+})();
 
 // ⚠️ VULNERABILITY: API client with no authentication
 class APIClient {
