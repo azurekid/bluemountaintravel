@@ -1,9 +1,15 @@
-const sql = require('mssql');
+let sql;
+let sqlLoadError;
+try {
+  sql = require('mssql');
+} catch (err) {
+  sqlLoadError = err;
+}
 
 function buildConfig() {
   const connectionString = process.env.SQL_CONNECTION_STRING;
   if (connectionString) {
-    return { connectionString };
+    return connectionString;
   }
   const server = process.env.SQL_SERVER || 'bluemountaintravel-sql.database.windows.net';
   const database = process.env.SQL_DB || 'TravelDB';
@@ -23,13 +29,26 @@ function buildConfig() {
 }
 
 module.exports = async function (context, req) {
+  if (sqlLoadError) {
+    context.res = {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        status: 'error',
+        message: 'mssql module not loaded: ' + sqlLoadError.message
+      })
+    };
+    return;
+  }
+
   const cfg = buildConfig();
   try {
+    const usingConnectionString = typeof cfg === 'string';
     context.log('Health check: connecting to SQL', {
-      usingConnectionString: !!cfg.connectionString,
-      server: cfg.server,
-      database: cfg.database,
-      userConfigured: !!cfg.user
+      usingConnectionString,
+      server: usingConnectionString ? null : cfg.server,
+      database: usingConnectionString ? null : cfg.database,
+      userConfigured: usingConnectionString ? null : !!cfg.user
     });
 
     await sql.connect(cfg);
@@ -45,8 +64,8 @@ module.exports = async function (context, req) {
       },
       body: JSON.stringify({
         status: 'ok',
-        server: cfg.server || 'connectionString',
-        database: cfg.database || null,
+        server: usingConnectionString ? 'connectionString' : cfg.server,
+        database: usingConnectionString ? null : cfg.database,
         time: new Date().toISOString(),
         ok: result?.recordset?.[0]?.ok === 1
       })

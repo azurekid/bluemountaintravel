@@ -3,7 +3,7 @@ const sql = require('mssql');
 function buildConfig() {
     const connectionString = process.env.SQL_CONNECTION_STRING;
     if (connectionString) {
-        return { connectionString };
+        return connectionString;
     }
     const server = process.env.SQL_SERVER || 'bluemountaintravel-sql.database.windows.net';
     const database = process.env.SQL_DB || 'TravelDB';
@@ -36,12 +36,13 @@ module.exports = async function (context, req) {
     }
 
     const cfg = buildConfig();
+    const usingConnectionString = typeof cfg === 'string';
     try {
         context.log('Profile DB config', {
-            usingConnectionString: !!cfg.connectionString,
-            server: cfg.server,
-            database: cfg.database,
-            userConfigured: !!cfg.user
+            usingConnectionString,
+            server: usingConnectionString ? null : cfg.server,
+            database: usingConnectionString ? null : cfg.database,
+            userConfigured: usingConnectionString ? null : !!cfg.user
         });
     } catch (_) {}
 

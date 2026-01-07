@@ -5,7 +5,7 @@ let poolPromise;
 function buildConfig() {
   const connectionString = process.env.SQL_CONNECTION_STRING;
   if (connectionString) {
-    return { connectionString }; // allows full connection string usage
+    return connectionString; // mssql supports passing a connection string directly
   }
 
   const server = process.env.SQL_SERVER || 'bluemountaintravel-sql.database.windows.net';
@@ -48,13 +48,14 @@ module.exports = async function (context, req) {
 
     // Basic diagnostics (logs only)
     const cfg = buildConfig();
+    const usingConnectionString = typeof cfg === 'string';
     try {
       context.log('Login attempt', {
         email,
-        usingConnectionString: !!cfg.connectionString,
-        server: cfg.server,
-        database: cfg.database,
-        userConfigured: !!cfg.user
+        usingConnectionString,
+        server: usingConnectionString ? null : cfg.server,
+        database: usingConnectionString ? null : cfg.database,
+        userConfigured: usingConnectionString ? null : !!cfg.user
       });
     } catch (_) {
       // Ignore logging errors
@@ -85,6 +86,7 @@ module.exports = async function (context, req) {
     context.log('Login function error', err);
     context.res = {
       status: 500,
+      headers: { 'Content-Type': 'application/json' },
       body: { error: err.message }
     };
   }
