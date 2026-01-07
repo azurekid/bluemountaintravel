@@ -12,8 +12,13 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
     
-    initializeMultipleProfiles();
+    console.log('Current user from localStorage:', currentUser);
+    
+    // Load and display the current user's profile FIRST
     loadProfile();
+    
+    // Then initialize multiple profiles
+    initializeMultipleProfiles();
     loadProfilesList();
     setupCreateProfileForm();
 });
@@ -22,13 +27,47 @@ document.addEventListener('DOMContentLoaded', function() {
 function initializeMultipleProfiles() {
     let profiles = localStorage.getItem('userProfiles');
     
-    if (!profiles) {
+    if (!profiles || profiles === '[]') {
         // ⚠️ VULNERABILITY: Storing all sample users including sensitive data
-        const sampleUsers = window.sampleUsers || [];
+        let sampleUsers = window.sampleUsers || [];
+        
+        // If no sample users available, generate from database format
+        if (sampleUsers.length === 0) {
+            sampleUsers = generateDefaultProfiles();
+        }
+        
         localStorage.setItem('userProfiles', JSON.stringify(sampleUsers));
         console.log('Initialized user profiles with sample data:', sampleUsers);
         console.log('⚠️ All user data including passwords stored in localStorage');
     }
+}
+
+// Generate default profiles if window.sampleUsers not available
+function generateDefaultProfiles() {
+    return [
+        {
+            id: "USR001",
+            firstName: "John",
+            lastName: "Smith",
+            email: "john.smith@techcorp.com",
+            phone: "+1-555-0123",
+            company: "Tech Corp",
+            membershipTier: "Platinum",
+            password: "password123",
+            creditCard: "4532-1234-5678-9012"
+        },
+        {
+            id: "USR002",
+            firstName: "Sarah",
+            lastName: "Johnson",
+            email: "sarah.johnson@globalind.com",
+            phone: "+1-555-0234",
+            company: "Global Industries",
+            membershipTier: "Gold",
+            password: "Sarah@2024",
+            creditCard: "5412-7534-9012-3456"
+        }
+    ];
 }
 
 // ⚠️ VULNERABILITY: Get all profiles from localStorage
@@ -40,48 +79,65 @@ function getAllProfiles() {
 // ⚠️ VULNERABILITY: Load and display all profiles
 function loadProfilesList() {
     const profiles = getAllProfiles();
-    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    const currentUserStr = localStorage.getItem('currentUser') || '{}';
+    const currentUser = JSON.parse(currentUserStr);
+    
+    // Normalize current user ID for comparison (handle both db format and sample format)
+    const currentUserId = currentUser.id || currentUser.UserID;
     
     // Update profile selector dropdown
     const selector = document.getElementById('profile-selector');
     if (selector) {
-        selector.innerHTML = profiles.map(p => 
-            `<option value="${p.id}" ${p.id === currentUser.id ? 'selected' : ''}>
-                ${p.firstName} ${p.lastName} (${p.email})
-            </option>`
-        ).join('');
+        selector.innerHTML = profiles.map(p => {
+            const userId = p.id || p.UserID;
+            const firstName = p.firstName || p.FirstName || 'Unknown';
+            const lastName = p.lastName || p.LastName || 'User';
+            const email = p.email || p.Email || 'unknown@example.com';
+            return `<option value="${userId}" ${userId === currentUserId ? 'selected' : ''}>
+                ${firstName} ${lastName} (${email})
+            </option>`;
+        }).join('');
     }
     
     // Update profiles grid
     const profilesList = document.getElementById('profiles-list');
     if (profilesList) {
-        profilesList.innerHTML = profiles.map(p => `
-            <div style="background: ${p.id === currentUser.id ? '#e3f2fd' : '#f8f9fa'}; 
+        profilesList.innerHTML = profiles.map(p => {
+            const userId = p.id || p.UserID;
+            const firstName = p.firstName || p.FirstName || 'Unknown';
+            const lastName = p.lastName || p.LastName || 'User';
+            const email = p.email || p.Email || 'unknown@example.com';
+            const membershipTier = p.membershipTier || p.MembershipTier || 'Standard';
+            const initials = firstName.charAt(0) + lastName.charAt(0);
+            const isActive = userId === currentUserId;
+            
+            return `
+            <div style="background: ${isActive ? '#e3f2fd' : '#f8f9fa'}; 
                         padding: 1rem; 
                         border-radius: 8px; 
-                        border: 2px solid ${p.id === currentUser.id ? 'var(--primary-color)' : '#ddd'};
+                        border: 2px solid ${isActive ? 'var(--primary-color)' : '#ddd'};
                         cursor: pointer;
                         transition: all 0.2s ease;"
-                 onclick="selectProfile('${p.id}')"
+                 onclick="selectProfile('${userId}')"
                  onmouseover="this.style.transform='translateY(-2px)'"
                  onmouseout="this.style.transform='translateY(0)'">
                 <div style="display: flex; align-items: center; gap: 0.75rem;">
                     <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary-color); 
                                 color: white; display: flex; align-items: center; justify-content: center; 
                                 font-weight: bold; font-size: 0.9rem;">
-                        ${p.firstName.charAt(0)}${p.lastName.charAt(0)}
+                        ${initials}
                     </div>
                     <div style="flex: 1; overflow: hidden;">
-                        <div style="font-weight: 600; font-size: 0.95rem;">${p.firstName} ${p.lastName}</div>
+                        <div style="font-weight: 600; font-size: 0.95rem;">${firstName} ${lastName}</div>
                         <div style="font-size: 0.8rem; color: #666; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                            ${p.email}
+                            ${email}
                         </div>
-                        <div style="font-size: 0.75rem; color: var(--primary-color);">${p.membershipTier}</div>
+                        <div style="font-size: 0.75rem; color: var(--primary-color);">${membershipTier}</div>
                     </div>
                 </div>
-                ${p.id === currentUser.id ? '<div style="font-size: 0.7rem; color: #28a745; margin-top: 0.5rem; text-align: center;">✓ Active</div>' : ''}
+                ${isActive ? '<div style="font-size: 0.7rem; color: #28a745; margin-top: 0.5rem; text-align: center;">✓ Active</div>' : ''}
             </div>
-        `).join('');
+        `}).join('');
     }
     
     console.log('Loaded', profiles.length, 'profiles');
@@ -92,7 +148,8 @@ function loadProfilesList() {
 // ⚠️ VULNERABILITY: Select and switch to a different profile
 function selectProfile(profileId) {
     const profiles = getAllProfiles();
-    const profile = profiles.find(p => p.id === profileId);
+    // Find profile by either id or UserID field (handle both formats)
+    const profile = profiles.find(p => (p.id || p.UserID) === profileId);
     
     if (profile) {
         // ⚠️ VULNERABILITY: Storing complete profile with sensitive data
@@ -103,6 +160,8 @@ function selectProfile(profileId) {
         
         // Reload the page to show new profile
         window.location.reload();
+    } else {
+        console.warn('Profile not found:', profileId);
     }
 }
 
@@ -261,51 +320,98 @@ function loadProfile() {
     
     user = JSON.parse(user);
     
+    // Normalize user object to handle both database format (Email, UserID) and sample format (email, id)
+    const firstName = user.firstName || user.FirstName || 'Unknown';
+    const lastName = user.lastName || user.LastName || 'User';
+    const email = user.email || user.Email || 'unknown@example.com';
+    const phone = user.phone || user.Phone || '';
+    const company = user.company || user.Company || '';
+    const userId = user.id || user.UserID || '';
+    const membershipTier = user.membershipTier || user.MembershipTier || 'Standard';
+    const creditCard = user.creditCard || '****-****-****-****';
+    const password = user.password || '••••••••';
+    
     // ⚠️ VULNERABILITY: Logging complete user object including sensitive data
     console.log('Current user profile:', user);
-    console.log('User password (plain text):', user.password);
-    console.log('User credit card:', user.creditCard);
+    console.log('Displaying user:', firstName, lastName);
+    console.log('User password (plain text):', password);
+    console.log('User credit card:', creditCard);
     console.log('User SSN:', user.ssn);
     
-    // Update profile display
-    const initials = `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`;
-    document.getElementById('profile-avatar').textContent = initials;
-    document.getElementById('profile-name').textContent = `${user.firstName} ${user.lastName}`;
-    document.getElementById('profile-email').textContent = user.email;
-    document.getElementById('profile-tier').textContent = `${user.membershipTier} Member`;
+    // Update profile display - ENSURE all elements are updated
+    const initials = `${firstName.charAt(0)}${lastName.charAt(0)}`;
     
-    document.getElementById('info-firstname').textContent = user.firstName;
-    document.getElementById('info-lastname').textContent = user.lastName;
-    document.getElementById('info-email').textContent = user.email;
-    document.getElementById('info-phone').textContent = user.phone;
-    document.getElementById('info-company').textContent = user.company;
-    document.getElementById('info-userid').textContent = user.id;
-    document.getElementById('info-tier').textContent = user.membershipTier;
+    // Get all elements and update them with proper error checking
+    const elements = {
+        'profile-avatar': initials,
+        'profile-name': `${firstName} ${lastName}`,
+        'profile-email': email,
+        'profile-tier': `${membershipTier} Member`,
+        'info-firstname': firstName,
+        'info-lastname': lastName,
+        'info-email': email,
+        'info-phone': phone || 'Not provided',
+        'info-company': company || 'Not provided',
+        'info-userid': userId,
+        'info-tier': membershipTier
+    };
+    
+    // Update all profile elements
+    Object.entries(elements).forEach(([id, value]) => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.textContent = value;
+            console.log(`Updated ${id} to:`, value);
+        } else {
+            console.warn(`Element not found: ${id}`);
+        }
+    });
     
     // ⚠️ VULNERABILITY: Showing last 4 digits of real card number
-    const cardLast4 = user.creditCard.slice(-4);
-    document.getElementById('info-card').textContent = `•••• •••• •••• ${cardLast4}`;
+    const cardLast4 = creditCard.slice(-4);
+    const cardElement = document.getElementById('info-card');
+    if (cardElement) {
+        cardElement.textContent = `•••• •••• •••• ${cardLast4}`;
+    }
     
     // ⚠️ VULNERABILITY: Showing real password length
-    document.getElementById('info-password').textContent = '•'.repeat(user.password.length);
+    const passwordElement = document.getElementById('info-password');
+    if (passwordElement) {
+        passwordElement.textContent = '•'.repeat(password.length);
+    }
     
     // Load booking count
     let bookings = localStorage.getItem('bookings');
     bookings = bookings ? JSON.parse(bookings) : [];
-    document.getElementById('total-bookings').textContent = bookings.length;
+    const bookingsElement = document.getElementById('total-bookings');
+    if (bookingsElement) {
+        bookingsElement.textContent = bookings.length;
+    }
     
     // ⚠️ VULNERABILITY: Direct Azure Storage URLs with SAS tokens
     const azureConfig = window.AzureConfig;
-    document.getElementById('storage-account').textContent = azureConfig.storageAccount;
-    
-    // ⚠️ VULNERABILITY: Exposed container URLs with SAS tokens
-    const profileUrl = azureConfig.storageUrls.profiles;
-    const documentsUrl = azureConfig.storageUrls.documents;
-    
-    document.getElementById('profile-container-url').href = profileUrl;
-    document.getElementById('profile-container-url').textContent = 'Open Profiles Container';
-    document.getElementById('documents-container-url').href = documentsUrl;
-    document.getElementById('documents-container-url').textContent = 'Open Documents Container';
+    if (azureConfig) {
+        const storageElement = document.getElementById('storage-account');
+        if (storageElement) {
+            storageElement.textContent = azureConfig.storageAccount;
+        }
+        
+        // ⚠️ VULNERABILITY: Exposed container URLs with SAS tokens
+        const profileUrl = azureConfig.storageUrls.profiles;
+        const documentsUrl = azureConfig.storageUrls.documents;
+        
+        const profileUrlElement = document.getElementById('profile-container-url');
+        if (profileUrlElement) {
+            profileUrlElement.href = profileUrl;
+            profileUrlElement.textContent = 'Open Profiles Container';
+        }
+        
+        const docsUrlElement = document.getElementById('documents-container-url');
+        if (docsUrlElement) {
+            docsUrlElement.href = documentsUrl;
+            docsUrlElement.textContent = 'Open Documents Container';
+        }
+    }
     
     // ⚠️ VULNERABILITY: Make user data globally accessible
     window.currentUserProfile = user;

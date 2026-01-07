@@ -136,15 +136,44 @@ function addAutofillButton(user) {
 
 // Function to autofill data when user clicks the button
 function autofillHotelUserData() {
-    const user = window.getCurrentUser ? getCurrentUser() : null;
+    const user = window.getCurrentUser ? window.getCurrentUser() : JSON.parse(localStorage.getItem('currentUser') || 'null');
     
     if (user) {
-        document.getElementById('firstName').value = user.firstName || '';
-        document.getElementById('lastName').value = user.lastName || '';
-        document.getElementById('email').value = user.email || '';
-        document.getElementById('phone').value = user.phone || '';
+        console.log('Autofilling hotel form with user data:', user);
+        
+        // Handle both database format (FirstName/LastName/Email/Phone) and sample format (firstName/lastName/email/phone)
+        const firstName = user.firstName || user.FirstName || '';
+        const lastName = user.lastName || user.LastName || '';
+        const email = user.email || user.Email || '';
+        const phone = user.phone || user.Phone || '';
+        
+        // Set form values
+        const firstNameField = document.getElementById('firstName');
+        const lastNameField = document.getElementById('lastName');
+        const emailField = document.getElementById('email');
+        const phoneField = document.getElementById('phone');
+        
+        if (firstNameField) {
+            firstNameField.value = firstName;
+            console.log('Set firstName:', firstName);
+        }
+        if (lastNameField) {
+            lastNameField.value = lastName;
+            console.log('Set lastName:', lastName);
+        }
+        if (emailField) {
+            emailField.value = email;
+            console.log('Set email:', email);
+        }
+        if (phoneField) {
+            phoneField.value = phone;
+            console.log('Set phone:', phone);
+        }
         
         console.log('User data autofilled from profile');
+    } else {
+        console.warn('No user data available to autofill');
+        alert('No user data available. Please log in first.');
     }
 }
 
