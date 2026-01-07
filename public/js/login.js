@@ -53,8 +53,14 @@ async function handleLogin(event) {
     
     try {
         // ⚠️ VULNERABILITY: Password sent via GET query parameters
-        // Query database through backend API
-        const response = await fetch(`/api/users?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`);
+        // Query database through backend API (prefer configured Function host when provided)
+        const base = (typeof window !== 'undefined' && window.BMT_API_BASE_URL)
+            ? window.BMT_API_BASE_URL
+            : (window.location.origin.includes('localhost')
+                ? 'http://localhost:3000/api'
+                : 'https://bluemountaintravel-func.azurewebsites.net/api');
+
+        const response = await fetch(`${base}/users?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`);
         
         if (!response.ok) {
             console.error('Login failed:', response.statusText);
