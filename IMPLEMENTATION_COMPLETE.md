@@ -215,6 +215,14 @@ This document summarizes all the new features and vulnerabilities added to the B
 ### New Data Files
 - `/public/app-registrations.json` - Service principal credentials
 
+### New Backend (Azure Function App)
+- `/api/host.json`, `/api/package.json`, `/api/local.settings.json` - Function host and local config for Node 18
+- `/api/users/index.js`, `/api/users/function.json` - Login API (`/api/users`) backed by Azure SQL `TravelDB`
+- Front-end override: `/public/js/api-client.js` now honors `window.BMT_API_BASE_URL` to point at the Function host
+
+### Deployment Docs
+- `/docs/FUNCTIONAPP_DEPLOYMENT.md` - Step-by-step Function App setup and publish guide
+
 ### Documentation
 - `/VULNERABILITY_GUIDE.md` - Complete guide with all flags and vulnerabilities
 
@@ -240,6 +248,51 @@ This document summarizes all the new features and vulnerabilities added to the B
    - Open DevTools console for JavaScript flags
    - Check network tab for API credentials
    - Download app-registrations.json
+
+## Azure Function App Setup (login API)
+
+> Use an isolated training subscription; the Function echoes intentionally vulnerable patterns.
+
+1. **Create resources** (consumption, Linux, Node 18):
+  ```bash
+  RG=rg-bluemountain-training
+  LOC=westeurope
+  STORAGE=bluemountaintravelfuncsa
+  PLAN=bluemountaintravel-func-plan
+  FUNCAPP=bluemountaintravel-func
+
+  az group create --name $RG --location $LOC
+  az storage account create --name $STORAGE --location $LOC --resource-group $RG --sku Standard_LRS
+  az functionapp plan create --name $PLAN --resource-group $RG --location $LOC --sku B1 --is-linux
+  az functionapp create --name $FUNCAPP --resource-group $RG --plan $PLAN --runtime node --runtime-version 18 --functions-version 4 --storage-account $STORAGE
+  ```
+
+2. **Configure SQL settings** (targets `bluemountaintravel-sql/TravelDB` with seeded users):
+  ```bash
+  az functionapp config appsettings set --name $FUNCAPP --resource-group $RG --settings \
+    SQL_SERVER="bluemountaintravel-sql.database.windows.net" \
+    SQL_DB="TravelDB" \
+    SQL_USER="admin" \
+    SQL_PASSWORD="P@ssw0rd123!"
+  ```
+  (Or set `SQL_CONNECTION_STRING` instead.)
+
+3. **Publish code** (from repo root):
+  ```bash
+  cd api
+  npm install
+  func azure functionapp publish $FUNCAPP
+  ```
+
+4. **Wire the static site to the Function**:
+  - If using SWA with `apiLocation: "api"`, the SWA runtime proxies `/api/*` to the Functions automatically.
+  - If using the existing static host (`https://calm-beach-041f9ca0f.2.azurestaticapps.net`), set `window.BMT_API_BASE_URL = "https://$FUNCAPP.azurewebsites.net/api";` before loading `public/js/api-client.js` so login calls reach the Function.
+
+5. **Smoke test login endpoint**:
+  ```bash
+  curl "https://$FUNCAPP.azurewebsites.net/api/users?email=sarah.johnson@globalind.com&password=Sarah@2024"
+  ```
+  Expected: JSON array containing Sarah’s record from the `Users` table.
 
 ## Statistics
 
