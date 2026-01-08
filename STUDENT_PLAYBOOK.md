@@ -74,8 +74,8 @@ npm start
 
 **Flag Location**: Look in the browser console on page load for hints!
 
-**Expected Flags**: 
-- `FLAG{exposed_flight_data_in_client_side_code}`
+**Expected Outcome**:
+- Find at least one `ctf_b64:` marker related to client-side data exposure
 
 ---
 
@@ -87,20 +87,19 @@ npm start
 
 **Steps**:
 1. Right-click on the homepage and select "View Page Source"
-2. Search for the word "FLAG" (Ctrl+F)
+2. Search for `ctf_b64` (Ctrl+F)
 3. Look for HTML comments (`<!-- -->`)
 4. Check for any credentials or API keys
 
 **What to Look For**:
-- `<!-- FLAG{...} -->`
+- `<!-- ctf_b64: <base64> -->`
 - API endpoints
 - Configuration data
 - Developer comments
 
-**Expected Flags**: 
-- Multiple flags in HTML comments throughout pages
-- `FLAG{insecure_login_form_no_rate_limiting}` in login.html
-- `FLAG{registration_endpoint_no_verification}` in register.html
+**Expected Findings**:
+- `ctf_b64:` markers in comments or scripts
+- Login/registration pages that include security-relevant hints (without publishing raw flags)
 
 ---
 
@@ -145,9 +144,8 @@ This application contains intentional security vulnerabilities:
 - User data with passwords
 
 **Expected Flags**:
-- `FLAG{user_pii_data_in_plain_text_storage}`
-- `FLAG{azure_credentials_john_smith}`
-- `FLAG{admin_password_found}`
+**Expected Outcome**:
+- Find and decode `ctf_b64:` markers related to exposed credentials and PII
 
 ---
 
@@ -181,8 +179,8 @@ getAllAzureUsernames()
 ```
 
 **Expected Flags**:
-- `FLAG{user_enumeration_endpoint_exposed}`
-- `FLAG{enumerate_all_users_no_auth}`
+**Expected Outcome**:
+- Find and decode `ctf_b64:` markers related to user enumeration
 
 ---
 
@@ -202,7 +200,8 @@ getAllAzureUsernames()
 - Employee database with AD usernames
 
 **Expected Flags**:
-- `FLAG{azure_username_list_for_password_spray}`
+**Expected Outcome**:
+- Find and decode a `ctf_b64:` marker related to Azure username enumeration
 
 ---
 
@@ -225,8 +224,8 @@ getAllAzureUsernames()
 - Client-side validation only
 
 **Expected Flags**:
-- `FLAG{insecure_login_form_no_rate_limiting}`
-- `FLAG{api_endpoint_exposed_in_source}`
+**Expected Outcome**:
+- Find and decode `ctf_b64:` markers related to login weaknesses and endpoint disclosure
 
 ---
 
@@ -252,8 +251,8 @@ const user = users.find(u => u.email === email && u.password === password);
 3. See all user data including password!
 
 **Expected Flags**:
-- `FLAG{client_side_authentication_bypass}`
-- `FLAG{predictable_session_token_generation}`
+**Expected Outcome**:
+- Find and decode `ctf_b64:` markers related to client-side auth and token predictability
 
 ---
 
@@ -273,7 +272,8 @@ const user = users.find(u => u.email === email && u.password === password);
 - Azure credentials
 
 **Expected Flags**:
-- `FLAG{all_user_data_accessible_via_window_object}`
+**Expected Outcome**:
+- Find and decode a `ctf_b64:` marker related to global/window data exposure
 
 ---
 
@@ -308,7 +308,8 @@ attemptPasswordSpray(emails, "Admin@BlueMountain2026!")
 - Azure credentials exposed
 
 **Expected Flags**:
-- `FLAG{password_spray_no_rate_limiting}`
+**Expected Outcome**:
+- Find and decode a `ctf_b64:` marker related to password spraying
 
 ---
 
@@ -329,10 +330,8 @@ attemptDatabasePasswordSpray(
 - Connection string returned
 - Database access level shown
 - No lockout after multiple attempts
-
-**Expected Flags**:
-- `FLAG{sql_password_spray_vulnerable}`
-- `FLAG{sql_connection_string_fully_exposed}`
+**Expected Outcome**:
+- Find and decode `ctf_b64:` markers related to SQL password spraying and exposed connection details
 
 ---
 
@@ -357,7 +356,8 @@ attemptEntraPasswordSpray(azureUsers, "AzureAdmin2026!@#")
 - No MFA challenge
 
 **Expected Flags**:
-- `FLAG{entra_id_password_spray_no_protection}`
+**Expected Outcome**:
+- Find and decode a `ctf_b64:` marker related to Entra ID password spraying
 
 ---
 
@@ -420,10 +420,8 @@ getPrivilegedEmployees()
 - Security question answers
 
 **Expected Flags**:
-- `FLAG{employee_database_publicly_accessible}`
-- `FLAG{employee_search_no_authentication}`
-- `FLAG{employee_pii_export_without_auth}`
-- `FLAG{privileged_account_list_exposed}`
+**Expected Outcome**:
+- Find and decode `ctf_b64:` markers related to employee database exposure
 
 ---
 
@@ -467,8 +465,8 @@ getPrivilegedEmployees()
 **Success**: You found http://localhost:8080/admin.html
 
 **Expected Flags**:
-- `FLAG{admin_panel_without_authentication}`
-- `FLAG{admin_panel_accessible_without_auth}`
+**Expected Outcome**:
+- Find and decode `ctf_b64:` markers related to unauthenticated admin access
 
 ---
 
@@ -499,14 +497,8 @@ showServicePrincipalDetails()
 - Entra ID global admin credentials
 
 **Expected Flags**:
-- `FLAG{admin_key_exposed_in_panel}`
-- `FLAG{database_credentials_in_admin_panel}`
-- `FLAG{exposed_azure_subscription_credentials}`
-- `FLAG{entra_global_admin_credentials_exposed}`
-- `FLAG{service_principal_can_access_all_azure_resources}`
-- `FLAG{all_admin_credentials_logged_to_console}`
-- `FLAG{all_user_pii_dumped_including_passwords}`
-- `FLAG{user_data_export_contains_everything}`
+**Expected Outcome**:
+- Find and decode `ctf_b64:` markers related to admin credential exposure and data export
 
 ---
 
@@ -528,8 +520,8 @@ showServicePrincipalDetails()
 - documents - Configuration files
 
 **Expected Flags**:
-- `FLAG{storage_browser_publicly_accessible}`
-- `FLAG{storage_browser_exposes_sas_token}`
+**Expected Outcome**:
+- Find and decode `ctf_b64:` markers related to the public storage browser and exposed SAS token
 
 ---
 
@@ -575,7 +567,8 @@ az storage blob download \
 - List contents (sp=l)
 
 **Expected Flags**:
-- `FLAG{sas_token_with_full_permissions_until_2025}`
+**Expected Outcome**:
+- Find and decode a `ctf_b64:` marker related to overly-permissive/long-lived SAS tokens
 
 ---
 
@@ -598,10 +591,8 @@ az storage blob download \
 - Azure CLI commands with credentials
 
 **Expected Flags**:
-- `FLAG{app_registration_credentials_in_public_storage}`
-- `FLAG{service_principal_full_contributor_access}`
-- `FLAG{azure_cli_commands_with_credentials}`
-- `FLAG{api_key_in_config_file}`
+**Expected Outcome**:
+- Find and decode `ctf_b64:` markers related to exposed app registration and service principal details
 
 ---
 
@@ -626,10 +617,8 @@ az storage blob download \
 - Admin (US Diplomatic) - US000000001
 
 **Expected Flags**:
-- `FLAG{passport_viewer_no_authentication}`
-- `FLAG{passport_images_no_auth_required}`
-- `FLAG{international_passports_in_public_blob}`
-- `FLAG{admin_diplomatic_passport_with_photo}`
+**Expected Outcome**:
+- Find and decode `ctf_b64:` markers related to unauthenticated passport access and sensitive documents
 
 ---
 
@@ -654,11 +643,8 @@ urls.forEach(p => console.log(p.url))
 ```
 
 **Expected Flags**:
-- `FLAG{passport_data_in_public_blob_storage}`
-- `FLAG{passport_documents_in_public_blob_storage}`
-- `FLAG{passport_container_sas_token_exposed}`
-- `FLAG{all_passport_urls_with_sas_tokens_logged}`
-- `FLAG{admin_diplomatic_passport_exposed}`
+**Expected Outcome**:
+- Find and decode `ctf_b64:` markers related to passport URL leakage and SAS exposure
 
 ---
 
@@ -689,7 +675,8 @@ az storage blob download-batch \
 ```
 
 **Expected Flags**:
-- `FLAG{bulk_passport_download_via_sas_token}`
+**Expected Outcome**:
+- Find and decode a `ctf_b64:` marker related to bulk passport download
 
 ---
 
@@ -721,7 +708,8 @@ lateralMovementFromDatabase()
    - URLs include SAS tokens for direct access
 
 **Expected Flags**:
-- `FLAG{lateral_movement_database_to_storage}`
+**Expected Outcome**:
+- Find and decode a `ctf_b64:` marker related to lateral movement from database to storage
 
 ---
 
@@ -772,9 +760,8 @@ az storage blob list \
 - Storage keys bypass SAS token restrictions
 
 **Expected Flags**:
-- `FLAG{key_vault_to_storage_lateral_movement}`
-- `FLAG{service_principal_can_access_all_azure_resources}`
-- `FLAG{database_access_via_service_principal}`
+**Expected Outcome**:
+- Find and decode `ctf_b64:` markers related to service principal abuse, Key Vault access, and database-to-cloud lateral movement
 
 ---
 
@@ -857,9 +844,8 @@ az keyvault list
 - Database record paths
 
 **Expected Flags**:
-- `FLAG{idor_vulnerability_in_hotel_details}`
-- `FLAG{internal_hotel_data_exposed_in_ui}`
-- `FLAG{hotel_detail_page_with_insecure_direct_object_reference}`
+**Expected Outcome**:
+- Find and decode `ctf_b64:` markers related to hotel IDOR and internal data exposure
 
 ---
 
@@ -958,89 +944,80 @@ az keyvault list
 
 Track your progress through the playbook:
 
-### Reconnaissance (5 flags)
-- [ ] FLAG{exposed_flight_data_in_client_side_code}
-- [ ] FLAG{hotel_details_exposed_client_side}
-- [ ] FLAG{user_pii_data_in_plain_text_storage}
-- [ ] FLAG{azure_credentials_john_smith}
-- [ ] FLAG{admin_password_found}
+Flags are intentionally not listed here in plaintext.
+Track completion by vulnerability name and record the decoded values you recover from `ctf_b64:` markers.
 
-### Authentication (10 flags)
-- [ ] FLAG{client_side_authentication_bypass}
-- [ ] FLAG{insecure_login_form_no_rate_limiting}
-- [ ] FLAG{api_endpoint_exposed_in_source}
-- [ ] FLAG{all_registration_data_logged_to_console}
-- [ ] FLAG{insecure_registration_accepts_any_data}
-- [ ] FLAG{registration_endpoint_no_verification}
-- [ ] FLAG{predictable_session_token_generation}
-- [ ] FLAG{admin_console_output_reveals_secrets}
-- [ ] FLAG{all_user_data_accessible_via_window_object}
-- [ ] FLAG{azure_admin_access_key_exposed}
+### Reconnaissance
+- [ ] Exposed flight data in client-side code
+- [ ] Hotel details exposed client-side
+- [ ] User PII stored in plain text (browser storage / client code)
+- [ ] Azure credentials exposed in client-side/config
+- [ ] Admin password discoverable from client-side/admin surface
 
-### Enumeration (6 flags)
-- [ ] FLAG{user_enumeration_endpoint_exposed}
-- [ ] FLAG{password_spray_no_rate_limiting}
-- [ ] FLAG{sql_password_spray_vulnerable}
-- [ ] FLAG{entra_id_password_spray_no_protection}
-- [ ] FLAG{enumerate_all_users_no_auth}
-- [ ] FLAG{azure_username_list_for_password_spray}
+### Authentication & Session
+- [ ] Client-side authentication bypass
+- [ ] No rate limiting on login
+- [ ] API endpoint exposed in page source
+- [ ] Registration data logged client-side
+- [ ] Insecure registration accepts any data
+- [ ] Registration endpoint lacks verification
+- [ ] Predictable session token generation
+- [ ] Admin console output reveals secrets
+- [ ] Window/global object exposes full user data
 
-### Admin Panel (10 flags)
-- [ ] FLAG{admin_panel_without_authentication}
-- [ ] FLAG{admin_panel_accessible_without_auth}
-- [ ] FLAG{admin_key_exposed_in_panel}
-- [ ] FLAG{database_credentials_in_admin_panel}
-- [ ] FLAG{exposed_azure_subscription_credentials}
-- [ ] FLAG{entra_global_admin_credentials_exposed}
-- [ ] FLAG{service_principal_can_access_all_azure_resources}
-- [ ] FLAG{all_admin_credentials_logged_to_console}
-- [ ] FLAG{api_keys_accessible_to_admin}
-- [ ] FLAG{all_user_pii_dumped_including_passwords}
+### Enumeration & Password Spraying
+- [ ] User enumeration endpoint exposed
+- [ ] Password spraying possible (no protection)
+- [ ] SQL password spraying vulnerable
+- [ ] Entra ID password spraying vulnerable
+- [ ] Enumerate all users without auth
+- [ ] Azure username list available for targeting
 
-### Storage & Passports (12 flags)
-- [ ] FLAG{passport_data_in_public_blob_storage}
-- [ ] FLAG{passport_documents_in_public_blob_storage}
-- [ ] FLAG{passport_container_sas_token_exposed}
-- [ ] FLAG{passport_viewer_no_authentication}
-- [ ] FLAG{passport_images_no_auth_required}
-- [ ] FLAG{international_passports_in_public_blob}
-- [ ] FLAG{bulk_passport_download_via_sas_token}
-- [ ] FLAG{admin_diplomatic_passport_exposed}
-- [ ] FLAG{admin_diplomatic_passport_with_photo}
-- [ ] FLAG{storage_browser_publicly_accessible}
-- [ ] FLAG{storage_browser_exposes_sas_token}
-- [ ] FLAG{all_passport_urls_with_sas_tokens_logged}
+### Admin Panel
+- [ ] Admin panel accessible without authentication
+- [ ] Admin key exposed in admin panel
+- [ ] Database credentials visible via admin panel
+- [ ] Azure subscription details exposed
+- [ ] Entra global admin credentials exposed
+- [ ] Service principal can access broad resources
+- [ ] Admin credentials/logging reveal secrets
+- [ ] API keys accessible to admin functions
+- [ ] User export contains excessive sensitive data
 
-### Service Principal (5 flags)
-- [ ] FLAG{app_registration_credentials_in_public_storage}
-- [ ] FLAG{service_principal_full_contributor_access}
-- [ ] FLAG{database_access_via_service_principal}
-- [ ] FLAG{api_key_in_config_file}
-- [ ] FLAG{azure_cli_commands_with_credentials}
+### Storage & Passports
+- [ ] Storage browser publicly accessible
+- [ ] Storage browser exposes SAS token
+- [ ] SAS token overly permissive/long-lived
+- [ ] Passport viewer accessible without authentication
+- [ ] Passport images/documents accessible without auth
+- [ ] International passports accessible in storage
+- [ ] Bulk download possible via SAS token
+- [ ] Diplomatic/admin passport exposed
+- [ ] Passport container SAS token exposed
+- [ ] Passport URLs with SAS tokens are enumerable/logged
 
-### Employee Data (4 flags)
-- [ ] FLAG{employee_database_publicly_accessible}
-- [ ] FLAG{employee_search_no_authentication}
-- [ ] FLAG{employee_pii_export_without_auth}
-- [ ] FLAG{privileged_account_list_exposed}
+### Service Principals & Identity
+- [ ] App registration credentials exposed
+- [ ] Service principal has full contributor access
+- [ ] Database access via service principal
+- [ ] API key stored in config file
+- [ ] Azure CLI commands with credentials exposed
 
-### Lateral Movement (3 flags)
-- [ ] FLAG{lateral_movement_database_to_storage}
-- [ ] FLAG{key_vault_to_storage_lateral_movement}
-- [ ] FLAG{sas_token_with_full_permissions_until_2025}
+### Employee Data
+- [ ] Employee database publicly accessible
+- [ ] Employee search without authentication
+- [ ] Employee PII export without auth
+- [ ] Privileged account list exposed
 
-### IDOR (3 flags)
-- [ ] FLAG{idor_vulnerability_in_hotel_details}
-- [ ] FLAG{internal_hotel_data_exposed_in_ui}
-- [ ] FLAG{hotel_detail_page_with_insecure_direct_object_reference}
+### Lateral Movement
+- [ ] Database → Storage lateral movement path
+- [ ] Service principal → Key Vault → Storage lateral movement path
 
-### Miscellaneous (5+ flags)
-- [ ] FLAG{user_data_export_contains_everything}
-- [ ] FLAG{downloading_files_with_sas_token}
-- [ ] FLAG{sql_connection_string_fully_exposed}
-- [ ] And more...
+### IDOR / Direct Reference
+- [ ] IDOR vulnerability in hotel details
+- [ ] Internal hotel data exposed in UI
 
-**Total Flags**: 60+
+**Total**: Use `docs/VULNERABILITIES_REFERENCE.md` as the complete 68-item catalog.
 
 ---
 

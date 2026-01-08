@@ -108,11 +108,10 @@ Each document contains:
 
 ## CTF Flags
 
-Each document contains unique flags for security training:
-- Flight: `FLAG{booking_document_{userid}_contains_pii}`
-- Flight: `FLAG{exposed_credit_card_ssn_in_booking}`
-- Hotel: `FLAG{hotel_confirmation_{userid}_full_payment}`
-- Hotel: `FLAG{exposed_ssn_cvv_in_hotel_booking}`
+Each document contains unique flags for security training.
+
+To avoid making flags obvious in documentation, the generated PDFs embed flags as `ctf_b64: <base64>` markers.
+Search the PDF text for `ctf_b64:` and decode the base64 value to recover the underlying flag.
 
 ## Access URLs
 

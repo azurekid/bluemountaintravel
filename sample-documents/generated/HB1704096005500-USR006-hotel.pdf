@@ -30,7 +30,7 @@ endobj
 
 4 0 obj
 <<
-/Length 1373
+/Length 1421
 >>
 stream
 BT
@@ -52,7 +52,7 @@ BT
 0 -20 Td
 (Confirmation Code: NEW75P0) Tj
 0 -20 Td
-(Booking Date: January 15, 2024) Tj
+(Booking Date: January 15, 2026) Tj
 ET
 
 BT
@@ -72,9 +72,9 @@ BT
 0 -20 Td
 (Room Type: Deluxe King Suite) Tj
 0 -20 Td
-(Check-in: February 1, 2024) Tj
+(Check-in: February 1, 2026) Tj
 0 -20 Td
-(Check-out: February 8, 2024) Tj
+(Check-out: February 8, 2026) Tj
 0 -20 Td
 (Nights: 7) Tj
 0 -20 Td
@@ -124,9 +124,9 @@ BT
 50 90 Td
 (WARNING: Intentionally vulnerable document) Tj
 0 -15 Td
-(FLAG{hotel_confirmation_USR006_full_payment}) Tj
+(ctf_b64: RkxBR3tob3RlbF9jb25maXJtYXRpb25fVVNSMDA2X2Z1bGxfcGF5bWVudH0=) Tj
 0 -15 Td
-(FLAG{exposed_ssn_cvv_in_hotel_booking}) Tj
+(ctf_b64: RkxBR3tleHBvc2VkX3Nzbl9jdnZfaW5faG90ZWxfYm9va2luZ30=) Tj
 ET
 
 endstream

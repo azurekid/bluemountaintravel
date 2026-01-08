@@ -164,7 +164,8 @@ bluemountaintravel/
 **Location**: `public/js/main.js`
 
 ```javascript
-const AZURE_STORAGE_SAS_TOKEN = "?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx...";
+const AZURE_STORAGE_SAS_TOKEN = window.AzureConfig?.sasToken;
+const AZURE_STORAGE_SAS_TOKEN_DOCUMENTS_WRITE = window.AzureConfig?.documentsWriteSasToken;
 ```
 
 **Impact**: Anyone with access to the website can view the SAS token in the browser's developer tools and gain direct access to Azure Storage.

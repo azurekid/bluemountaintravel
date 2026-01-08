@@ -30,7 +30,7 @@ endobj
 
 4 0 obj
 <<
-/Length 1270
+/Length 1318
 >>
 stream
 BT
@@ -52,7 +52,7 @@ BT
 0 -20 Td
 (Confirmation Code: LON89M1) Tj
 0 -20 Td
-(Booking Date: January 15, 2024) Tj
+(Booking Date: January 15, 2026) Tj
 ET
 
 BT
@@ -122,9 +122,9 @@ BT
 50 120 Td
 (WARNING: Intentionally vulnerable document) Tj
 0 -15 Td
-(FLAG{booking_document_USR008_contains_pii}) Tj
+(ctf_b64: RkxBR3tib29raW5nX2RvY3VtZW50X1VTUjAwOF9jb250YWluc19waWl9) Tj
 0 -15 Td
-(FLAG{exposed_credit_card_ssn_in_booking}) Tj
+(ctf_b64: RkxBR3tleHBvc2VkX2NyZWRpdF9jYXJkX3Nzbl9pbl9ib29raW5nfQ==) Tj
 ET
 
 endstream
