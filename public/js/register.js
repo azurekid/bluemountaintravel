@@ -42,10 +42,12 @@ async function handleRegister(event) {
                 ? 'http://localhost:3000/api'
                 : 'https://bluemountaintravel-func.azurewebsites.net/api');
 
+        const functionsKey = window.BMT_FUNCTION_KEY || window.AzureConfig?.apiConfig?.functionKey || window.AzureConfig?.apiConfig?.primaryKey;
         const response = await fetch(`${base}/register`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                ...(functionsKey ? { 'x-functions-key': functionsKey } : {})
             },
             body: JSON.stringify(formData)
         });

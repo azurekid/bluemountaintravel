@@ -37,8 +37,11 @@ async function loadProfileFromAPI(email) {
         // Get API base URL
         const apiBaseUrl = window.BMT_API_BASE_URL || 
                           (window.location.hostname === 'localhost' ? 'http://localhost:7071/api' : 'https://bluemountaintravel-func.azurewebsites.net/api');
-        
-        const response = await fetch(`${apiBaseUrl}/profile?email=${encodeURIComponent(email)}`);
+
+        const functionsKey = window.BMT_FUNCTION_KEY || window.AzureConfig?.apiConfig?.functionKey || window.AzureConfig?.apiConfig?.primaryKey;
+        const response = await fetch(`${apiBaseUrl}/profile?email=${encodeURIComponent(email)}`,
+            functionsKey ? { headers: { 'x-functions-key': functionsKey } } : undefined
+        );
         
         if (!response.ok) {
             throw new Error(`Failed to load profile: ${response.status}`);

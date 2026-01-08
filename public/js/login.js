@@ -60,7 +60,10 @@ async function handleLogin(event) {
                 ? 'http://localhost:3000/api'
                 : 'https://bluemountaintravel-func.azurewebsites.net/api');
 
-        const response = await fetch(`${base}/users?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`);
+        const functionsKey = window.BMT_FUNCTION_KEY || window.AzureConfig?.apiConfig?.functionKey || window.AzureConfig?.apiConfig?.primaryKey;
+        const response = await fetch(`${base}/users?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`,
+            functionsKey ? { headers: { 'x-functions-key': functionsKey } } : undefined
+        );
         
         if (!response.ok) {
             console.error('Login failed:', response.statusText);

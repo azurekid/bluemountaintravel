@@ -322,11 +322,13 @@ function processHotelBooking() {
     localStorage.setItem('bookings', JSON.stringify(bookings));
     
     // Make API call
+    const functionsKey = window.BMT_FUNCTION_KEY || window.AzureConfig?.apiConfig?.functionKey || window.AzureConfig?.apiConfig?.primaryKey;
     fetch(`${window.AzureConfig.apiConfig.endpoint}/hotel-bookings`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'X-API-Key': window.AzureConfig.apiConfig.primaryKey,
+            ...(functionsKey ? { 'x-functions-key': functionsKey } : {}),
             'X-Storage-SAS': window.AzureConfig.sasToken
         },
         body: JSON.stringify(bookingData)

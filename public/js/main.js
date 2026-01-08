@@ -10,6 +10,9 @@ const STORAGE_ACCOUNT_NAME = "bluemountaintravel";
 
 // ⚠️ VULNERABILITY: Hardcoded API Keys
 const API_CONFIG = {
+    // Azure Functions host/function key (required when authLevel is "function")
+    // Set this to your real function key after deployment.
+    functionKey: "UAPSTzJ8DEeM-KpqjD4N_FEdEXJyeHaACrNbnHbghSm8AzFuIBr-dA==",
     primaryKey: "fake-api-key-12345",
     secondaryKey: "fake-api-key-67890",
     endpoint: "https://bluemountaintravel.azurewebsites.net/api"

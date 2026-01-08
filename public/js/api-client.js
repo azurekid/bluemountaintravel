@@ -13,6 +13,16 @@ const API_BASE_URL = (() => {
     return hostedDefault; // default to direct Function host for SWA and other hosts
 })();
 
+function getFunctionsKey() {
+    if (typeof window === 'undefined') return null;
+    return (
+        window.BMT_FUNCTION_KEY ||
+        window.AzureConfig?.apiConfig?.functionKey ||
+        window.AzureConfig?.apiConfig?.primaryKey ||
+        null
+    );
+}
+
 // ⚠️ VULNERABILITY: API client with no authentication
 class APIClient {
     constructor() {
@@ -26,10 +36,12 @@ class APIClient {
         console.log(`API Request: ${options.method || 'GET'} ${url}`);
         
         try {
+            const functionsKey = getFunctionsKey();
             const response = await fetch(url, {
                 ...options,
                 headers: {
                     'Content-Type': 'application/json',
+                    ...(functionsKey ? { 'x-functions-key': functionsKey } : {}),
                     ...options.headers
                 }
             });
