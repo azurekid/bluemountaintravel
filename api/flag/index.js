@@ -1,37 +1,35 @@
-const { listBlobNames, downloadBlobText } = require('../shared/blob');
-
-const CONTAINER = process.env.SECRETS_CONTAINER || 'secrets';
-
 function toBase64(value) {
   return Buffer.from(String(value ?? ''), 'utf8').toString('base64');
 }
 
 module.exports = async function (context, req) {
   try {
-    const names = await listBlobNames(CONTAINER);
-    if (!names.length) {
-      context.res = {
-        status: 404,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: 'not_found', message: 'No flags found' })
-      };
-      return;
-    }
+    const providedB64 = process.env.CHALLENGE_FLAG_B64;
+    const providedRaw = process.env.CHALLENGE_FLAG;
 
-    const chosen = names[Math.floor(Math.random() * names.length)];
-    const text = await downloadBlobText(CONTAINER, chosen);
+    let flagB64;
+
+    if (typeof providedB64 === 'string' && providedB64.trim().length) {
+      flagB64 = providedB64.trim();
+    } else {
+      // Avoid a searchable literal prefix in source.
+      const defaultFlag =
+        `${'FL' + 'AG'}{` +
+        `challenge_completed_calling_${'flag'}_endpoint` +
+        `}`;
+
+      flagB64 = toBase64((providedRaw || defaultFlag).trim());
+    }
 
     context.res = {
       status: 200,
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'text/plain; charset=utf-8',
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type'
       },
-      body: JSON.stringify({
-        ctf_b64: toBase64(text.trimEnd())
-      })
+      body: flagB64
     };
   } catch (err) {
     context.log.error('flag error:', err);
