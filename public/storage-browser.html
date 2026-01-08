@@ -38,14 +38,14 @@
     <div style="padding: 3rem 0; min-height: 70vh;">
         <div class="container">
             <!-- Storage Account Info -->
-            <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+            <div style="background: rgba(248, 249, 250, 0.88); padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
                 <h3 style="margin-bottom: 1rem;">Storage Account Information</h3>
                 <p><strong>Account Name:</strong> bluemountaintravel</p>
                 <p><strong>Endpoint:</strong> https://bluemountaintravel.blob.core.windows.net/</p>
                 <p><strong>Access:</strong> SAS Token (Full Permissions)</p>
                 <p style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #dee2e6;">
                     <strong>SAS Token:</strong><br/>
-                    <code style="font-size: 0.8rem; word-break: break-all; display: block; background: white; padding: 0.5rem; border-radius: 4px; margin-top: 0.5rem;">
+                    <code style="font-size: 0.8rem; word-break: break-all; display: block; background: rgba(255, 255, 255, 0.92); padding: 0.5rem; border-radius: 4px; margin-top: 0.5rem;">
                         ?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T23:59:59Z&st=2024-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==
                     </code>
                 </p>
@@ -53,7 +53,7 @@
             </div>
 
             <!-- Container List -->
-            <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 2rem;">
+            <div style="background: rgba(255, 255, 255, 0.92); padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 2rem;">
                 <h3 style="margin-bottom: 1.5rem;">Available Containers</h3>
                 
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
@@ -96,16 +96,16 @@
             </div>
 
             <!-- Container Browser -->
-            <div id="container-browser" style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: none;">
+            <div id="container-browser" style="background: rgba(255, 255, 255, 0.92); padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: none;">
                 <h3 id="container-title" style="margin-bottom: 1.5rem;">Container Contents</h3>
                 <div id="file-list"></div>
                 <button onclick="closeContainer()" class="btn-search" style="margin-top: 1.5rem;">← Back to Containers</button>
             </div>
 
             <!-- Access Instructions -->
-            <div style="background: #e7f3ff; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #007bff; margin-top: 2rem;">
+            <div style="background: rgba(231, 243, 255, 0.90); padding: 1.5rem; border-radius: 8px; border-left: 4px solid #007bff; margin-top: 2rem;">
                 <h4 style="margin-bottom: 1rem;">💡 Access via Azure CLI</h4>
-                <pre style="background: #f8f9fa; padding: 1rem; border-radius: 4px; overflow-x: auto; font-size: 0.85rem;">
+                <pre style="background: rgba(248, 249, 250, 0.88); padding: 1rem; border-radius: 4px; overflow-x: auto; font-size: 0.85rem;">
 # List all containers
 az storage container list --account-name bluemountaintravel --sas-token "&lt;token&gt;"
 
@@ -118,7 +118,7 @@ az storage blob download --account-name bluemountaintravel --container-name pass
             </div>
 
             <!-- Lateral Movement Hints -->
-            <div style="background: #fff3cd; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #ffc107; margin-top: 2rem;">
+            <div style="background: rgba(255, 243, 205, 0.90); padding: 1.5rem; border-radius: 8px; border-left: 4px solid #ffc107; margin-top: 2rem;">
                 <h4 style="margin-bottom: 1rem;">🔐 Lateral Movement Opportunities</h4>
                 <ul style="margin-left: 1.5rem; line-height: 2;">
                     <li>Database credentials can access employee/passport metadata</li>

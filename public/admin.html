@@ -27,7 +27,7 @@
     </nav>
 
     <!-- Page Header -->
-    <div class="page-header" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);">
+    <div class="page-header page-header--danger">
         <div class="container">
             <h1>🔐 Administrator Panel</h1>
             <p>Full system access and control</p>
@@ -38,7 +38,7 @@
     <div class="admin-container" style="padding: 3rem 0; min-height: 70vh;">
         <div class="container">
             <!-- Access Warning -->
-            <div style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem;">
+            <div style="background: rgba(255, 243, 205, 0.90); border: 2px solid #ffc107; border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem;">
                 <h3 style="color: #856404; margin-bottom: 0.5rem;">⚠️ Privileged Access</h3>
                 <p style="color: #856404; margin: 0;">You are accessing the administrative control panel. All actions are logged.</p>
             </div>
@@ -46,7 +46,7 @@
             <!-- Admin Sections -->
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
                 <!-- System Information -->
-                <div class="admin-card" style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                <div class="admin-card" style="background: rgba(255, 255, 255, 0.92); padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
                     <h3 style="color: var(--primary-color); margin-bottom: 1rem;">🖥️ System Information</h3>
                     <div style="font-size: 0.9rem; line-height: 1.8;">
                         <p><strong>Environment:</strong> Production</p>
@@ -55,14 +55,14 @@
                         <p><strong>Storage Account:</strong> bluemountaintravel</p>
                         <p style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #eee;">
                             <strong>Admin Key:</strong><br/>
-                            <code style="background: #f8f9fa; padding: 0.5rem; display: block; margin-top: 0.5rem; word-break: break-all;">BMT-ADMIN-KEY-2024-PROD-abc123xyz789</code>
+                            <code style="background: rgba(248, 249, 250, 0.88); padding: 0.5rem; display: block; margin-top: 0.5rem; word-break: break-all;">BMT-ADMIN-KEY-2024-PROD-abc123xyz789</code>
                         </p>
                         <!-- FLAG{admin_key_exposed_in_panel} -->
                     </div>
                 </div>
 
                 <!-- Azure Resources -->
-                <div class="admin-card" style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                <div class="admin-card" style="background: rgba(255, 255, 255, 0.92); padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
                     <h3 style="color: var(--primary-color); margin-bottom: 1rem;">☁️ Azure Resources</h3>
                     <div style="font-size: 0.9rem; line-height: 1.8;">
                         <p><strong>Subscription ID:</strong><br/>
@@ -76,7 +76,7 @@
                 </div>
 
                 <!-- Database Access -->
-                <div class="admin-card" style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                <div class="admin-card" style="background: rgba(255, 255, 255, 0.92); padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
                     <h3 style="color: var(--primary-color); margin-bottom: 1rem;">🗄️ Database Access</h3>
                     <div style="font-size: 0.9rem; line-height: 1.8;">
                         <p><strong>Server:</strong> bluemountaintravel.database.windows.net</p>
@@ -90,7 +90,7 @@
                 </div>
 
                 <!-- User Management -->
-                <div class="admin-card" style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                <div class="admin-card" style="background: rgba(255, 255, 255, 0.92); padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
                     <h3 style="color: var(--primary-color); margin-bottom: 1rem;">👥 User Management</h3>
                     <div style="font-size: 0.9rem;">
                         <p id="user-count">Loading users...</p>
@@ -100,7 +100,7 @@
                 </div>
 
                 <!-- Storage Access -->
-                <div class="admin-card" style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                <div class="admin-card" style="background: rgba(255, 255, 255, 0.92); padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
                     <h3 style="color: var(--primary-color); margin-bottom: 1rem;">📦 Storage Access</h3>
                     <div style="font-size: 0.9rem; line-height: 1.8;">
                         <p><strong>Account:</strong> bluemountaintravel</p>
@@ -117,7 +117,7 @@
                 </div>
 
                 <!-- API Configuration -->
-                <div class="admin-card" style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                <div class="admin-card" style="background: rgba(255, 255, 255, 0.92); padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
                     <h3 style="color: var(--primary-color); margin-bottom: 1rem;">🔌 API Configuration</h3>
                     <div style="font-size: 0.9rem; line-height: 1.8;">
                         <p><strong>Endpoint:</strong><br/>
@@ -131,7 +131,7 @@
             </div>
 
             <!-- Entra ID Access -->
-            <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="background: rgba(255, 255, 255, 0.92); padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-top: 2rem;">
                 <h3 style="color: var(--primary-color); margin-bottom: 1rem;">🔐 Microsoft Entra ID (Azure AD) Access</h3>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
                     <div>
@@ -153,7 +153,7 @@
             </div>
 
             <!-- Security Flags -->
-            <div style="background: #f8f9fa; padding: 2rem; border-radius: 8px; margin-top: 2rem; border: 2px dashed #6c757d;">
+            <div style="background: rgba(248, 249, 250, 0.88); padding: 2rem; border-radius: 8px; margin-top: 2rem; border: 2px dashed #6c757d;">
                 <h3 style="color: #495057; margin-bottom: 1rem;">🚩 Security Training Flags</h3>
                 <p style="margin-bottom: 1rem;">If you found this page, you've discovered several security issues:</p>
                 <ul style="margin-left: 2rem; line-height: 2;">
