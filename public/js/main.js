@@ -1189,6 +1189,22 @@ function buildUnsplashFeaturedUrl(width, height, keywords) {
     return `https://loremflickr.com/${width}/${height}/${tags}?lock=${lock}`;
 }
 
+function buildHotelRoomPhotoUrl(width, height, hotelKey) {
+    // Bias towards interiors/rooms rather than city skylines
+    // Deterministically vary between a few room-related tag sets so the grid doesn't look identical.
+    const variations = [
+        ['hotel', 'room', 'interior', 'bed', 'suite'],
+        ['hotel', 'room', 'interior', 'luxury', 'suite'],
+        ['hotel', 'room', 'interior', 'modern', 'bedroom'],
+        ['hotel', 'room', 'interior', 'resort', 'suite'],
+        ['hotel', 'lobby', 'interior', 'accommodation']
+    ];
+    const idx = hashToLock(hotelKey) % variations.length;
+    const tags = safeEncodeKeywords(variations[idx]);
+    const lock = hashToLock(`${hotelKey}:${width}x${height}:${tags}`) % 10000;
+    return `https://loremflickr.com/${width}/${height}/${tags}?lock=${lock}`;
+}
+
 function parseCityFromRoute(value) {
     if (!value) return '';
     // "City (CODE)" -> "City"
@@ -1356,11 +1372,8 @@ function ensureLargeDemoData() {
     });
 
     (hotelData || []).forEach(h => {
-        if (!h.photoUrl) {
-            const city = h.city || (h.location ? h.location.split(',')[0] : 'Hotel');
-            const country = h.country || (h.location ? h.location.split(',').slice(1).join(',').trim() : '');
-            h.photoUrl = buildUnsplashFeaturedUrl(900, 600, ['hotel', city, country]);
-        }
+        // Always prefer a room/interior style photo to match UX expectations.
+        h.photoUrl = buildHotelRoomPhotoUrl(900, 600, h.id || h.name || h.location || 'hotel');
         if (!h.locationType) {
             h.locationType = 'city';
         }
@@ -1470,7 +1483,7 @@ function ensureLargeDemoData() {
             checkOut: '12:00 PM',
             cancellationPolicy: 'Free cancellation up to 48 hours before check-in',
             locationType,
-            photoUrl: buildUnsplashFeaturedUrl(900, 600, ['hotel', loc.city, loc.country, 'interior'])
+            photoUrl: buildHotelRoomPhotoUrl(900, 600, id)
         });
 
         hotelIndex += 1;
