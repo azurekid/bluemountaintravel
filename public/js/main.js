@@ -1170,8 +1170,23 @@ function safeEncodeKeywords(keywords) {
         .join(',');
 }
 
+function hashToLock(value) {
+    // Simple deterministic hash -> positive integer
+    const str = String(value || '');
+    let hash = 5381;
+    for (let i = 0; i < str.length; i++) {
+        hash = ((hash << 5) + hash) + str.charCodeAt(i); // djb2
+        hash |= 0;
+    }
+    return Math.abs(hash);
+}
+
 function buildUnsplashFeaturedUrl(width, height, keywords) {
-    return `https://source.unsplash.com/featured/${width}x${height}/?${safeEncodeKeywords(keywords)}`;
+    // NOTE: Avoid source.unsplash.com here (it can intermittently return Heroku error pages).
+    // loremflickr serves tagged photos and supports a deterministic lock parameter.
+    const tags = safeEncodeKeywords(keywords);
+    const lock = hashToLock(`${width}x${height}:${tags}`) % 10000;
+    return `https://loremflickr.com/${width}/${height}/${tags}?lock=${lock}`;
 }
 
 function parseCityFromRoute(value) {
