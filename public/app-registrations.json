@@ -1,6 +1,6 @@
 {
   "comment": "⚠️ THIS FILE SHOULD NOT BE PUBLICLY ACCESSIBLE",
-  "flag": "FLAG{app_registration_credentials_in_public_storage}",
+  "flag": "ctf_b64: RkxBR3thcHBfcmVnaXN0cmF0aW9uX2NyZWRlbnRpYWxzX2luX3B1YmxpY19zdG9yYWdlfQ==",
   "environment": "production",
   "lastUpdated": "2026-01-15T10:30:00Z",
   "azureAppRegistrations": [
@@ -42,7 +42,7 @@
         "https://bluemountaintravel.azurewebsites.net/auth/callback",
         "http://localhost:8080/auth/callback"
       ],
-      "flag": "FLAG{service_principal_full_contributor_access}"
+      "flag": "ctf_b64: RkxBR3tzZXJ2aWNlX3ByaW5jaXBhbF9mdWxsX2NvbnRyaWJ1dG9yX2FjY2Vzc30="
     },
     {
       "name": "BlueMountainTravel-BackupService",
@@ -98,7 +98,7 @@
         "primary": "Server=tcp:bluemountaintravel.database.windows.net,1433;Initial Catalog=TravelDB;User ID=datasync-sp;Authentication=Active Directory Service Principal;Encrypt=True;",
         "servicePrincipalAuth": "Use Application ID and Client Secret for authentication"
       },
-      "flag": "FLAG{database_access_via_service_principal}"
+      "flag": "ctf_b64: RkxBR3tkYXRhYmFzZV9hY2Nlc3NfdmlhX3NlcnZpY2VfcHJpbmNpcGFsfQ=="
     }
   ],
   "managedIdentities": [
@@ -139,7 +139,7 @@
         "description": "API authentication key",
         "value": "fake-api-key-12345",
         "comment": "⚠️ This should not be in plain text!",
-        "flag": "FLAG{api_key_in_config_file}"
+        "flag": "ctf_b64: RkxBR3thcGlfa2V5X2luX2NvbmZpZ19maWxlfQ=="
       }
     ]
   },
@@ -149,7 +149,7 @@
     "listResources": "az resource list --subscription 12345678-1234-1234-1234-123456789012",
     "accessKeyVault": "az keyvault secret show --vault-name bluemountain-kv --name DatabasePassword",
     "listStorageContainers": "az storage container list --account-name bluemountaintravel",
-    "flag": "FLAG{azure_cli_commands_with_credentials}"
+    "flag": "ctf_b64: RkxBR3thenVyZV9jbGlfY29tbWFuZHNfd2l0aF9jcmVkZW50aWFsc30="
   },
   "powershellCommands": {
     "comment": "PowerShell commands for Azure access",

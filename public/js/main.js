@@ -903,7 +903,7 @@ const flightData = [
 ];
 
 // ⚠️ FLAG: Hidden in hotel data structure
-// Sample hotel data with detailed facilities - FLAG{hotel_details_exposed_client_side}
+// Sample hotel data with detailed facilities - ctf_b64: RkxBR3tob3RlbF9kZXRhaWxzX2V4cG9zZWRfY2xpZW50X3NpZGV9
 const hotelData = [
     {
         id: "HT001",
@@ -1501,7 +1501,7 @@ try {
 }
 
 // Sample user data - ⚠️ VULNERABILITY: Storing sensitive data in localStorage
-// ⚠️ FLAG{user_pii_data_in_plain_text_storage}
+// ⚠️ ctf_b64: RkxBR3t1c2VyX3BpaV9kYXRhX2luX3BsYWluX3RleHRfc3RvcmFnZX0=
 const sampleUsers = [
     {
         id: "USR001",
@@ -1522,7 +1522,7 @@ const sampleUsers = [
         // ⚠️ FLAG: Azure credentials in user object
         azureUsername: "john.smith@bluemountain.onmicrosoft.com",
         azurePassword: "Winter2026!",
-        // FLAG{azure_credentials_john_smith}
+        // ctf_b64: RkxBR3thenVyZV9jcmVkZW50aWFsc19qb2huX3NtaXRofQ==
         entraId: "a1b2c3d4-e5f6-4789-a012-3456789abcde"
     },
     {
@@ -1611,7 +1611,7 @@ const sampleUsers = [
         membershipTier: "Admin",
         // ⚠️ CRITICAL: Admin credentials exposed
         password: "Admin@BlueMountain2026!",
-        // FLAG{admin_password_found}
+        // ctf_b64: RkxBR3thZG1pbl9wYXNzd29yZF9mb3VuZH0=
         creditCard: "4111-1111-1111-1111",
         cvv: "999",
         cardExpiry: "12/99",
@@ -1623,7 +1623,7 @@ const sampleUsers = [
         entraId: "f6a7b8c9-d0e1-9234-f567-89f012345678",
         // ⚠️ VULNERABILITY: Admin access keys exposed
         adminAccessKey: "BMT-ADMIN-KEY-2026-PROD-abc123xyz789",
-        // FLAG{azure_admin_access_key_exposed}
+        // ctf_b64: RkxBR3thenVyZV9hZG1pbl9hY2Nlc3Nfa2V5X2V4cG9zZWR9
         azureSubscriptionId: "12345678-1234-1234-1234-123456789012",
         azureTenantId: "87654321-4321-4321-4321-210987654321"
     }

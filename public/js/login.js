@@ -1,6 +1,6 @@
 // Login page functionality
 // ⚠️ VULNERABILITY: Client-side authentication with no server validation
-// FLAG{client_side_authentication_bypass}
+// ctf_b64: RkxBR3tjbGllbnRfc2lkZV9hdXRoZW50aWNhdGlvbl9ieXBhc3N9
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Login page loaded');
@@ -132,7 +132,7 @@ function generateFakeSessionToken(user) {
     // ⚠️ VULNERABILITY: Weak token generation
     const token = 'BMT-' + user.UserID + '-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
     console.log('Generated session token:', token);
-    // FLAG{predictable_session_token_generation}
+    // ctf_b64: RkxBR3twcmVkaWN0YWJsZV9zZXNzaW9uX3Rva2VuX2dlbmVyYXRpb259
     return token;
 }
 

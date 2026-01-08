@@ -1,6 +1,6 @@
 // Employee Information Database
 // ⚠️ VULNERABILITY: Employee data exposed without authentication
-// FLAG{employee_database_publicly_accessible}
+// ctf_b64: RkxBR3tlbXBsb3llZV9kYXRhYmFzZV9wdWJsaWNseV9hY2Nlc3NpYmxlfQ==
 
 // ⚠️ Simulated employee database from HR system
 const employeeDatabase = [
@@ -194,7 +194,7 @@ const employeeDatabase = [
 // ⚠️ VULNERABILITY: Function to search employees without authentication
 function searchEmployees(query) {
     console.log('Searching employee database for:', query);
-    // FLAG{employee_search_no_authentication}
+    // ctf_b64: RkxBR3tlbXBsb3llZV9zZWFyY2hfbm9fYXV0aGVudGljYXRpb259
     
     const results = employeeDatabase.filter(emp => {
         const searchStr = query.toLowerCase();
@@ -214,7 +214,7 @@ function searchEmployees(query) {
 function exportEmployeeData() {
     console.log('Exporting employee database...');
     console.log('Total employees:', employeeDatabase.length);
-    // FLAG{employee_pii_export_without_auth}
+    // ctf_b64: RkxBR3tlbXBsb3llZV9waWlfZXhwb3J0X3dpdGhvdXRfYXV0aH0=
     
     console.table(employeeDatabase);
     
@@ -258,7 +258,7 @@ function getAllAzureUsernames() {
     const usernames = employeeDatabase.map(emp => emp.azureUsername);
     console.log('All Azure/Entra usernames for password spraying:');
     console.log(usernames);
-    // FLAG{azure_username_list_for_password_spray}
+    // ctf_b64: RkxBR3thenVyZV91c2VybmFtZV9saXN0X2Zvcl9wYXNzd29yZF9zcHJheX0=
     return usernames;
 }
 
@@ -280,7 +280,7 @@ function getPrivilegedEmployees() {
     
     console.log('Employees with elevated access:');
     console.table(privileged);
-    // FLAG{privileged_account_list_exposed}
+    // ctf_b64: RkxBR3twcml2aWxlZ2VkX2FjY291bnRfbGlzdF9leHBvc2VkfQ==
     
     return privileged;
 }

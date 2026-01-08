@@ -113,7 +113,7 @@ function searchFlights() {
     const sqlQuery = buildVulnerableSQLQuery(from, to, airline, departureDate, returnDate);
     console.log('⚠️ VULNERABLE SQL QUERY:', sqlQuery);
     console.log('⚠️ This query is vulnerable to SQL injection!');
-    console.log('FLAG{sql_injection_in_flight_search}');
+    // ctf_b64: RkxBR3tzcWxfaW5qZWN0aW9uX2luX2ZsaWdodF9zZWFyY2h9
     
     // Simulate executing the vulnerable query
     let filteredFlights = executeVulnerableQuery(sqlQuery);

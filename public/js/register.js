@@ -1,6 +1,6 @@
 // Register page functionality
 // ⚠️ VULNERABILITY: No input validation or sanitization
-// FLAG{insecure_registration_accepts_any_data}
+// ctf_b64: RkxBR3tpbnNlY3VyZV9yZWdpc3RyYXRpb25fYWNjZXB0c19hbnlfZGF0YX0=
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Register page loaded');
@@ -24,7 +24,7 @@ async function handleRegister(event) {
     
     console.log('Registration data (ALL SENSITIVE DATA LOGGED):');
     console.log(formData);
-    // FLAG{all_registration_data_logged_to_console}
+    // ctf_b64: RkxBR3thbGxfcmVnaXN0cmF0aW9uX2RhdGFfbG9nZ2VkX3RvX2NvbnNvbGV9
     
     // ⚠️ VULNERABILITY: No password strength requirement
     if (formData.password.length < 3) {

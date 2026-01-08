@@ -70,7 +70,7 @@ function searchHotels() {
     const sqlQuery = buildVulnerableHotelSQLQuery(location, checkIn, checkOut);
     console.log('⚠️ VULNERABLE SQL QUERY:', sqlQuery);
     console.log('⚠️ This query is vulnerable to SQL injection!');
-    console.log('FLAG{sql_injection_in_hotel_search}');
+    // ctf_b64: RkxBR3tzcWxfaW5qZWN0aW9uX2luX2hvdGVsX3NlYXJjaH0=
     
     // Simulate executing the vulnerable query
     let filteredHotels = executeVulnerableHotelQuery(sqlQuery);

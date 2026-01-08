@@ -72,7 +72,7 @@ bookings/
 
 **Access Method**:
 - Public URL: `https://bluemountaintravel.blob.core.windows.net/bookings/{filename}`
-- With SAS token: `{url}?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31...`
+- With SAS token: `{url}?<SAS_TOKEN>`
 
 **Sensitive Data Level**: HIGH
 - PII (names, email, phone numbers)
@@ -306,7 +306,7 @@ passports/
 
 **SAS Token** (Shared Access Signature):
 ```
-?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2027-12-31T23:59:59Z&st=2026-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==
+<SAS_TOKEN_QUERY_STRING>
 ```
 
 **Permissions**: rwdlacupiytfx

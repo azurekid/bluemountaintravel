@@ -1,6 +1,6 @@
 // Passport Database - Stored in Azure Blob Storage
 // ⚠️ VULNERABILITY: Passport documents accessible via public SAS token
-// FLAG{passport_data_in_public_blob_storage}
+// ctf_b64: RkxBR3twYXNzcG9ydF9kYXRhX2luX3B1YmxpY19ibG9iX3N0b3JhZ2V9
 
 const passportDatabase = [
     {
@@ -54,7 +54,7 @@ const passportDatabase = [
             url: "https://bluemountaintravel.blob.core.windows.net/passports/US123456789-passport.pdf?sv=2024-11-04&ss=bfqt&srt=c&sp=rlitfx&se=2027-01-08T20:04:11Z&st=2026-01-08T11:49:11Z&spr=https,http&sig=JZuBqq36vX1MdzJv11ED2wtUfGNVWSVUZx5rThhJrH4%3D",
             scanDate: "2026-01-15T10:30:00Z"
         },
-        flag: "FLAG{john_smith_passport_accessible}"
+        flag: "ctf_b64: RkxBR3tqb2huX3NtaXRoX3Bhc3Nwb3J0X2FjY2Vzc2libGV9"
     },
     {
         passportId: "PASS002",
@@ -291,7 +291,7 @@ const passportDatabase = [
             scanDate: "2026-01-01T00:00:00Z"
         },
         specialNotes: "DIPLOMATIC PASSPORT - FULL ACCESS",
-        flag: "FLAG{admin_diplomatic_passport_exposed}"
+        flag: "ctf_b64: RkxBR3thZG1pbl9kaXBsb21hdGljX3Bhc3Nwb3J0X2V4cG9zZWR9"
     }
 ];
 
@@ -305,7 +305,7 @@ const passportIndex = {
     sasToken: "?sv=2024-11-04&ss=bfqt&srt=c&sp=rlitfx&se=2027-01-08T20:04:11Z&st=2026-01-08T11:49:11Z&spr=https,http&sig=JZuBqq36vX1MdzJv11ED2wtUfGNVWSVUZx5rThhJrH4%3D",
     containerUrl: "https://bluemountaintravel.blob.core.windows.net/passports",
     listAllUrl: "https://bluemountaintravel.blob.core.windows.net/passports?restype=container&comp=list&sv=2024-11-04&ss=bfqt&srt=c&sp=rlitfx&se=2027-01-08T20:04:11Z&st=2026-01-08T11:49:11Z&spr=https,http&sig=JZuBqq36vX1MdzJv11ED2wtUfGNVWSVUZx5rThhJrH4%3D",
-    flag: "FLAG{passport_container_sas_token_exposed}",
+    flag: "ctf_b64: RkxBR3twYXNzcG9ydF9jb250YWluZXJfc2FzX3Rva2VuX2V4cG9zZWR9",
     accessInstructions: {
         azureCLI: "az storage blob list --account-name bluemountaintravel --container-name passports --sas-token '<token>'",
         azureStorageExplorer: "Use the SAS URL to connect to the container",
@@ -349,7 +349,7 @@ function listAllPassportUrls() {
         console.log('');
     });
     
-    // FLAG{all_passport_urls_with_sas_tokens_logged}
+    // ctf_b64: RkxBR3thbGxfcGFzc3BvcnRfdXJsc193aXRoX3Nhc190b2tlbnNfbG9nZ2VkfQ==
     
     return passportDatabase.map(p => ({
         employee: p.employeeId,
@@ -385,7 +385,7 @@ function lateralMovementFromDatabase() {
     console.log('  Including: passports, profiles, bookings, documents');
     console.log('');
     console.log('=================================');
-    console.log('FLAG{lateral_movement_database_to_storage}');
+    // ctf_b64: RkxBR3tsYXRlcmFsX21vdmVtZW50X2RhdGFiYXNlX3RvX3N0b3JhZ2V9
 }
 
 // ⚠️ VULNERABILITY: Simulate accessing passports via Key Vault
@@ -405,7 +405,7 @@ function accessPassportsViaKeyVault() {
     console.log('   az storage blob download --account-name bluemountaintravel --account-key <key> --container-name passports --name US123456789-passport.pdf --file passport.pdf');
     console.log('');
     console.log('=== FULL ACCESS TO ALL PASSPORT DATA ===');
-    console.log('FLAG{key_vault_to_storage_lateral_movement}');
+    // ctf_b64: RkxBR3trZXlfdmF1bHRfdG9fc3RvcmFnZV9sYXRlcmFsX21vdmVtZW50fQ==
 }
 
 // Export to window
@@ -429,5 +429,5 @@ console.log('  - lateralMovementFromDatabase()');
 console.log('  - accessPassportsViaKeyVault()');
 console.log('');
 console.log('⚠️ VULNERABILITY: Passports accessible via SAS token');
-console.log('FLAG{passport_documents_in_public_blob_storage}');
+// ctf_b64: RkxBR3twYXNzcG9ydF9kb2N1bWVudHNfaW5fcHVibGljX2Jsb2Jfc3RvcmFnZX0=
 console.log('================================');

@@ -1,6 +1,6 @@
 // User enumeration API endpoint simulation
 // ⚠️ VULNERABILITY: User enumeration without rate limiting
-// FLAG{user_enumeration_endpoint_exposed}
+// ctf_b64: RkxBR3t1c2VyX2VudW1lcmF0aW9uX2VuZHBvaW50X2V4cG9zZWR9
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('API endpoints available for testing');
@@ -42,7 +42,7 @@ function checkUserExists(email) {
 function attemptPasswordSpray(emailList, password) {
     console.log('=== PASSWORD SPRAY ATTEMPT ===');
     console.log(`Testing password: ${password} against ${emailList.length} accounts`);
-    // FLAG{password_spray_no_rate_limiting}
+    // ctf_b64: RkxBR3twYXNzd29yZF9zcHJheV9ub19yYXRlX2xpbWl0aW5nfQ==
     
     const results = [];
     const users = window.sampleUsers || [];
@@ -95,7 +95,7 @@ function attemptPasswordSpray(emailList, password) {
 function attemptDatabasePasswordSpray(usernames, password) {
     console.log('=== DATABASE PASSWORD SPRAY ===');
     console.log(`Attempting SQL authentication with password: ${password}`);
-    // FLAG{sql_password_spray_vulnerable}
+    // ctf_b64: RkxBR3tzcWxfcGFzc3dvcmRfc3ByYXlfdnVsbmVyYWJsZX0=
     
     const dbConfig = window.AzureConfig.databaseConfig;
     console.log('Target database:', dbConfig.server);
@@ -149,7 +149,7 @@ function attemptDatabasePasswordSpray(usernames, password) {
 function attemptEntraPasswordSpray(usernames, password) {
     console.log('=== ENTRA ID PASSWORD SPRAY ===');
     console.log(`Attempting Entra authentication with password: ${password}`);
-    // FLAG{entra_id_password_spray_no_protection}
+    // ctf_b64: RkxBR3tlbnRyYV9pZF9wYXNzd29yZF9zcHJheV9ub19wcm90ZWN0aW9ufQ==
     
     const tenant = 'bluemountain.onmicrosoft.com';
     const users = window.sampleUsers || [];
@@ -222,7 +222,7 @@ function generateFakeRefreshToken(user) {
 // ⚠️ VULNERABILITY: Enumerate all emails in system
 function enumerateAllUsers() {
     console.log('=== USER ENUMERATION ===');
-    // FLAG{enumerate_all_users_no_auth}
+    // ctf_b64: RkxBR3tlbnVtZXJhdGVfYWxsX3VzZXJzX25vX2F1dGh9
     
     const users = window.sampleUsers || [];
     const registeredUsers = localStorage.getItem('registeredUsers');

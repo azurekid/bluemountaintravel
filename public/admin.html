@@ -57,7 +57,7 @@
                             <strong>Admin Key:</strong><br/>
                             <code style="background: rgba(248, 249, 250, 0.88); padding: 0.5rem; display: block; margin-top: 0.5rem; word-break: break-all;">BMT-ADMIN-KEY-2026-PROD-abc123xyz789</code>
                         </p>
-                        <!-- FLAG{admin_key_exposed_in_panel} -->
+                        <!-- ctf_b64: RkxBR3thZG1pbl9rZXlfZXhwb3NlZF9pbl9wYW5lbH0= -->
                     </div>
                 </div>
 
@@ -85,7 +85,7 @@
                         <p><strong>Password:</strong> P@ssw0rd123!</p>
                         <p><strong>Port:</strong> 1433</p>
                         <button onclick="showConnectionString()" class="btn-search" style="margin-top: 1rem; width: 100%;">Show Connection String</button>
-                        <!-- FLAG{database_credentials_in_admin_panel} -->
+                        <!-- ctf_b64: RkxBR3tkYXRhYmFzZV9jcmVkZW50aWFsc19pbl9hZG1pbl9wYW5lbH0= -->
                     </div>
                 </div>
 
@@ -125,7 +125,7 @@
                         <p><strong>Primary Key:</strong> fake-api-key-12345</p>
                         <p><strong>Secondary Key:</strong> fake-api-key-67890</p>
                         <button onclick="regenerateKeys()" class="btn-search" style="margin-top: 1rem; width: 100%; background: #dc3545;">Regenerate Keys</button>
-                        <!-- FLAG{api_keys_accessible_to_admin} -->
+                        <!-- ctf_b64: RkxBR3thcGlfa2V5c19hY2Nlc3NpYmxlX3RvX2FkbWlufQ== -->
                     </div>
                 </div>
             </div>
@@ -140,7 +140,7 @@
                         <p><strong>Password:</strong> AzureAdmin2026!@#</p>
                         <p><strong>Tenant:</strong> bluemountain.onmicrosoft.com</p>
                         <p><strong>Tenant ID:</strong> 87654321-4321-4321-4321-210987654321</p>
-                        <!-- FLAG{entra_global_admin_credentials_exposed} -->
+                        <!-- ctf_b64: RkxBR3tlbnRyYV9nbG9iYWxfYWRtaW5fY3JlZGVudGlhbHNfZXhwb3NlZH0= -->
                     </div>
                     <div>
                         <h4>Service Principal</h4>
@@ -157,16 +157,20 @@
                 <h3 style="color: #495057; margin-bottom: 1rem;">🚩 Security Training Flags</h3>
                 <p style="margin-bottom: 1rem;">If you found this page, you've discovered several security issues:</p>
                 <ul style="margin-left: 2rem; line-height: 2;">
-                    <li>FLAG{admin_panel_without_authentication}</li>
-                    <li>FLAG{exposed_azure_subscription_credentials}</li>
-                    <li>FLAG{database_connection_strings_in_ui}</li>
-                    <li>FLAG{service_principal_secret_exposed}</li>
+                    <li>Admin panel accessible without authentication</li>
+                    <li>Azure subscription identifiers exposed in UI</li>
+                    <li>Database connection details visible in UI</li>
+                    <li>Service principal secrets exposed</li>
                 </ul>
+                <!-- ctf_b64: RkxBR3thZG1pbl9wYW5lbF93aXRob3V0X2F1dGhlbnRpY2F0aW9ufQ== -->
+                <!-- ctf_b64: RkxBR3tleHBvc2VkX2F6dXJlX3N1YnNjcmlwdGlvbl9jcmVkZW50aWFsc30= -->
+                <!-- ctf_b64: RkxBR3tkYXRhYmFzZV9jb25uZWN0aW9uX3N0cmluZ3NfaW5fdWl9 -->
+                <!-- ctf_b64: RkxBR3tzZXJ2aWNlX3ByaW5jaXBhbF9zZWNyZXRfZXhwb3NlZH0= -->
                 <p style="margin-top: 1rem; font-style: italic;">Congratulations! You've successfully escalated privileges.</p>
             </div>
 
             <!-- Hidden Comment Flags -->
-            <!-- FLAG{admin_html_source_contains_secrets} -->
+            <!-- ctf_b64: RkxBR3thZG1pbl9odG1sX3NvdXJjZV9jb250YWluc19zZWNyZXRzfQ== -->
             <!-- Azure Portal: https://portal.azure.com/#@bluemountain.onmicrosoft.com -->
             <!-- Service Principal can be used for: az login --service-principal -u <app-id> -p <client-secret> --tenant <tenant-id> -->
         </div>

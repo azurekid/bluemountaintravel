@@ -1,6 +1,6 @@
 // Admin panel functionality
 // ⚠️ VULNERABILITY: No authentication check for admin panel
-// FLAG{admin_panel_accessible_without_auth}
+// ctf_b64: RkxBR3thZG1pbl9wYW5lbF9hY2Nlc3NpYmxlX3dpdGhvdXRfYXV0aH0=
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🔐 Admin Panel Loaded');
@@ -43,7 +43,7 @@ function logAdminCredentials() {
     console.log('Service Principal App ID:', 'a1b2c3d4-e5f6-7890-abcd-ef1234567890');
     console.log('Service Principal Secret:', 'SuperSecret123!@#$%');
     console.log('========================');
-    // FLAG{all_admin_credentials_logged_to_console}
+    // ctf_b64: RkxBR3thbGxfYWRtaW5fY3JlZGVudGlhbHNfbG9nZ2VkX3RvX2NvbnNvbGV9
 }
 
 function updateUserCount() {
@@ -79,7 +79,7 @@ Portal URL: https://portal.azure.com/#@bluemountain.onmicrosoft.com
     
     alert(credentials);
     console.log(credentials);
-    // FLAG{azure_service_principal_with_full_access}
+    // ctf_b64: RkxBR3thenVyZV9zZXJ2aWNlX3ByaW5jaXBhbF93aXRoX2Z1bGxfYWNjZXNzfQ==
 }
 
 function showConnectionString() {
@@ -93,7 +93,7 @@ function showConnectionString() {
     console.log('az sql db show-connection-string --client ado.net --name TravelDB --server bluemountaintravel');
     console.log('\nDirect SQL Connection:');
     console.log('sqlcmd -S bluemountaintravel.database.windows.net -d TravelDB -U admin -P P@ssw0rd123!');
-    // FLAG{sql_connection_string_fully_exposed}
+    // ctf_b64: RkxBR3tzcWxfY29ubmVjdGlvbl9zdHJpbmdfZnVsbHlfZXhwb3NlZH0=
 }
 
 function viewAllUsers() {
@@ -120,7 +120,7 @@ function viewAllUsers() {
         console.log('Azure Password:', user.azurePassword);
         console.log('Entra ID:', user.entraId);
     });
-    // FLAG{all_user_pii_dumped_including_passwords}
+    // ctf_b64: RkxBR3thbGxfdXNlcl9waWlfZHVtcGVkX2luY2x1ZGluZ19wYXNzd29yZHN9
     
     alert(`Found ${allUsers.length} users. Check console for full details including passwords, SSNs, and credit cards.`);
 }
@@ -149,7 +149,7 @@ function exportUserData() {
     URL.revokeObjectURL(url);
     
     console.log('User data exported with all PII, passwords, and Azure credentials');
-    // FLAG{user_data_export_contains_everything}
+    // ctf_b64: RkxBR3t1c2VyX2RhdGFfZXhwb3J0X2NvbnRhaW5zX2V2ZXJ5dGhpbmd9
     
     alert('User data exported successfully!\n\nFile contains all passwords, SSNs, credit cards, and Azure credentials in plain text.');
 }
@@ -178,7 +178,7 @@ BlobEndpoint=https://${storageAccount}.blob.core.windows.net/;SharedAccessSignat
     
     alert(info);
     console.log(info);
-    // FLAG{sas_token_with_full_permissions_until_2025}
+    // ctf_b64: RkxBR3tzYXNfdG9rZW5fd2l0aF9mdWxsX3Blcm1pc3Npb25zX3VudGlsXzIwMjV9
 }
 
 function regenerateKeys() {
@@ -192,7 +192,7 @@ function regenerateKeys() {
     console.log('New Secondary Key:', newSecondary);
     
     alert('API Keys Regenerated:\n\nPrimary: ' + newPrimary + '\nSecondary: ' + newSecondary + '\n\nOld keys will be invalidated in 24 hours.');
-    // FLAG{api_key_regeneration_predictable}
+    // ctf_b64: RkxBR3thcGlfa2V5X3JlZ2VuZXJhdGlvbl9wcmVkaWN0YWJsZX0=
 }
 
 function showServicePrincipalDetails() {
@@ -228,7 +228,7 @@ https://login.microsoftonline.com/87654321-4321-4321-4321-210987654321/oauth2/v2
     
     alert(details);
     console.log(details);
-    // FLAG{service_principal_can_access_all_azure_resources}
+    // ctf_b64: RkxBR3tzZXJ2aWNlX3ByaW5jaXBhbF9jYW5fYWNjZXNzX2FsbF9henVyZV9yZXNvdXJjZXN9
 }
 
 function logout() {

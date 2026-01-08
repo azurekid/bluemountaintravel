@@ -1,6 +1,6 @@
 // SQL Injection Demonstration
 // ⚠️ VULNERABILITY: This file demonstrates SQL injection vulnerabilities
-// FLAG{sql_injection_demonstration_available}
+// ctf_b64: RkxBR3tzcWxfaW5qZWN0aW9uX2RlbW9uc3RyYXRpb25fYXZhaWxhYmxlfQ==
 
 console.log('=== SQL INJECTION VULNERABILITY DEMO LOADED ===');
 console.log('This application demonstrates SQL injection vulnerabilities');
@@ -52,7 +52,7 @@ function testFlightSQLInjection(payload) {
             console.log('This could bypass password checks or other security controls');
         }
         
-        console.log('\nFLAG{sql_injection_successful_demonstration}');
+        // ctf_b64: RkxBR3tzcWxfaW5qZWN0aW9uX3N1Y2Nlc3NmdWxfZGVtb25zdHJhdGlvbn0=
     }
     
     return injectedQuery;
@@ -77,7 +77,7 @@ function testHotelSQLInjection(payload) {
             console.log('Attacker could extract: customer data, booking history, payment information');
         }
         
-        console.log('\nFLAG{hotel_search_vulnerable_to_sql_injection}');
+        // ctf_b64: RkxBR3tob3RlbF9zZWFyY2hfdnVsbmVyYWJsZV90b19zcWxfaW5qZWN0aW9ufQ==
     }
     
     return injectedQuery;
@@ -95,28 +95,28 @@ function demonstrateSQLInjectionDataExtraction() {
     console.log('Injected Query:');
     console.log("SELECT * FROM Flights WHERE departure_city = '" + payload1 + "'");
     console.log('Result: Attacker gets all user emails, passwords, credit cards, and SSNs');
-    console.log('FLAG{sql_injection_extracts_user_credentials}');
+    // ctf_b64: RkxBR3tzcWxfaW5qZWN0aW9uX2V4dHJhY3RzX3VzZXJfY3JlZGVudGlhbHN9
     
     // Example 2: Extract booking information
     const payload2 = "' UNION SELECT bookingId, customerName, flightNumber, seatNumber FROM Bookings--";
     console.log('\n2. EXTRACTING BOOKING DATA:');
     console.log('Payload:', payload2);
     console.log('Result: Attacker gets all booking details and passenger information');
-    console.log('FLAG{sql_injection_extracts_booking_data}');
+    // ctf_b64: RkxBR3tzcWxfaW5qZWN0aW9uX2V4dHJhY3RzX2Jvb2tpbmdfZGF0YX0=
     
     // Example 3: Extract admin credentials
     const payload3 = "' UNION SELECT username, password, role, lastLogin FROM Administrators--";
     console.log('\n3. EXTRACTING ADMIN CREDENTIALS:');
     console.log('Payload:', payload3);
     console.log('Result: Attacker gets admin usernames and passwords');
-    console.log('FLAG{sql_injection_extracts_admin_credentials}');
+    // ctf_b64: RkxBR3tzcWxfaW5qZWN0aW9uX2V4dHJhY3RzX2FkbWluX2NyZWRlbnRpYWxzfQ==
     
     // Example 4: Extract payment information
     const payload4 = "' UNION SELECT cardNumber, cvv, expiryDate, cardholderName FROM PaymentMethods--";
     console.log('\n4. EXTRACTING PAYMENT DATA:');
     console.log('Payload:', payload4);
     console.log('Result: Attacker gets all stored credit card information');
-    console.log('FLAG{sql_injection_extracts_payment_data}');
+    // ctf_b64: RkxBR3tzcWxfaW5qZWN0aW9uX2V4dHJhY3RzX3BheW1lbnRfZGF0YX0=
     
     console.log('\n=== END OF EXTRACTION DEMO ===');
 }
@@ -149,7 +149,7 @@ function demonstrateSQLInjectionAuthBypass() {
     console.log('The OR \'1\'=\'1\' condition is always true');
     console.log('The -- comment removes the rest of the query');
     console.log('Attacker is logged in as admin without knowing the password!');
-    console.log('\nFLAG{sql_injection_bypasses_authentication}');
+    // ctf_b64: RkxBR3tzcWxfaW5qZWN0aW9uX2J5cGFzc2VzX2F1dGhlbnRpY2F0aW9ufQ==
 }
 
 // ⚠️ VULNERABILITY: Show common SQL injection payloads
@@ -166,7 +166,7 @@ function showCommonSQLInjectionPayloads() {
     console.log('Usage:');
     console.log('  testFlightSQLInjection("' + sqlInjectionPayloads.unionAttack + '")');
     console.log('  testHotelSQLInjection("' + sqlInjectionPayloads.alwaysTrue + '")');
-    console.log('\nFLAG{sql_injection_payloads_documented}');
+    // ctf_b64: RkxBR3tzcWxfaW5qZWN0aW9uX3BheWxvYWRzX2RvY3VtZW50ZWR9
 }
 
 // ⚠️ VULNERABILITY: Automated SQL injection test
@@ -183,7 +183,7 @@ function runAutomatedSQLInjectionTest() {
     console.log('=== ALL TESTS COMPLETED ===');
     console.log('🚨 CRITICAL: All SQL injection tests succeeded!');
     console.log('Application is vulnerable to SQL injection attacks');
-    console.log('FLAG{automated_sql_injection_test_passed}');
+    // ctf_b64: RkxBR3thdXRvbWF0ZWRfc3FsX2luamVjdGlvbl90ZXN0X3Bhc3NlZH0=
 }
 
 // Export functions globally

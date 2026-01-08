@@ -27,7 +27,8 @@ Shared Access Signature (SAS) tokens are hardcoded directly in client-side JavaS
 
 ### Example Code
 ```javascript
-const AZURE_STORAGE_SAS_TOKEN = "?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T23:59:59Z...";
+const AZURE_STORAGE_SAS_TOKEN = window.AzureConfig?.sasToken;
+const AZURE_STORAGE_SAS_TOKEN_DOCUMENTS_WRITE = window.AzureConfig?.documentsWriteSasToken;
 ```
 
 ### How to Exploit
@@ -54,7 +55,7 @@ curl "https://bluemountaintravel.blob.core.windows.net/bookings?restype=containe
 ### Remediation
 ```javascript
 // DON'T DO THIS:
-const SAS_TOKEN = "?sv=2021...";
+const SAS_TOKEN = "<SAS_TOKEN>";
 
 // DO THIS INSTEAD:
 // Server-side API endpoint
@@ -520,7 +521,7 @@ SAS tokens have excessive permissions and very long expiration times.
 
 ### Example
 ```
-?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T23:59:59Z
+<SAS_TOKEN_QUERY_STRING>
 ```
 
 ### Impact

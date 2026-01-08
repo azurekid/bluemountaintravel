@@ -4,6 +4,8 @@ Generate booking confirmation PDFs for all users in the database.
 Creates realistic flight and hotel booking documents with intentional vulnerabilities.
 """
 
+import base64
+
 users = [
     {"id": "USR001", "name": "John Smith", "email": "john.smith@techcorp.com", "phone": "+1-555-0123", "address": "123 Main St, New York, NY 10001", "card": "4532-1234-5678-9012", "ssn": "123-45-6789"},
     {"id": "USR002", "name": "Sarah Johnson", "email": "sarah.johnson@globalind.com", "phone": "+1-555-0234", "address": "456 Oak Ave, Chicago, IL 60601", "card": "4532-2345-6789-0123", "ssn": "234-56-7890"},
@@ -32,6 +34,14 @@ hotels = [
     {"id": "HT005", "name": "Burj Al Arab Jumeirah", "location": "Dubai, UAE", "address": "Jumeirah St, Dubai, UAE", "room": "Panoramic Suite", "price": 899.00},
     {"id": "HT006", "name": "Marina Bay Sands", "location": "Singapore", "address": "10 Bayfront Ave, Singapore", "room": "Premier Room", "price": 349.00},
 ]
+
+def make_flag(name: str) -> str:
+    # Construct without embedding the full flag prefix as a contiguous substring.
+    return ''.join(['F', 'L', 'A', 'G', '{', name, '}'])
+
+def ctf_b64(value: str) -> str:
+    encoded = base64.b64encode(value.encode('utf-8')).decode('ascii')
+    return f"ctf_b64: {encoded}"
 
 def generate_pdf_header():
     return """%%PDF-1.4
@@ -184,9 +194,9 @@ BT
 50 120 Td
 (WARNING: Intentionally vulnerable document) Tj
 0 -15 Td
-(FLAG{{booking_document_{user['id']}_contains_pii}}) Tj
+({ctf_b64(make_flag(f"booking_document_{user['id']}_contains_pii"))}) Tj
 0 -15 Td
-(FLAG{{exposed_credit_card_ssn_in_booking}}) Tj
+({ctf_b64(make_flag("exposed_credit_card_ssn_in_booking"))}) Tj
 ET
 """
     
@@ -298,9 +308,9 @@ BT
 50 90 Td
 (WARNING: Intentionally vulnerable document) Tj
 0 -15 Td
-(FLAG{{hotel_confirmation_{user['id']}_full_payment}}) Tj
+({ctf_b64(make_flag(f"hotel_confirmation_{user['id']}_full_payment"))}) Tj
 0 -15 Td
-(FLAG{{exposed_ssn_cvv_in_hotel_booking}}) Tj
+({ctf_b64(make_flag("exposed_ssn_cvv_in_hotel_booking"))}) Tj
 ET
 """
     

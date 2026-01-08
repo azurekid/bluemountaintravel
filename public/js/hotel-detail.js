@@ -1,6 +1,6 @@
 // Hotel detail page functionality
 // ⚠️ VULNERABILITY: Insecure Direct Object Reference (IDOR)
-// FLAG{idor_vulnerability_in_hotel_details}
+// ctf_b64: RkxBR3tpZG9yX3Z1bG5lcmFiaWxpdHlfaW5faG90ZWxfZGV0YWlsc30=
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Loading hotel detail page...');
@@ -149,7 +149,7 @@ function displayHotelDetails(hotel) {
             <p style="font-size: 0.9rem;"><strong>Country Code:</strong> ${hotel.country || 'N/A'}</p>
             <p style="font-size: 0.9rem;"><strong>Database Record:</strong> hotels/${hotel.id}</p>
             <p style="font-size: 0.9rem;"><strong>Storage URL:</strong> ${window.AzureConfig.storageUrls.documents}/hotels/${hotel.id}.json</p>
-            <!-- FLAG{internal_hotel_data_exposed_in_ui} -->
+            <!-- ctf_b64: RkxBR3tpbnRlcm5hbF9ob3RlbF9kYXRhX2V4cG9zZWRfaW5fdWl9 -->
         </div>
     `;
     
