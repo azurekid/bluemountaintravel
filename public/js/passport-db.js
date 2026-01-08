@@ -51,7 +51,7 @@ const passportDatabase = [
             container: "passports",
             blobName: "US123456789-passport.pdf",
             // ⚠️ VULNERABILITY: Full URL with SAS token
-            url: "https://bluemountaintravel.blob.core.windows.net/passports/US123456789-passport.pdf?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2027-12-31T23:59:59Z&st=2026-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==",
+            url: "https://bluemountaintravel.blob.core.windows.net/passports/US123456789-passport.pdf?sv=2024-11-04&ss=bfqt&srt=c&sp=rlitfx&se=2027-01-08T20:04:11Z&st=2026-01-08T11:49:11Z&spr=https,http&sig=JZuBqq36vX1MdzJv11ED2wtUfGNVWSVUZx5rThhJrH4%3D",
             scanDate: "2026-01-15T10:30:00Z"
         },
         flag: "FLAG{john_smith_passport_accessible}"
@@ -102,7 +102,7 @@ const passportDatabase = [
         storageInfo: {
             container: "passports",
             blobName: "US234567890-passport.pdf",
-            url: "https://bluemountaintravel.blob.core.windows.net/passports/US234567890-passport.pdf?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2027-12-31T23:59:59Z&st=2026-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==",
+            url: "https://bluemountaintravel.blob.core.windows.net/passports/US234567890-passport.pdf?sv=2024-11-04&ss=bfqt&srt=c&sp=rlitfx&se=2027-01-08T20:04:11Z&st=2026-01-08T11:49:11Z&spr=https,http&sig=JZuBqq36vX1MdzJv11ED2wtUfGNVWSVUZx5rThhJrH4%3D",
             scanDate: "2026-01-12T14:20:00Z"
         }
     },
@@ -152,7 +152,7 @@ const passportDatabase = [
         storageInfo: {
             container: "passports",
             blobName: "CN567890123-passport.pdf",
-            url: "https://bluemountaintravel.blob.core.windows.net/passports/CN567890123-passport.pdf?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2027-12-31T23:59:59Z&st=2026-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==",
+            url: "https://bluemountaintravel.blob.core.windows.net/passports/CN567890123-passport.pdf?sv=2024-11-04&ss=bfqt&srt=c&sp=rlitfx&se=2027-01-08T20:04:11Z&st=2026-01-08T11:49:11Z&spr=https,http&sig=JZuBqq36vX1MdzJv11ED2wtUfGNVWSVUZx5rThhJrH4%3D",
             scanDate: "2026-01-10T09:15:00Z"
         }
     },
@@ -203,7 +203,7 @@ const passportDatabase = [
         storageInfo: {
             container: "passports",
             blobName: "GB789012345-passport.pdf",
-            url: "https://bluemountaintravel.blob.core.windows.net/passports/GB789012345-passport.pdf?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2027-12-31T23:59:59Z&st=2026-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==",
+            url: "https://bluemountaintravel.blob.core.windows.net/passports/GB789012345-passport.pdf?sv=2024-11-04&ss=bfqt&srt=c&sp=rlitfx&se=2027-01-08T20:04:11Z&st=2026-01-08T11:49:11Z&spr=https,http&sig=JZuBqq36vX1MdzJv11ED2wtUfGNVWSVUZx5rThhJrH4%3D",
             scanDate: "2026-01-18T16:45:00Z"
         }
     },
@@ -253,7 +253,7 @@ const passportDatabase = [
         storageInfo: {
             container: "passports",
             blobName: "MX890123456-passport.pdf",
-            url: "https://bluemountaintravel.blob.core.windows.net/passports/MX890123456-passport.pdf?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2027-12-31T23:59:59Z&st=2026-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==",
+            url: "https://bluemountaintravel.blob.core.windows.net/passports/MX890123456-passport.pdf?sv=2024-11-04&ss=bfqt&srt=c&sp=rlitfx&se=2027-01-08T20:04:11Z&st=2026-01-08T11:49:11Z&spr=https,http&sig=JZuBqq36vX1MdzJv11ED2wtUfGNVWSVUZx5rThhJrH4%3D",
             scanDate: "2026-01-08T11:30:00Z"
         }
     },
@@ -287,7 +287,7 @@ const passportDatabase = [
         storageInfo: {
             container: "passports",
             blobName: "US000000001-diplomatic.pdf",
-            url: "https://bluemountaintravel.blob.core.windows.net/passports/US000000001-diplomatic.pdf?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2027-12-31T23:59:59Z&st=2026-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==",
+            url: "https://bluemountaintravel.blob.core.windows.net/passports/US000000001-diplomatic.pdf?sv=2024-11-04&ss=bfqt&srt=c&sp=rlitfx&se=2027-01-08T20:04:11Z&st=2026-01-08T11:49:11Z&spr=https,http&sig=JZuBqq36vX1MdzJv11ED2wtUfGNVWSVUZx5rThhJrH4%3D",
             scanDate: "2026-01-01T00:00:00Z"
         },
         specialNotes: "DIPLOMATIC PASSPORT - FULL ACCESS",
@@ -302,9 +302,9 @@ const passportIndex = {
     storageAccount: "bluemountaintravel",
     containerName: "passports",
     // ⚠️ VULNERABILITY: SAS token with full permissions
-    sasToken: "?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2027-12-31T23:59:59Z&st=2026-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==",
+    sasToken: "?sv=2024-11-04&ss=bfqt&srt=c&sp=rlitfx&se=2027-01-08T20:04:11Z&st=2026-01-08T11:49:11Z&spr=https,http&sig=JZuBqq36vX1MdzJv11ED2wtUfGNVWSVUZx5rThhJrH4%3D",
     containerUrl: "https://bluemountaintravel.blob.core.windows.net/passports",
-    listAllUrl: "https://bluemountaintravel.blob.core.windows.net/passports?restype=container&comp=list&sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2027-12-31T23:59:59Z&st=2026-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==",
+    listAllUrl: "https://bluemountaintravel.blob.core.windows.net/passports?restype=container&comp=list&sv=2024-11-04&ss=bfqt&srt=c&sp=rlitfx&se=2027-01-08T20:04:11Z&st=2026-01-08T11:49:11Z&spr=https,http&sig=JZuBqq36vX1MdzJv11ED2wtUfGNVWSVUZx5rThhJrH4%3D",
     flag: "FLAG{passport_container_sas_token_exposed}",
     accessInstructions: {
         azureCLI: "az storage blob list --account-name bluemountaintravel --container-name passports --sas-token '<token>'",

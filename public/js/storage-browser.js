@@ -1,6 +1,6 @@
 // Storage Browser functionality
 // ⚠️ VULNERABILITY: Public access to Azure storage without authentication
-// FLAG{storage_browser_no_auth_required}
+// ctf_b64: RkxBR3tzdG9yYWdlX2Jyb3dzZXJfbm9fYXV0aF9yZXF1aXJlZH0=
 
 function browseContainer(containerName) {
     console.log('Browsing container:', containerName);
@@ -76,7 +76,7 @@ function getProfileFiles() {
         name: `user-${u.id}.json`,
         size: '15 KB',
         modified: '2026-01-15T10:00:00Z',
-        url: `https://bluemountaintravel.blob.core.windows.net/profiles/user-${u.id}.json?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2027-12-31T23:59:59Z&st=2026-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==`,
+        url: `https://bluemountaintravel.blob.core.windows.net/profiles/user-${u.id}.json?sv=2024-11-04&ss=bfqt&srt=c&sp=rlitfx&se=2027-01-08T20:04:11Z&st=2026-01-08T11:49:11Z&spr=https,http&sig=JZuBqq36vX1MdzJv11ED2wtUfGNVWSVUZx5rThhJrH4%3D`,
         metadata: {
             email: u.email,
             name: `${u.firstName} ${u.lastName}`
@@ -90,13 +90,13 @@ function getBookingFiles() {
             name: 'booking-BK1234567890.pdf',
             size: '234 KB',
             modified: '2026-01-20T14:30:00Z',
-            url: 'https://bluemountaintravel.blob.core.windows.net/bookings/booking-BK1234567890.pdf?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2027-12-31T23:59:59Z&st=2026-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789=='
+            url: 'https://bluemountaintravel.blob.core.windows.net/bookings/booking-BK1234567890.pdf?sv=2024-11-04&ss=bfqt&srt=c&sp=rlitfx&se=2027-01-08T20:04:11Z&st=2026-01-08T11:49:11Z&spr=https,http&sig=JZuBqq36vX1MdzJv11ED2wtUfGNVWSVUZx5rThhJrH4%3D'
         },
         {
             name: 'booking-HB9876543210.pdf',
             size: '189 KB',
             modified: '2026-01-19T09:15:00Z',
-            url: 'https://bluemountaintravel.blob.core.windows.net/bookings/booking-HB9876543210.pdf?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2027-12-31T23:59:59Z&st=2026-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789=='
+            url: 'https://bluemountaintravel.blob.core.windows.net/bookings/booking-HB9876543210.pdf?sv=2024-11-04&ss=bfqt&srt=c&sp=rlitfx&se=2027-01-08T20:04:11Z&st=2026-01-08T11:49:11Z&spr=https,http&sig=JZuBqq36vX1MdzJv11ED2wtUfGNVWSVUZx5rThhJrH4%3D'
         }
     ];
 }
@@ -107,7 +107,7 @@ function getDocumentFiles() {
             name: 'app-registrations.json',
             size: '8 KB',
             modified: '2026-01-15T10:30:00Z',
-            url: 'https://bluemountaintravel.blob.core.windows.net/documents/app-registrations.json?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2027-12-31T23:59:59Z&st=2026-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==',
+            url: 'https://bluemountaintravel.blob.core.windows.net/documents/app-registrations.json?sv=2024-11-04&ss=bfqt&srt=c&sp=rlitfx&se=2027-01-08T20:04:11Z&st=2026-01-08T11:49:11Z&spr=https,http&sig=JZuBqq36vX1MdzJv11ED2wtUfGNVWSVUZx5rThhJrH4%3D',
             metadata: {
                 description: 'Azure App Registration credentials and service principals',
                 warning: 'Contains sensitive credentials!'
@@ -117,7 +117,7 @@ function getDocumentFiles() {
             name: 'employee-database.json',
             size: '45 KB',
             modified: '2026-01-18T16:00:00Z',
-            url: 'https://bluemountaintravel.blob.core.windows.net/documents/employee-database.json?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2027-12-31T23:59:59Z&st=2026-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==',
+            url: 'https://bluemountaintravel.blob.core.windows.net/documents/employee-database.json?sv=2024-11-04&ss=bfqt&srt=c&sp=rlitfx&se=2027-01-08T20:04:11Z&st=2026-01-08T11:49:11Z&spr=https,http&sig=JZuBqq36vX1MdzJv11ED2wtUfGNVWSVUZx5rThhJrH4%3D',
             metadata: {
                 description: 'Complete employee records with PII',
                 records: 6
@@ -127,7 +127,7 @@ function getDocumentFiles() {
             name: 'azure-credentials.txt',
             size: '3 KB',
             modified: '2026-01-10T08:00:00Z',
-            url: 'https://bluemountaintravel.blob.core.windows.net/documents/azure-credentials.txt?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2027-12-31T23:59:59Z&st=2026-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789=='
+            url: 'https://bluemountaintravel.blob.core.windows.net/documents/azure-credentials.txt?sv=2024-11-04&ss=bfqt&srt=c&sp=rlitfx&se=2027-01-08T20:04:11Z&st=2026-01-08T11:49:11Z&spr=https,http&sig=JZuBqq36vX1MdzJv11ED2wtUfGNVWSVUZx5rThhJrH4%3D'
         }
     ];
 }
@@ -135,7 +135,7 @@ function getDocumentFiles() {
 function downloadFile(url, filename) {
     console.log('Downloading file:', filename);
     console.log('URL:', url);
-    // FLAG{downloading_files_with_sas_token}
+    // ctf_b64: RkxBR3tkb3dubG9hZGluZ19maWxlc193aXRoX3Nhc190b2tlbn0=
     
     alert(`Downloading: ${filename}\n\nURL: ${url}\n\nIn a real scenario, the file would download now.\n\nFor training purposes, the download URL with SAS token has been logged to console.`);
 }
@@ -191,11 +191,10 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('4. App registration credentials in documents container');
     console.log('5. Employee PII in profiles container');
     console.log('');
-    console.log('🚩 FLAGS:');
-    console.log('- FLAG{storage_browser_no_auth_required}');
-    console.log('- FLAG{passport_container_no_authentication}');
-    console.log('- FLAG{app_registration_credentials_in_public_storage}');
-    console.log('');
+    // Flags are intentionally present for the training scenario, but not printed verbatim.
+    // ctf_b64: RkxBR3tzdG9yYWdlX2Jyb3dzZXJfbm9fYXV0aF9yZXF1aXJlZH0=
+    // ctf_b64: RkxBR3twYXNzcG9ydF9jb250YWluZXJfbm9fYXV0aGVudGljYXRpb259
+    // ctf_b64: RkxBR3thcHBfcmVnaXN0cmF0aW9uX2NyZWRlbnRpYWxzX2luX3B1YmxpY19zdG9yYWdlfQ==
     console.log('💡 LATERAL MOVEMENT:');
     console.log('- Use app-registrations.json credentials to access Key Vault');
     console.log('- Get storage account key from Key Vault');
