@@ -6,8 +6,6 @@ try {
   sqlLoadError = err;
 }
 
-let poolPromise;
-
 function buildConfig() {
   const connectionString = process.env.SQL_CONNECTION_STRING;
   if (connectionString) {
@@ -32,13 +30,6 @@ function buildConfig() {
   };
 }
 
-async function getPool() {
-  if (!poolPromise) {
-    poolPromise = sql.connect(buildConfig());
-  }
-  return poolPromise;
-}
-
 module.exports = async function (context, req) {
   try {
     if (sqlLoadError) {
@@ -60,7 +51,8 @@ module.exports = async function (context, req) {
       return;
     }
 
-    const pool = await getPool();
+    const pool = await new sql.ConnectionPool(buildConfig()).connect();
+    try {
 
     // Check if user already exists
     const checkRequest = pool.request();
@@ -95,17 +87,22 @@ module.exports = async function (context, req) {
        VALUES (@userId, @email, @password, @firstName, @lastName, @phone, GETDATE(), 1)`
     );
 
-    context.res = {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-      body: { success: true, userId, message: 'User registered successfully' }
-    };
+      context.res = {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+        body: { success: true, userId, message: 'User registered successfully' }
+      };
+    } finally {
+      try {
+        await pool.close();
+      } catch (_) {}
+    }
   } catch (err) {
     context.log('Register function error', err);
     context.res = {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
-      body: { error: err.message }
+      body: { error: err.message, code: err.code || null }
     };
   }
 };

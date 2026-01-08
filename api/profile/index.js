@@ -61,10 +61,11 @@ module.exports = async function (context, req) {
         });
     } catch (_) {}
 
+    let pool;
     try {
-        await sql.connect(cfg);
+        pool = await new sql.ConnectionPool(cfg).connect();
 
-        const result = await sql.query`
+        const result = await pool.request().query`
             SELECT 
                 u.UserID, u.Email, u.FirstName, u.LastName, u.Phone, 
                 u.DateOfBirth, u.Address, u.City, u.State, u.ZipCode, 
@@ -144,6 +145,10 @@ module.exports = async function (context, req) {
             body: JSON.stringify({ error: 'Database error', details: err.message })
         };
     } finally {
-        sql.close();
+        if (pool) {
+            try {
+                await pool.close();
+            } catch (_) {}
+        }
     }
 };

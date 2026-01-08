@@ -6,8 +6,6 @@ try {
   sqlLoadError = err;
 }
 
-let poolPromise;
-
 function buildConfig() {
   const connectionString = process.env.SQL_CONNECTION_STRING;
   if (connectionString) {
@@ -30,13 +28,6 @@ function buildConfig() {
       trustServerCertificate: false
     }
   };
-}
-
-async function getPool() {
-  if (!poolPromise) {
-    poolPromise = sql.connect(buildConfig());
-  }
-  return poolPromise;
 }
 
 module.exports = async function (context, req) {
@@ -76,33 +67,41 @@ module.exports = async function (context, req) {
       // Ignore logging errors
     }
 
-    const pool = await getPool();
-    const request = pool.request();
-    request.input('email', sql.VarChar, email);
-    request.input('password', sql.VarChar, password);
+    const pool = await new sql.ConnectionPool(cfg).connect();
+    try {
+      const request = pool.request();
+      request.input('email', sql.VarChar, email);
+      request.input('password', sql.VarChar, password);
 
-    // Use trimmed/case-insensitive email match and trimmed password to avoid whitespace/collation surprises
-    const result = await request.query(`
-      SELECT *
-      FROM Users
-      WHERE LTRIM(RTRIM(LOWER(Email))) = LTRIM(RTRIM(LOWER(@email)))
-        AND LTRIM(RTRIM(PasswordHash)) = LTRIM(RTRIM(@password))
-        AND IsActive = 1
-    `);
+      // Use trimmed/case-insensitive email match and trimmed password to avoid whitespace/collation surprises
+      const result = await request.query(`
+        SELECT *
+        FROM Users
+        WHERE LTRIM(RTRIM(LOWER(Email))) = LTRIM(RTRIM(LOWER(@email)))
+          AND LTRIM(RTRIM(PasswordHash)) = LTRIM(RTRIM(@password))
+          AND IsActive = 1
+      `);
 
-    context.log('Login query executed', { rows: result?.recordset?.length || 0 });
+      context.log('Login query executed', { rows: result?.recordset?.length || 0 });
 
-    context.res = {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-      body: result.recordset || []
-    };
+      context.res = {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+        body: result.recordset || []
+      };
+    } finally {
+      try {
+        await pool.close();
+      } catch (_) {
+        // ignore close errors
+      }
+    }
   } catch (err) {
     context.log('Login function error', err);
     context.res = {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
-      body: { error: err.message }
+      body: { error: err.message, code: err.code || null }
     };
   }
 };
