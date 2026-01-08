@@ -51,8 +51,8 @@ const passportDatabase = [
             container: "passports",
             blobName: "US123456789-passport.pdf",
             // ⚠️ VULNERABILITY: Full URL with SAS token
-            url: "https://bluemountaintravel.blob.core.windows.net/passports/US123456789-passport.pdf?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T23:59:59Z&st=2024-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==",
-            scanDate: "2024-01-15T10:30:00Z"
+            url: "https://bluemountaintravel.blob.core.windows.net/passports/US123456789-passport.pdf?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2027-12-31T23:59:59Z&st=2026-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==",
+            scanDate: "2026-01-15T10:30:00Z"
         },
         flag: "FLAG{john_smith_passport_accessible}"
     },
@@ -91,7 +91,7 @@ const passportDatabase = [
                 country: "UAE",
                 type: "Business Visa",
                 issueDate: "2023-09-05",
-                expiryDate: "2024-09-05",
+                expiryDate: "2026-09-05",
                 visaNumber: "AE147258369"
             }
         ],
@@ -102,8 +102,8 @@ const passportDatabase = [
         storageInfo: {
             container: "passports",
             blobName: "US234567890-passport.pdf",
-            url: "https://bluemountaintravel.blob.core.windows.net/passports/US234567890-passport.pdf?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T23:59:59Z&st=2024-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==",
-            scanDate: "2024-01-12T14:20:00Z"
+            url: "https://bluemountaintravel.blob.core.windows.net/passports/US234567890-passport.pdf?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2027-12-31T23:59:59Z&st=2026-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==",
+            scanDate: "2026-01-12T14:20:00Z"
         }
     },
     {
@@ -134,7 +134,7 @@ const passportDatabase = [
                 country: "United States",
                 type: "H-1B Work Visa",
                 issueDate: "2021-09-01",
-                expiryDate: "2024-09-01",
+                expiryDate: "2026-09-01",
                 visaNumber: "US-H1B-2021-456789"
             },
             {
@@ -152,8 +152,8 @@ const passportDatabase = [
         storageInfo: {
             container: "passports",
             blobName: "CN567890123-passport.pdf",
-            url: "https://bluemountaintravel.blob.core.windows.net/passports/CN567890123-passport.pdf?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T23:59:59Z&st=2024-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==",
-            scanDate: "2024-01-10T09:15:00Z"
+            url: "https://bluemountaintravel.blob.core.windows.net/passports/CN567890123-passport.pdf?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2027-12-31T23:59:59Z&st=2026-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==",
+            scanDate: "2026-01-10T09:15:00Z"
         }
     },
     {
@@ -191,7 +191,7 @@ const passportDatabase = [
                 country: "Australia",
                 type: "Business eVisitor",
                 issueDate: "2023-01-20",
-                expiryDate: "2024-01-20",
+                expiryDate: "2026-01-20",
                 visaNumber: "AU-eVisitor-456123789"
             }
         ],
@@ -203,8 +203,8 @@ const passportDatabase = [
         storageInfo: {
             container: "passports",
             blobName: "GB789012345-passport.pdf",
-            url: "https://bluemountaintravel.blob.core.windows.net/passports/GB789012345-passport.pdf?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T23:59:59Z&st=2024-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==",
-            scanDate: "2024-01-18T16:45:00Z"
+            url: "https://bluemountaintravel.blob.core.windows.net/passports/GB789012345-passport.pdf?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2027-12-31T23:59:59Z&st=2026-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==",
+            scanDate: "2026-01-18T16:45:00Z"
         }
     },
     {
@@ -235,7 +235,7 @@ const passportDatabase = [
                 country: "United States",
                 type: "TN Work Visa (NAFTA)",
                 issueDate: "2021-05-01",
-                expiryDate: "2024-05-01",
+                expiryDate: "2026-05-01",
                 visaNumber: "US-TN-789654321"
             },
             {
@@ -253,8 +253,8 @@ const passportDatabase = [
         storageInfo: {
             container: "passports",
             blobName: "MX890123456-passport.pdf",
-            url: "https://bluemountaintravel.blob.core.windows.net/passports/MX890123456-passport.pdf?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T23:59:59Z&st=2024-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==",
-            scanDate: "2024-01-08T11:30:00Z"
+            url: "https://bluemountaintravel.blob.core.windows.net/passports/MX890123456-passport.pdf?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2027-12-31T23:59:59Z&st=2026-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==",
+            scanDate: "2026-01-08T11:30:00Z"
         }
     },
     {
@@ -287,8 +287,8 @@ const passportDatabase = [
         storageInfo: {
             container: "passports",
             blobName: "US000000001-diplomatic.pdf",
-            url: "https://bluemountaintravel.blob.core.windows.net/passports/US000000001-diplomatic.pdf?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T23:59:59Z&st=2024-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==",
-            scanDate: "2024-01-01T00:00:00Z"
+            url: "https://bluemountaintravel.blob.core.windows.net/passports/US000000001-diplomatic.pdf?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2027-12-31T23:59:59Z&st=2026-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==",
+            scanDate: "2026-01-01T00:00:00Z"
         },
         specialNotes: "DIPLOMATIC PASSPORT - FULL ACCESS",
         flag: "FLAG{admin_diplomatic_passport_exposed}"
@@ -297,14 +297,14 @@ const passportDatabase = [
 
 // ⚠️ VULNERABILITY: Passport metadata index file
 const passportIndex = {
-    lastUpdated: "2024-01-20T12:00:00Z",
+    lastUpdated: "2026-01-20T12:00:00Z",
     totalPassports: passportDatabase.length,
     storageAccount: "bluemountaintravel",
     containerName: "passports",
     // ⚠️ VULNERABILITY: SAS token with full permissions
-    sasToken: "?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T23:59:59Z&st=2024-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==",
+    sasToken: "?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2027-12-31T23:59:59Z&st=2026-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==",
     containerUrl: "https://bluemountaintravel.blob.core.windows.net/passports",
-    listAllUrl: "https://bluemountaintravel.blob.core.windows.net/passports?restype=container&comp=list&sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T23:59:59Z&st=2024-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==",
+    listAllUrl: "https://bluemountaintravel.blob.core.windows.net/passports?restype=container&comp=list&sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2027-12-31T23:59:59Z&st=2026-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==",
     flag: "FLAG{passport_container_sas_token_exposed}",
     accessInstructions: {
         azureCLI: "az storage blob list --account-name bluemountaintravel --container-name passports --sas-token '<token>'",

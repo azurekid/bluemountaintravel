@@ -2,7 +2,10 @@
 // WARNING: This code contains intentional security vulnerabilities for training purposes
 
 // ⚠️ VULNERABILITY: Exposed Azure Storage SAS Token
-const AZURE_STORAGE_SAS_TOKEN = "?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T23:59:59Z&st=2024-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==";
+// NOTE: Token is intentionally long-lived for training.
+const AZURE_STORAGE_SAS_TOKEN = "?sv=2024-11-04&ss=bfqt&srt=c&sp=rlitfx&se=2027-01-08T20:04:11Z&st=2026-01-08T11:49:11Z&spr=https,http&sig=JZuBqq36vX1MdzJv11ED2wtUfGNVWSVUZx5rThhJrH4%3D";
+// Used when constructing write URLs specifically for the documents container.
+const AZURE_STORAGE_SAS_TOKEN_DOCUMENTS_WRITE = "?sv=2024-11-04&ss=b&srt=c&sp=wlactfx&se=2027-01-08T20:09:04Z&st=2026-01-08T11:54:04Z&spr=https,http&sig=WaESPWqHUs%2FqKX1Tm2QNQsuO4Drsj3V%2BjsI0ygHu6EE%3D";
 const STORAGE_ACCOUNT_NAME = "bluemountaintravel";
 
 // ⚠️ VULNERABILITY: Hardcoded API Keys
@@ -29,8 +32,8 @@ const STORAGE_URLS = {
     sasToken: AZURE_STORAGE_SAS_TOKEN
 };
 
-// ⚠️ VULNERABILITY: Hidden flag in comments
-// FLAG{exposed_flight_data_in_client_side_code}
+// ⚠️ VULNERABILITY: Training marker (CTF)
+// ctf_b64: RkxBR3tleHBvc2VkX2ZsaWdodF9kYXRhX2luX2NsaWVudF9zaWRlX2NvZGV9
 
 // Sample flight data - Expanded list with 50+ destinations
 const flightData = [
@@ -1518,7 +1521,7 @@ const sampleUsers = [
         address: "123 Main St, New York, NY 10001",
         // ⚠️ FLAG: Azure credentials in user object
         azureUsername: "john.smith@bluemountain.onmicrosoft.com",
-        azurePassword: "Winter2024!",
+        azurePassword: "Winter2026!",
         // FLAG{azure_credentials_john_smith}
         entraId: "a1b2c3d4-e5f6-4789-a012-3456789abcde"
     },
@@ -1526,11 +1529,11 @@ const sampleUsers = [
         id: "USR002",
         firstName: "Sarah",
         lastName: "Johnson",
-        email: "sarah.johnson@enterprise.com",
+        email: "sarah.johnson@globalind.com",
         phone: "+1-555-0234",
         company: "Global Industries",
         membershipTier: "Gold",
-        password: "Sarah@2024",
+        password: "Sarah@2026",
         creditCard: "5412-7534-9012-3456",
         cvv: "456",
         cardExpiry: "09/25",
@@ -1538,18 +1541,18 @@ const sampleUsers = [
         dateOfBirth: "1990-07-22",
         address: "456 Oak Ave, Chicago, IL 60601",
         azureUsername: "sarah.j@bluemountain.onmicrosoft.com",
-        azurePassword: "Summer2024!",
+        azurePassword: "Summer2026!",
         entraId: "b2c3d4e5-f6a7-5890-b123-456789bcdef0"
     },
     {
         id: "USR003",
         firstName: "Michael",
         lastName: "Chen",
-        email: "michael.chen@startups.io",
+        email: "michael.chen@innovlab.io",
         phone: "+1-555-0345",
         company: "Innovation Labs",
         membershipTier: "Silver",
-        password: "Chen#2024",
+        password: "Chen#2026",
         creditCard: "3714-496353-98431",
         cvv: "7890",
         cardExpiry: "03/27",
@@ -1557,7 +1560,7 @@ const sampleUsers = [
         dateOfBirth: "1988-11-30",
         address: "789 Tech Blvd, San Francisco, CA 94102",
         azureUsername: "m.chen@bluemountain.onmicrosoft.com",
-        azurePassword: "Fall2024!",
+        azurePassword: "Fall2026!",
         entraId: "c3d4e5f6-a7b8-6901-c234-56789cdef012"
     },
     {
@@ -1576,18 +1579,18 @@ const sampleUsers = [
         dateOfBirth: "1992-05-18",
         address: "321 Corporate Dr, Boston, MA 02101",
         azureUsername: "emma.williams@bluemountain.onmicrosoft.com",
-        azurePassword: "Spring2024!",
+        azurePassword: "Spring2026!",
         entraId: "d4e5f6a7-b8c9-7012-d345-6789def01234"
     },
     {
         id: "USR005",
         firstName: "David",
         lastName: "Martinez",
-        email: "d.martinez@finance.com",
+        email: "david.martinez@invbank.com",
         phone: "+1-555-0567",
         company: "Investment Bank",
         membershipTier: "Gold",
-        password: "DavidM@rtinez2024",
+        password: "DavidM@rtinez2026",
         creditCard: "5105-1051-0510-5100",
         cvv: "789",
         cardExpiry: "11/25",
@@ -1595,7 +1598,7 @@ const sampleUsers = [
         dateOfBirth: "1987-09-25",
         address: "555 Wall St, New York, NY 10005",
         azureUsername: "david.m@bluemountain.onmicrosoft.com",
-        azurePassword: "Banker2024!",
+        azurePassword: "Banker2026!",
         entraId: "e5f6a7b8-c9d0-8123-e456-789ef0123456"
     },
     {
@@ -1607,7 +1610,7 @@ const sampleUsers = [
         company: "Blue Mountain Travel",
         membershipTier: "Admin",
         // ⚠️ CRITICAL: Admin credentials exposed
-        password: "Admin@BlueMountain2024!",
+        password: "Admin@BlueMountain2026!",
         // FLAG{admin_password_found}
         creditCard: "4111-1111-1111-1111",
         cvv: "999",
@@ -1616,10 +1619,10 @@ const sampleUsers = [
         dateOfBirth: "1980-01-01",
         address: "1 Blue Mountain Plaza, Seattle, WA 98101",
         azureUsername: "admin@bluemountain.onmicrosoft.com",
-        azurePassword: "AzureAdmin2024!@#",
+        azurePassword: "AzureAdmin2026!@#",
         entraId: "f6a7b8c9-d0e1-9234-f567-89f012345678",
         // ⚠️ VULNERABILITY: Admin access keys exposed
-        adminAccessKey: "BMT-ADMIN-KEY-2024-PROD-abc123xyz789",
+        adminAccessKey: "BMT-ADMIN-KEY-2026-PROD-abc123xyz789",
         // FLAG{azure_admin_access_key_exposed}
         azureSubscriptionId: "12345678-1234-1234-1234-123456789012",
         azureTenantId: "87654321-4321-4321-4321-210987654321"
@@ -1758,7 +1761,8 @@ function getCurrentUser() {
 
 // ⚠️ VULNERABILITY: Direct blob storage access function
 function uploadToAzureStorage(file, containerName) {
-    const blobUrl = `https://${STORAGE_ACCOUNT_NAME}.blob.core.windows.net/${containerName}/${file.name}${AZURE_STORAGE_SAS_TOKEN}`;
+    const sasToken = containerName === 'documents' ? AZURE_STORAGE_SAS_TOKEN_DOCUMENTS_WRITE : AZURE_STORAGE_SAS_TOKEN;
+    const blobUrl = `https://${STORAGE_ACCOUNT_NAME}.blob.core.windows.net/${containerName}/${file.name}${sasToken}`;
     
     console.log('Uploading to Azure Storage:', blobUrl);
     
@@ -1777,10 +1781,11 @@ if (typeof window !== 'undefined') {
     window.HotelData = hotelData;
     window.sampleUsers = sampleUsers;  // ⚠️ VULNERABILITY: Exposing all users globally
     window.getCurrentUser = getCurrentUser;  // Export for use in other pages
-    // FLAG{all_user_data_accessible_via_window_object}
+    // ctf_b64: RkxBR3thbGxfdXNlcl9kYXRhX2FjY2Vzc2libGVfdmlhX3dpbmRvd19vYmplY3R9
     window.AzureConfig = {
         storageAccount: STORAGE_ACCOUNT_NAME,
         sasToken: AZURE_STORAGE_SAS_TOKEN,
+        documentsWriteSasToken: AZURE_STORAGE_SAS_TOKEN_DOCUMENTS_WRITE,
         storageUrls: STORAGE_URLS,
         apiConfig: API_CONFIG,
         databaseConfig: DATABASE_CONFIG
@@ -1819,14 +1824,8 @@ console.log('5. Public blob storage URLs');
 console.log('6. Detailed error logging with sensitive information');
 console.log('===============================================');
 console.log('');
-console.log('🚩 CTF FLAGS - Find these throughout the application:');
-console.log('- FLAG{exposed_flight_data_in_client_side_code}');
-console.log('- FLAG{user_pii_data_in_plain_text_storage}');
-console.log('- FLAG{azure_credentials_john_smith}');
-console.log('- FLAG{admin_password_found}');
-console.log('- FLAG{azure_admin_access_key_exposed}');
-console.log('- And many more hidden in the application...');
-console.log('');
+console.log('CTF markers are embedded throughout the app.');
+console.log('Hints: check localStorage, view-source, and network requests.');
 console.log('💡 HINTS:');
 console.log('- Check localStorage for sensitive data');
 console.log('- View source code for hidden comments');

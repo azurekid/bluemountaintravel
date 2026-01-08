@@ -25,7 +25,7 @@ const dbConfig = {
 
 // ⚠️ VULNERABILITY: Exposed Azure Storage credentials
 const storageAccountName = process.env.STORAGE_ACCOUNT || 'bluemountaintravel';
-const sasToken = process.env.SAS_TOKEN || '?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T23:59:59Z&st=2024-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==';
+const sasToken = process.env.SAS_TOKEN || '?sv=2024-11-04&ss=bfqt&srt=c&sp=rlitfx&se=2027-01-08T20:04:11Z&st=2026-01-08T11:49:11Z&spr=https,http&sig=JZuBqq36vX1MdzJv11ED2wtUfGNVWSVUZx5rThhJrH4%3D';
 
 // Middleware
 app.use(cors()); // ⚠️ VULNERABILITY: Allow all origins

@@ -75,8 +75,8 @@ function getProfileFiles() {
     return users.map(u => ({
         name: `user-${u.id}.json`,
         size: '15 KB',
-        modified: '2024-01-15T10:00:00Z',
-        url: `https://bluemountaintravel.blob.core.windows.net/profiles/user-${u.id}.json?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T23:59:59Z&st=2024-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==`,
+        modified: '2026-01-15T10:00:00Z',
+        url: `https://bluemountaintravel.blob.core.windows.net/profiles/user-${u.id}.json?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2027-12-31T23:59:59Z&st=2026-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==`,
         metadata: {
             email: u.email,
             name: `${u.firstName} ${u.lastName}`
@@ -89,14 +89,14 @@ function getBookingFiles() {
         {
             name: 'booking-BK1234567890.pdf',
             size: '234 KB',
-            modified: '2024-01-20T14:30:00Z',
-            url: 'https://bluemountaintravel.blob.core.windows.net/bookings/booking-BK1234567890.pdf?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T23:59:59Z&st=2024-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789=='
+            modified: '2026-01-20T14:30:00Z',
+            url: 'https://bluemountaintravel.blob.core.windows.net/bookings/booking-BK1234567890.pdf?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2027-12-31T23:59:59Z&st=2026-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789=='
         },
         {
             name: 'booking-HB9876543210.pdf',
             size: '189 KB',
-            modified: '2024-01-19T09:15:00Z',
-            url: 'https://bluemountaintravel.blob.core.windows.net/bookings/booking-HB9876543210.pdf?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T23:59:59Z&st=2024-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789=='
+            modified: '2026-01-19T09:15:00Z',
+            url: 'https://bluemountaintravel.blob.core.windows.net/bookings/booking-HB9876543210.pdf?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2027-12-31T23:59:59Z&st=2026-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789=='
         }
     ];
 }
@@ -106,8 +106,8 @@ function getDocumentFiles() {
         {
             name: 'app-registrations.json',
             size: '8 KB',
-            modified: '2024-01-15T10:30:00Z',
-            url: 'https://bluemountaintravel.blob.core.windows.net/documents/app-registrations.json?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T23:59:59Z&st=2024-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==',
+            modified: '2026-01-15T10:30:00Z',
+            url: 'https://bluemountaintravel.blob.core.windows.net/documents/app-registrations.json?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2027-12-31T23:59:59Z&st=2026-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==',
             metadata: {
                 description: 'Azure App Registration credentials and service principals',
                 warning: 'Contains sensitive credentials!'
@@ -116,8 +116,8 @@ function getDocumentFiles() {
         {
             name: 'employee-database.json',
             size: '45 KB',
-            modified: '2024-01-18T16:00:00Z',
-            url: 'https://bluemountaintravel.blob.core.windows.net/documents/employee-database.json?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T23:59:59Z&st=2024-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==',
+            modified: '2026-01-18T16:00:00Z',
+            url: 'https://bluemountaintravel.blob.core.windows.net/documents/employee-database.json?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2027-12-31T23:59:59Z&st=2026-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==',
             metadata: {
                 description: 'Complete employee records with PII',
                 records: 6
@@ -126,8 +126,8 @@ function getDocumentFiles() {
         {
             name: 'azure-credentials.txt',
             size: '3 KB',
-            modified: '2024-01-10T08:00:00Z',
-            url: 'https://bluemountaintravel.blob.core.windows.net/documents/azure-credentials.txt?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T23:59:59Z&st=2024-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789=='
+            modified: '2026-01-10T08:00:00Z',
+            url: 'https://bluemountaintravel.blob.core.windows.net/documents/azure-credentials.txt?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2027-12-31T23:59:59Z&st=2026-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789=='
         }
     ];
 }
