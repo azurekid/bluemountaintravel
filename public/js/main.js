@@ -1196,19 +1196,55 @@ function buildUnsplashFeaturedUrl(width, height, keywords) {
 }
 
 function buildHotelRoomPhotoUrl(width, height, hotelKey) {
-    // Bias towards interiors/rooms rather than city skylines
-    // Deterministically vary between a few room-related tag sets so the grid doesn't look identical.
-    const variations = [
-        ['hotel', 'room', 'interior', 'bed', 'suite'],
-        ['hotel', 'room', 'interior', 'luxury', 'suite'],
-        ['hotel', 'room', 'interior', 'modern', 'bedroom'],
-        ['hotel', 'room', 'interior', 'resort', 'suite'],
-        ['hotel', 'lobby', 'interior', 'accommodation']
+    // Curated list of high-quality Unsplash luxury hotel/resort room photos
+    // These are actual professional hotel photography - interiors, suites, views
+    const luxuryHotelPhotos = [
+        // Luxury hotel rooms and suites
+        'photo-1618773928121-c32242e63f39', // Elegant hotel bedroom
+        'photo-1631049307264-da0ec9d70304', // Modern luxury suite
+        'photo-1590490360182-c33d57733427', // Boutique hotel room
+        'photo-1566665797739-1674de7a421a', // Hotel room with view
+        'photo-1582719478250-c89cae4dc85b', // Luxury hotel bed
+        'photo-1611892440504-42a792e24d32', // Premium suite interior
+        'photo-1578683010236-d716f9a3f461', // Elegant hotel interior
+        'photo-1520250497591-112f2f40a3f4', // Resort room ocean view
+        'photo-1542314831-068cd1dbfeeb', // Grand hotel lobby
+        'photo-1564501049412-61c2a3083791', // Modern hotel room
+        'photo-1551882547-ff40c63fe5fa', // Luxury resort suite
+        'photo-1618221195710-dd6b41faaea6', // Hotel room design
+        'photo-1596394516093-501ba68a0ba6', // Premium accommodation
+        'photo-1445019980597-93fa8acb246c', // Stylish hotel bed
+        'photo-1584132967334-10e028bd69f7', // Upscale hotel room
+        'photo-1587874522487-fe10e9d2e4c2', // Boutique suite
+        'photo-1560185007-c5ca9d2c014d', // Hotel room artwork
+        'photo-1560448204-603b3fc33ddc', // Luxury bedroom view
+        'photo-1571896349842-33c89424de2d', // Resort accommodation
+        'photo-1512918728675-ed5a9ecdebfd', // Hotel bathroom luxury
+        'photo-1590381105924-c72589b9ef3f', // Modern hotel design
+        'photo-1595576508898-0ad5c879a061', // Premium room interior
+        'photo-1522771739844-6a9f6d5f14af', // Classic luxury hotel
+        'photo-1625244724120-1fd1d34d00f6', // Contemporary suite
+        'photo-1613977257363-707ba9348227', // Resort bedroom
+        'photo-1602002418816-5c0aeef426aa', // Executive suite
+        'photo-1609949165314-64f2a9a5f53a', // Penthouse view
+        'photo-1566073771259-6a8506099945', // Pool resort
+        'photo-1571003123894-1f0594d2b5d9', // Luxury villa
+        'photo-1540541338287-41700207dee6', // Infinity pool resort
+        'photo-1544124499-58912cbddaad', // Overwater bungalow
+        'photo-1615460549969-36fa19521a4f', // Spa hotel
+        'photo-1600596542815-ffad4c1539a9', // Premium lodge
+        'photo-1568495248636-6432b97bd949', // Hotel terrace
+        'photo-1517840901100-8179e982acb7', // Beach resort room
+        'photo-1559599189-fe84dea4eb79', // Tropical suite
+        'photo-1564078516393-cf04bd966897', // City hotel luxury
+        'photo-1582719508461-905c673771fd', // Skyline view room
+        'photo-1521783988139-89397d761dce', // Mountain resort
+        'photo-1563911302283-d2bc129e7570'  // Desert luxury hotel
     ];
-    const idx = hashToLock(hotelKey) % variations.length;
-    const tags = safeEncodeKeywords(variations[idx]);
-    const lock = hashToLock(`${hotelKey}:${width}x${height}:${tags}`) % 10000;
-    return `https://loremflickr.com/${width}/${height}/${tags}?lock=${lock}`;
+    
+    const idx = hashToLock(hotelKey) % luxuryHotelPhotos.length;
+    const photoId = luxuryHotelPhotos[idx];
+    return `https://images.unsplash.com/${photoId}?w=${width}&h=${height}&fit=crop&q=80`;
 }
 
 function parseCityFromRoute(value) {

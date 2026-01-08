@@ -27,14 +27,15 @@ body {
 
 /* Navigation */
 .navbar {
-    background: linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(30, 30, 30, 0.95) 100%);
-    padding: 1.2rem 0;
+    background: linear-gradient(135deg, rgba(10, 10, 10, 0.98) 0%, rgba(25, 25, 25, 0.98) 100%);
+    padding: 1.4rem 0;
     position: fixed;
     width: 100%;
     top: 0;
     z-index: 1000;
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.15);
 }
 
 .navbar .container {
@@ -45,15 +46,16 @@ body {
 
 .logo {
     color: #fff;
-    font-size: 1.6rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
+    font-size: 1.8rem;
+    font-weight: 300;
+    letter-spacing: 3px;
+    text-transform: uppercase;
 }
 
 /* Apply gradient only if supported */
 @supports (background-clip: text) or (-webkit-background-clip: text) {
     .logo {
-        background: linear-gradient(135deg, #ffffff 0%, #d4af37 100%);
+        background: linear-gradient(135deg, #ffffff 0%, #d4af37 50%, #ffffff 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -67,17 +69,34 @@ body {
 }
 
 .nav-menu a {
-    color: #fff;
+    color: rgba(255, 255, 255, 0.85);
     text-decoration: none;
     transition: all 0.3s ease;
-    font-weight: 500;
-    font-size: 0.95rem;
-    letter-spacing: 0.3px;
+    font-weight: 400;
+    font-size: 0.9rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 0.5rem 0;
+    position: relative;
+}
+
+.nav-menu a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #d4af37, transparent);
+    transition: width 0.3s ease;
 }
 
 .nav-menu a:hover {
     color: #d4af37;
-    transform: translateY(-1px);
+}
+
+.nav-menu a:hover::after {
+    width: 100%;
 }
 
 /* Hero Section with City Background */
@@ -128,59 +147,84 @@ body {
     position: relative;
     z-index: 1;
     color: #fff;
-    max-width: 800px;
-    padding: 2rem;
+    max-width: 900px;
+    padding: 3rem;
 }
 
 .hero-content h1 {
-    font-size: 3.5rem;
-    margin-bottom: 1rem;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.4);
+    font-weight: 300;
+    letter-spacing: 6px;
+    text-transform: uppercase;
 }
 
 .hero-content p {
-    font-size: 1.5rem;
-    margin-bottom: 2rem;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    font-size: 1.2rem;
+    margin-bottom: 2.5rem;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.4);
+    font-weight: 300;
+    letter-spacing: 3px;
+    text-transform: uppercase;
 }
 
 /* Buttons */
 .btn-primary, .btn-secondary {
     display: inline-block;
-    padding: 1rem 2.5rem;
+    padding: 1.1rem 3rem;
     text-decoration: none;
-    border-radius: 2px;
-    transition: all 0.3s ease;
-    font-weight: 600;
-    font-size: 0.95rem;
-    letter-spacing: 1px;
+    border-radius: 0;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    font-weight: 500;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
     text-transform: uppercase;
     border: none;
     cursor: pointer;
+    position: relative;
+    overflow: hidden;
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #d4af37 0%, #c5a028 100%);
+    background: #d4af37;
     color: #1a1a1a;
-    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.35);
+}
+
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s ease;
 }
 
 .btn-primary:hover {
-    background: linear-gradient(135deg, #e5c04a 0%, #d4af37 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+    background: #e5c766;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(212, 175, 55, 0.5);
+}
+
+.btn-primary:hover::before {
+    left: 100%;
 }
 
 .btn-secondary {
-    background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%);
-    color: #fff;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    background: transparent;
+    color: #1a1a1a;
+    border: 2px solid #1a1a1a;
+    box-shadow: none;
 }
 
 .btn-secondary:hover {
-    background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    background: #1a1a1a;
+    color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
 }
 
 /* Featured Destinations */
@@ -197,11 +241,22 @@ body {
 
 .featured-destinations h2 {
     text-align: center;
-    font-size: 3rem;
-    margin-bottom: 3rem;
+    font-size: 2.5rem;
+    margin-bottom: 4rem;
     color: #1a1a1a;
-    font-weight: 700;
-    letter-spacing: 1px;
+    font-weight: 300;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    position: relative;
+}
+
+.featured-destinations h2::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 2px;
+    background: #d4af37;
+    margin: 1.5rem auto 0;
 }
 
 .destinations-grid {
@@ -211,18 +266,34 @@ body {
 }
 
 .destination-card {
-    background-color: rgba(255, 255, 255, 0.92);
-    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.98);
+    border-radius: 0;
     overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-    border: 1px solid #e5e5e5;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    border: none;
+    position: relative;
+}
+
+.destination-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, #d4af37, #f4e4a6, #d4af37);
+    transform: scaleX(0);
+    transition: transform 0.5s ease;
 }
 
 .destination-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 12px 35px rgba(0,0,0,0.15);
-    border-color: #d4af37;
+    transform: translateY(-15px);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+}
+
+.destination-card:hover::before {
+    transform: scaleX(1);
 }
 
 .destination-image {
@@ -275,21 +346,23 @@ body {
 }
 
 .destination-info {
-    padding: 1.5rem;
+    padding: 2rem;
 }
 
 .destination-info h3 {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
+    font-size: 1.3rem;
+    margin-bottom: 0.75rem;
     color: #1a1a1a;
-    font-weight: 700;
-    letter-spacing: 0.3px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
 .destination-info p {
-    margin-bottom: 1rem;
-    color: #4a4a4a;
-    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    color: #6b6b6b;
+    line-height: 1.8;
+    font-weight: 300;
 }
 
 /* Why Choose Us Section */
@@ -305,11 +378,21 @@ body {
 
 .why-choose-us h2 {
     text-align: center;
-    font-size: 3rem;
-    margin-bottom: 3rem;
+    font-size: 2.5rem;
+    margin-bottom: 4rem;
     color: #1a1a1a;
-    font-weight: 700;
-    letter-spacing: 1px;
+    font-weight: 300;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+}
+
+.why-choose-us h2::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 2px;
+    background: #d4af37;
+    margin: 1.5rem auto 0;
 }
 
 .features-grid {
@@ -320,25 +403,28 @@ body {
 
 .feature {
     text-align: center;
-    padding: 2rem;
+    padding: 3rem 2rem;
 }
 
 .feature-icon {
-    font-size: 3rem;
-    margin-bottom: 1rem;
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: #d4af37;
 }
 
 .feature h3 {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
     color: #1a1a1a;
-    font-weight: 700;
-    letter-spacing: 0.3px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
 }
 
 .feature p {
-    color: #4a4a4a;
-    line-height: 1.7;
+    color: #6b6b6b;
+    line-height: 1.9;
+    font-weight: 300;
 }
 
 /* Photo Gallery */
@@ -424,15 +510,19 @@ body {
     background-position: center;
 }
 
-/* Business Travel Pages - Modern Styling */
+/* Business Travel Pages - Luxury Styling */
 :root {
-    --primary-color: #2563eb;
-    --secondary-color: #1e40af;
-    --accent-color: #3b82f6;
-    --text-dark: #1e293b;
-    --text-light: #64748b;
-    --background: #f8fafc;
-    --card-bg: rgba(255, 255, 255, 0.95);
+    --primary-color: #1a1a1a;
+    --secondary-color: #2c2c2c;
+    --accent-color: #d4af37;
+    --accent-light: #e5c766;
+    --accent-dark: #b8972e;
+    --text-dark: #1a1a1a;
+    --text-light: #6b6b6b;
+    --background: #fafafa;
+    --card-bg: rgba(255, 255, 255, 0.97);
+    --gold-gradient: linear-gradient(135deg, #d4af37 0%, #f4e4a6 50%, #d4af37 100%);
+    --dark-gradient: linear-gradient(135deg, #1a1a1a 0%, #2c3e50 100%);
 }
 
 /* Navigation Brand */
@@ -443,26 +533,33 @@ body {
 
 .nav-brand .logo {
     margin: 0;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
 }
 
 .nav-brand .tagline {
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.7rem;
+    color: rgba(212, 175, 55, 0.8);
     margin: 0;
-    font-weight: 300;
+    font-weight: 400;
+    letter-spacing: 3px;
+    text-transform: uppercase;
 }
 
 .btn-login {
-    background: var(--primary-color) !important;
-    padding: 0.5rem 1.5rem !important;
-    border-radius: 6px !important;
-    color: white !important;
-    transition: background 0.3s ease;
+    background: transparent !important;
+    padding: 0.6rem 1.8rem !important;
+    border-radius: 0 !important;
+    border: 1px solid #d4af37 !important;
+    color: #d4af37 !important;
+    transition: all 0.3s ease;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-size: 0.8rem !important;
 }
 
 .btn-login:hover {
-    background: var(--secondary-color) !important;
+    background: #d4af37 !important;
+    color: #1a1a1a !important;
 }
 
 /* Page Header */
@@ -502,17 +599,19 @@ body {
 }
 
 .page-header h1 {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    font-weight: 700;
-    letter-spacing: 1px;
+    font-size: 3.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 300;
+    letter-spacing: 4px;
+    text-transform: uppercase;
 }
 
 .page-header p {
-    font-size: 1.2rem;
-    opacity: 0.95;
+    font-size: 1.1rem;
+    opacity: 0.9;
     font-weight: 300;
-    letter-spacing: 0.5px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
 }
 
 /* Content Containers */
@@ -537,8 +636,8 @@ body {
 
 .hotels-container {
     background-image: 
-        linear-gradient(to bottom, rgba(248, 249, 250, 0.70) 0%, rgba(248, 249, 250, 0.78) 100%),
-        url('https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1920&q=80');
+        linear-gradient(to bottom, rgba(250, 250, 250, 0.78) 0%, rgba(250, 250, 250, 0.85) 100%),
+        url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1920&q=80');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -567,25 +666,27 @@ body {
     }
 }
 
-/* Glassmorphism Cards */
+/* Luxury Cards */
 .flight-card,
 .hotel-card,
 .booking-card,
 .profile-card {
-    background: rgba(255, 255, 255, 0.92);
-    border-radius: 4px;
-    padding: 2rem;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    border: 1px solid #e5e5e5;
-    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: 0;
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.06);
+    border: none;
+    border-left: 3px solid transparent;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
 }
 
 .flight-card:hover,
 .hotel-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-    border-color: #d4af37;
+    transform: translateY(-8px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+    border-left-color: #d4af37;
 }
 
 /* Flight Card Specific */
@@ -800,24 +901,26 @@ body {
 
 /* Filters Sidebar */
 .filters-sidebar {
-    background: rgba(255, 255, 255, 0.92);
-    padding: 2rem;
-    border-radius: 4px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    background: rgba(255, 255, 255, 0.98);
+    padding: 2.5rem;
+    border-radius: 0;
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.06);
     position: sticky;
     top: 100px;
     max-height: calc(100vh - 120px);
     overflow-y: auto;
+    border-top: 3px solid #d4af37;
 }
 
 .filters-sidebar h3 {
     color: #1a1a1a;
-    margin-bottom: 2rem;
-    font-size: 1.4rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    padding-bottom: 1rem;
-    border-bottom: 2px solid #d4af37;
+    margin-bottom: 2.5rem;
+    font-size: 1.1rem;
+    font-weight: 400;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e5e5e5;
 }
 
 .filter-group {
@@ -872,25 +975,44 @@ body {
 /* Buttons */
 .btn-search,
 .btn-book {
-    background: linear-gradient(135deg, #d4af37 0%, #c5a028 100%);
+    background: #d4af37;
     color: #1a1a1a;
     border: none;
-    padding: 0.85rem 2.5rem;
-    border-radius: 2px;
-    font-weight: 600;
-    font-size: 0.95rem;
+    padding: 1rem 3rem;
+    border-radius: 0;
+    font-weight: 500;
+    font-size: 0.85rem;
     cursor: pointer;
-    transition: all 0.3s ease;
-    letter-spacing: 1px;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    letter-spacing: 2px;
     text-transform: uppercase;
-    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+    box-shadow: 0 6px 25px rgba(212, 175, 55, 0.35);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-search::before,
+.btn-book::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transition: left 0.5s ease;
 }
 
 .btn-search:hover,
 .btn-book:hover {
-    background: linear-gradient(135deg, #e5c04a 0%, #d4af37 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+    background: #e5c766;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(212, 175, 55, 0.5);
+}
+
+.btn-search:hover::before,
+.btn-book:hover::before {
+    left: 100%;
 }
 
 /* Utility Classes */
@@ -916,9 +1038,10 @@ body {
 
 /* Footer */
 .footer {
-    background-color: #333;
+    background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
     color: #fff;
-    padding: 3rem 0 1rem;
+    padding: 5rem 0 2rem;
+    border-top: 1px solid rgba(212, 175, 55, 0.3);
 }
 
 .footer-grid {
