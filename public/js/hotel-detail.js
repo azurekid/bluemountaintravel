@@ -58,11 +58,11 @@ function displayHotelDetails(hotel) {
         'HT012': 'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=1200&q=80'
     };
     
-    const imageUrl = hotelImages[hotel.id] || hotelImages['HT001'];
+    const imageUrl = hotel.photoUrl || hotel.imageUrl || hotelImages[hotel.id] || hotelImages['HT001'];
     const stars = '⭐'.repeat(hotel.rating);
     
     // Create amenity badges
-    const amenitiesBadges = hotel.amenities.map(amenity => 
+    const amenitiesBadges = (hotel.amenities || []).map(amenity => 
         `<span class="amenity-badge" style="display: inline-block; background: var(--primary-color); color: white; padding: 0.5rem 1rem; border-radius: 20px; margin: 0.25rem;">${amenity}</span>`
     ).join('');
     

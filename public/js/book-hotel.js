@@ -52,7 +52,7 @@ const hotelImages = {
 // Display hotel summary in the sidebar
 function displayHotelSummary(hotel) {
     const summaryDiv = document.getElementById('hotel-details');
-    const imageUrl = hotelImages[hotel.id] || hotelImages['HT001'];
+    const imageUrl = hotel.photoUrl || hotel.imageUrl || hotelImages[hotel.id] || hotelImages['HT001'];
     const stars = '⭐'.repeat(hotel.rating);
     
     summaryDiv.innerHTML = `
@@ -73,7 +73,7 @@ function displayHotelSummary(hotel) {
         
         <div style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
             <p style="font-weight: 600; margin-bottom: 0.5rem;">Amenities</p>
-            <p style="font-size: 0.9rem;">${hotel.amenities.join(', ')}</p>
+            <p style="font-size: 0.9rem;">${(hotel.amenities || []).join(', ')}</p>
         </div>
         
         <div id="price-summary" style="padding-top: 0.5rem;">

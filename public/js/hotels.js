@@ -135,7 +135,7 @@ function displayHotels(hotelsToDisplay) {
         return;
     }
     
-    // Hotel image URLs from Unsplash - realistic hotel photos
+    // Hotel image URLs (legacy fallback for the original small dataset)
     const hotelImages = {
         'HT001': 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800&q=80', // Grand Hyatt New York
         'HT002': 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80', // The Ritz-Carlton London
@@ -149,10 +149,10 @@ function displayHotels(hotelsToDisplay) {
     
     hotels.forEach(hotel => {
         const stars = '⭐'.repeat(hotel.rating);
-        const imageUrl = hotelImages[hotel.id] || 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80';
+        const imageUrl = hotel.photoUrl || hotel.imageUrl || hotelImages[hotel.id] || 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80';
         
         // Create amenity badges
-        const amenitiesBadges = hotel.amenities.map(amenity => 
+        const amenitiesBadges = (hotel.amenities || []).map(amenity => 
             `<span class="amenity-badge">${amenity}</span>`
         ).join('');
         
@@ -211,24 +211,61 @@ function applyFilters() {
     console.log('Active filters:', { priceFilters, ratingFilters, amenityFilters, locationFilters });
     
     const hotelCards = document.querySelectorAll('.hotel-card');
+
+    const hotelsById = new Map((window.HotelData || []).map(h => [h.id, h]));
+
+    function normalizeAmenityKey(value) {
+        const v = String(value || '').toLowerCase();
+        if (!v) return '';
+        if (v.includes('wifi')) return 'wifi';
+        if (v.includes('breakfast')) return 'breakfast';
+        if (v.includes('gym') || v.includes('fitness')) return 'gym';
+        if (v.includes('pool')) return 'pool';
+        if (v.includes('spa')) return 'spa';
+        return v;
+    }
     
     hotelCards.forEach(card => {
         let show = true;
+
+        const hotelId = card.getAttribute('data-hotel-id');
+        const hotel = hotelId ? hotelsById.get(hotelId) : null;
         
         // Apply price filter
         if (priceFilters.length > 0) {
-            const priceElement = card.querySelector('.price-amount');
-            if (priceElement) {
-                const priceText = priceElement.textContent.replace('$', '').trim();
-                const price = parseInt(priceText, 10);
-                if (!isNaN(price)) {
-                    show = priceFilters.some(filter => {
-                        if (filter === '0-300') return price < 300;
-                        if (filter === '300-500') return price >= 300 && price <= 500;
-                        if (filter === '500+') return price > 500;
-                        return true;
-                    });
-                }
+            const price = hotel ? Number(hotel.price) : NaN;
+            if (!Number.isNaN(price)) {
+                show = priceFilters.some(filter => {
+                    if (filter === '0-300') return price < 300;
+                    if (filter === '300-500') return price >= 300 && price <= 500;
+                    if (filter === '500+') return price > 500;
+                    return true;
+                });
+            }
+        }
+
+        // Apply rating filter
+        if (show && ratingFilters.length > 0) {
+            const allowed = new Set(ratingFilters.map(r => parseInt(r, 10)).filter(n => Number.isFinite(n)));
+            const rating = hotel ? parseInt(hotel.rating, 10) : NaN;
+            if (!Number.isNaN(rating)) {
+                show = allowed.has(rating);
+            }
+        }
+
+        // Apply amenities filter (hotel must match all selected amenity categories)
+        if (show && amenityFilters.length > 0) {
+            const required = amenityFilters.map(normalizeAmenityKey).filter(Boolean);
+            const hotelAmenities = (hotel?.amenities || []).map(normalizeAmenityKey).filter(Boolean);
+            show = required.every(req => hotelAmenities.includes(req));
+        }
+
+        // Apply location filter
+        if (show && locationFilters.length > 0) {
+            const allowedLocations = new Set(locationFilters.map(v => String(v).toLowerCase()));
+            const locationType = String(hotel?.locationType || '').toLowerCase();
+            if (locationType) {
+                show = allowedLocations.has(locationType);
             }
         }
         

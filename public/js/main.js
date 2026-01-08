@@ -1144,6 +1144,331 @@ const hotelData = [
     }
 ];
 
+// ---------------------------------------------------------------------------
+// Large demo dataset generation (500+ flights, 500+ hotels)
+// ---------------------------------------------------------------------------
+
+function createSeededRng(seed) {
+    // xorshift32
+    let state = seed >>> 0;
+    return function rng() {
+        state ^= state << 13;
+        state ^= state >>> 17;
+        state ^= state << 5;
+        return ((state >>> 0) / 4294967296);
+    };
+}
+
+function pad3(n) {
+    return String(n).padStart(3, '0');
+}
+
+function safeEncodeKeywords(keywords) {
+    return keywords
+        .filter(Boolean)
+        .map(k => encodeURIComponent(String(k).trim()))
+        .join(',');
+}
+
+function buildUnsplashFeaturedUrl(width, height, keywords) {
+    return `https://source.unsplash.com/featured/${width}x${height}/?${safeEncodeKeywords(keywords)}`;
+}
+
+function parseCityFromRoute(value) {
+    if (!value) return '';
+    // "City (CODE)" -> "City"
+    const idx = value.indexOf(' (');
+    return idx > 0 ? value.slice(0, idx) : value;
+}
+
+function ensureLargeDemoData() {
+    const TARGET_FLIGHTS = 500;
+    const TARGET_HOTELS = 500;
+
+    const rng = createSeededRng(20260108);
+
+    const airports = [
+        // Americas
+        { city: 'New York', country: 'USA', code: 'JFK' },
+        { city: 'Los Angeles', country: 'USA', code: 'LAX' },
+        { city: 'Chicago', country: 'USA', code: 'ORD' },
+        { city: 'San Francisco', country: 'USA', code: 'SFO' },
+        { city: 'Miami', country: 'USA', code: 'MIA' },
+        { city: 'Seattle', country: 'USA', code: 'SEA' },
+        { city: 'Boston', country: 'USA', code: 'BOS' },
+        { city: 'Dallas', country: 'USA', code: 'DFW' },
+        { city: 'Toronto', country: 'Canada', code: 'YYZ' },
+        { city: 'Vancouver', country: 'Canada', code: 'YVR' },
+        { city: 'Mexico City', country: 'Mexico', code: 'MEX' },
+        { city: 'São Paulo', country: 'Brazil', code: 'GRU' },
+        { city: 'Rio de Janeiro', country: 'Brazil', code: 'GIG' },
+        { city: 'Buenos Aires', country: 'Argentina', code: 'EZE' },
+        { city: 'Lima', country: 'Peru', code: 'LIM' },
+        { city: 'Bogotá', country: 'Colombia', code: 'BOG' },
+        // Europe
+        { city: 'London', country: 'UK', code: 'LHR' },
+        { city: 'Paris', country: 'France', code: 'CDG' },
+        { city: 'Amsterdam', country: 'Netherlands', code: 'AMS' },
+        { city: 'Frankfurt', country: 'Germany', code: 'FRA' },
+        { city: 'Munich', country: 'Germany', code: 'MUC' },
+        { city: 'Zurich', country: 'Switzerland', code: 'ZRH' },
+        { city: 'Rome', country: 'Italy', code: 'FCO' },
+        { city: 'Madrid', country: 'Spain', code: 'MAD' },
+        { city: 'Barcelona', country: 'Spain', code: 'BCN' },
+        { city: 'Lisbon', country: 'Portugal', code: 'LIS' },
+        { city: 'Dublin', country: 'Ireland', code: 'DUB' },
+        { city: 'Vienna', country: 'Austria', code: 'VIE' },
+        { city: 'Prague', country: 'Czechia', code: 'PRG' },
+        { city: 'Stockholm', country: 'Sweden', code: 'ARN' },
+        { city: 'Copenhagen', country: 'Denmark', code: 'CPH' },
+        // Africa
+        { city: 'Cairo', country: 'Egypt', code: 'CAI' },
+        { city: 'Nairobi', country: 'Kenya', code: 'NBO' },
+        { city: 'Addis Ababa', country: 'Ethiopia', code: 'ADD' },
+        { city: 'Johannesburg', country: 'South Africa', code: 'JNB' },
+        { city: 'Cape Town', country: 'South Africa', code: 'CPT' },
+        { city: 'Casablanca', country: 'Morocco', code: 'CMN' },
+        // Middle East
+        { city: 'Dubai', country: 'UAE', code: 'DXB' },
+        { city: 'Doha', country: 'Qatar', code: 'DOH' },
+        { city: 'Abu Dhabi', country: 'UAE', code: 'AUH' },
+        { city: 'Riyadh', country: 'Saudi Arabia', code: 'RUH' },
+        { city: 'Tel Aviv', country: 'Israel', code: 'TLV' },
+        // Asia-Pacific
+        { city: 'Tokyo', country: 'Japan', code: 'NRT' },
+        { city: 'Osaka', country: 'Japan', code: 'KIX' },
+        { city: 'Seoul', country: 'South Korea', code: 'ICN' },
+        { city: 'Hong Kong', country: 'Hong Kong', code: 'HKG' },
+        { city: 'Singapore', country: 'Singapore', code: 'SIN' },
+        { city: 'Bangkok', country: 'Thailand', code: 'BKK' },
+        { city: 'Hanoi', country: 'Vietnam', code: 'HAN' },
+        { city: 'Ho Chi Minh City', country: 'Vietnam', code: 'SGN' },
+        { city: 'Manila', country: 'Philippines', code: 'MNL' },
+        { city: 'Kuala Lumpur', country: 'Malaysia', code: 'KUL' },
+        { city: 'Jakarta', country: 'Indonesia', code: 'CGK' },
+        { city: 'Sydney', country: 'Australia', code: 'SYD' },
+        { city: 'Melbourne', country: 'Australia', code: 'MEL' },
+        { city: 'Auckland', country: 'New Zealand', code: 'AKL' },
+        { city: 'Delhi', country: 'India', code: 'DEL' },
+        { city: 'Mumbai', country: 'India', code: 'BOM' },
+        { city: 'Bengaluru', country: 'India', code: 'BLR' },
+        { city: 'Beijing', country: 'China', code: 'PEK' },
+        { city: 'Shanghai', country: 'China', code: 'PVG' }
+    ];
+
+    const airlines = [
+        { name: 'Delta Airlines', code: 'DL' },
+        { name: 'American Airlines', code: 'AA' },
+        { name: 'United Airlines', code: 'UA' },
+        { name: 'British Airways', code: 'BA' },
+        { name: 'Lufthansa', code: 'LH' },
+        { name: 'Air France', code: 'AF' },
+        { name: 'KLM', code: 'KL' },
+        { name: 'Emirates', code: 'EK' },
+        { name: 'Qatar Airways', code: 'QR' },
+        { name: 'Singapore Airlines', code: 'SQ' },
+        { name: 'ANA', code: 'NH' },
+        { name: 'Cathay Pacific', code: 'CX' },
+        { name: 'Korean Air', code: 'KE' },
+        { name: 'Turkish Airlines', code: 'TK' },
+        { name: 'Qantas', code: 'QF' },
+        { name: 'Air Canada', code: 'AC' },
+        { name: 'LATAM', code: 'LA' },
+        { name: 'Aeromexico', code: 'AM' },
+        { name: 'Ethiopian Airlines', code: 'ET' },
+        { name: 'Kenya Airways', code: 'KQ' }
+    ];
+
+    const hotelCities = [
+        { city: 'New York', country: 'USA' },
+        { city: 'Los Angeles', country: 'USA' },
+        { city: 'Chicago', country: 'USA' },
+        { city: 'San Francisco', country: 'USA' },
+        { city: 'Miami', country: 'USA' },
+        { city: 'Toronto', country: 'Canada' },
+        { city: 'Vancouver', country: 'Canada' },
+        { city: 'Mexico City', country: 'Mexico' },
+        { city: 'São Paulo', country: 'Brazil' },
+        { city: 'Buenos Aires', country: 'Argentina' },
+        { city: 'London', country: 'UK' },
+        { city: 'Paris', country: 'France' },
+        { city: 'Amsterdam', country: 'Netherlands' },
+        { city: 'Frankfurt', country: 'Germany' },
+        { city: 'Munich', country: 'Germany' },
+        { city: 'Zurich', country: 'Switzerland' },
+        { city: 'Rome', country: 'Italy' },
+        { city: 'Madrid', country: 'Spain' },
+        { city: 'Barcelona', country: 'Spain' },
+        { city: 'Lisbon', country: 'Portugal' },
+        { city: 'Dublin', country: 'Ireland' },
+        { city: 'Vienna', country: 'Austria' },
+        { city: 'Prague', country: 'Czechia' },
+        { city: 'Stockholm', country: 'Sweden' },
+        { city: 'Copenhagen', country: 'Denmark' },
+        { city: 'Cairo', country: 'Egypt' },
+        { city: 'Nairobi', country: 'Kenya' },
+        { city: 'Johannesburg', country: 'South Africa' },
+        { city: 'Cape Town', country: 'South Africa' },
+        { city: 'Casablanca', country: 'Morocco' },
+        { city: 'Dubai', country: 'UAE' },
+        { city: 'Doha', country: 'Qatar' },
+        { city: 'Riyadh', country: 'Saudi Arabia' },
+        { city: 'Tel Aviv', country: 'Israel' },
+        { city: 'Tokyo', country: 'Japan' },
+        { city: 'Osaka', country: 'Japan' },
+        { city: 'Seoul', country: 'South Korea' },
+        { city: 'Hong Kong', country: 'Hong Kong' },
+        { city: 'Singapore', country: 'Singapore' },
+        { city: 'Bangkok', country: 'Thailand' },
+        { city: 'Hanoi', country: 'Vietnam' },
+        { city: 'Ho Chi Minh City', country: 'Vietnam' },
+        { city: 'Manila', country: 'Philippines' },
+        { city: 'Kuala Lumpur', country: 'Malaysia' },
+        { city: 'Jakarta', country: 'Indonesia' },
+        { city: 'Sydney', country: 'Australia' },
+        { city: 'Melbourne', country: 'Australia' },
+        { city: 'Auckland', country: 'New Zealand' },
+        { city: 'Delhi', country: 'India' },
+        { city: 'Mumbai', country: 'India' }
+    ];
+
+    // Ensure existing entries have photoUrl + locationType
+    (flightData || []).forEach(f => {
+        if (!f.photoUrl) {
+            const toCity = f.toCity || parseCityFromRoute(f.to);
+            f.photoUrl = buildUnsplashFeaturedUrl(900, 600, [toCity, 'skyline', 'travel']);
+        }
+    });
+
+    (hotelData || []).forEach(h => {
+        if (!h.photoUrl) {
+            const city = h.city || (h.location ? h.location.split(',')[0] : 'Hotel');
+            const country = h.country || (h.location ? h.location.split(',').slice(1).join(',').trim() : '');
+            h.photoUrl = buildUnsplashFeaturedUrl(900, 600, ['hotel', city, country]);
+        }
+        if (!h.locationType) {
+            h.locationType = 'city';
+        }
+    });
+
+    // Generate additional flights
+    let flightIndex = flightData.length + 1;
+    while (flightData.length < TARGET_FLIGHTS) {
+        const from = airports[Math.floor(rng() * airports.length)];
+        let to = airports[Math.floor(rng() * airports.length)];
+        // ensure different
+        let guard = 0;
+        while (to.code === from.code && guard < 10) {
+            to = airports[Math.floor(rng() * airports.length)];
+            guard += 1;
+        }
+
+        const airline = airlines[Math.floor(rng() * airlines.length)];
+        const depHour = 5 + Math.floor(rng() * 17); // 5..21
+        const depMin = [0, 15, 30, 45][Math.floor(rng() * 4)];
+        const depIsPm = depHour >= 12;
+        const depDisplayHour = ((depHour + 11) % 12) + 1;
+        const dep = `${depDisplayHour}:${String(depMin).padStart(2, '0')} ${depIsPm ? 'PM' : 'AM'}`;
+
+        const durationHours = 2 + Math.floor(rng() * 16); // 2..17
+        const durationMins = [0, 15, 30, 45][Math.floor(rng() * 4)];
+        const duration = `${durationHours}h ${String(durationMins).padStart(2, '0')}m`;
+
+        const cls = rng() < 0.12 ? 'First Class' : 'Business';
+        const basePrice = Math.round((durationHours * 85) + (rng() * 250));
+        const price = Math.max(199, Math.round(basePrice * (cls === 'First Class' ? 1.35 : 1.0)));
+
+        const arrival = 'See itinerary';
+
+        const id = `FL${pad3(flightIndex)}`;
+        const flightNumber = `${airline.code}${100 + Math.floor(rng() * 9000)}`;
+
+        flightData.push({
+            id,
+            airline: airline.name,
+            flightNumber,
+            from: `${from.city} (${from.code})`,
+            fromCity: from.city,
+            fromCode: from.code,
+            to: `${to.city} (${to.code})`,
+            toCity: to.city,
+            toCode: to.code,
+            departure: dep,
+            arrival,
+            duration,
+            class: cls,
+            price,
+            availableSeats: 2 + Math.floor(rng() * 28),
+            photoUrl: buildUnsplashFeaturedUrl(900, 600, [to.city, to.country, 'skyline', 'travel'])
+        });
+
+        flightIndex += 1;
+    }
+
+    // Generate additional hotels
+    const hotelNamePrefixes = ['Grand', 'Royal', 'Modern', 'Central', 'Harbor', 'Riverside', 'Metropolitan', 'Vista', 'Heritage', 'Skyline'];
+    const hotelNameSuffixes = ['Hotel', 'Plaza', 'Suites', 'Residences', 'Grand Hotel', 'Business Hotel', 'Boutique Hotel'];
+    const roomTypes = ['Deluxe Room', 'Executive Suite', 'Business King', 'Premium Queen', 'Junior Suite', 'Corner Suite', 'Club Room'];
+    const amenityPool = ['WiFi', 'Breakfast', 'Gym', 'Pool', 'Spa', 'Business Center', 'Airport Shuttle', 'Concierge', 'Restaurant', 'Bar', 'City View', 'Parking'];
+    const locationTypes = ['city', 'airport', 'business'];
+
+    let hotelIndex = hotelData.length + 1;
+    while (hotelData.length < TARGET_HOTELS) {
+        const loc = hotelCities[(hotelData.length + 7) % hotelCities.length];
+        const prefix = hotelNamePrefixes[Math.floor(rng() * hotelNamePrefixes.length)];
+        const suffix = hotelNameSuffixes[Math.floor(rng() * hotelNameSuffixes.length)];
+        const name = `${prefix} ${loc.city} ${suffix}`;
+
+        const rating = rng() < 0.6 ? (rng() < 0.5 ? 4 : 5) : 3;
+        const roomType = roomTypes[Math.floor(rng() * roomTypes.length)];
+
+        // Pick 4-8 amenities, ensure common filter amenities exist sometimes
+        const shuffled = [...amenityPool].sort(() => rng() - 0.5);
+        const amenities = shuffled.slice(0, 4 + Math.floor(rng() * 5));
+        if (rng() < 0.65 && !amenities.includes('WiFi')) amenities.push('WiFi');
+        if (rng() < 0.45 && !amenities.includes('Breakfast')) amenities.push('Breakfast');
+
+        const base = 90 + (rating * 65) + Math.floor(rng() * 220);
+        const price = Math.min(1199, Math.max(99, base));
+
+        const locationType = locationTypes[Math.floor(rng() * locationTypes.length)];
+
+        const id = `HT${pad3(hotelIndex)}`;
+
+        hotelData.push({
+            id,
+            name,
+            location: `${loc.city}, ${loc.country}`,
+            city: loc.city,
+            country: loc.country,
+            rating,
+            roomType,
+            amenities,
+            price,
+            available: rng() > 0.06,
+            description: `A comfortable ${rating}-star stay in ${loc.city} with business-friendly amenities and easy access to key districts.`,
+            address: `${10 + Math.floor(rng() * 990)} ${loc.city} Central Ave, ${loc.city}`,
+            phone: `+${1 + Math.floor(rng() * 80)}-${100 + Math.floor(rng() * 900)}-${100 + Math.floor(rng() * 900)}-${1000 + Math.floor(rng() * 9000)}`,
+            roomFacilities: ['Work Desk', 'Coffee Maker', 'Safe', 'Smart TV', 'Blackout Curtains', 'In-room WiFi'],
+            hotelFacilities: ['24hr Front Desk', 'Laundry Service', 'Meeting Rooms', 'Fitness Center'],
+            checkIn: '3:00 PM',
+            checkOut: '12:00 PM',
+            cancellationPolicy: 'Free cancellation up to 48 hours before check-in',
+            locationType,
+            photoUrl: buildUnsplashFeaturedUrl(900, 600, ['hotel', loc.city, loc.country, 'interior'])
+        });
+
+        hotelIndex += 1;
+    }
+}
+
+// Generate larger datasets for demo pages
+try {
+    ensureLargeDemoData();
+} catch (e) {
+    console.warn('Failed to generate large demo dataset:', e);
+}
+
 // Sample user data - ⚠️ VULNERABILITY: Storing sensitive data in localStorage
 // ⚠️ FLAG{user_pii_data_in_plain_text_storage}
 const sampleUsers = [
