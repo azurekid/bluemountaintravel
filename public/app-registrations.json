@@ -2,7 +2,7 @@
   "comment": "⚠️ THIS FILE SHOULD NOT BE PUBLICLY ACCESSIBLE",
   "flag": "FLAG{app_registration_credentials_in_public_storage}",
   "environment": "production",
-  "lastUpdated": "2024-01-15T10:30:00Z",
+  "lastUpdated": "2026-01-15T10:30:00Z",
   "azureAppRegistrations": [
     {
       "name": "BlueMountainTravel-WebApp",
@@ -52,7 +52,7 @@
       "displayName": "Blue Mountain Travel Backup Service",
       "description": "Automated backup service principal",
       "credentials": {
-        "clientSecret": "BackupSecret2024!@#",
+        "clientSecret": "BackupSecret2026!@#",
         "clientSecretId": "secret-id-67890",
         "certificateThumbprint": null,
         "expirationDate": "2025-12-31T23:59:59Z"
@@ -78,7 +78,7 @@
       "displayName": "Blue Mountain Travel Data Sync",
       "description": "Database synchronization service",
       "credentials": {
-        "clientSecret": "DataSync2024Pass!@#",
+        "clientSecret": "DataSync2026Pass!@#",
         "clientSecretId": "secret-id-24680",
         "certificateThumbprint": null,
         "expirationDate": "2025-06-30T23:59:59Z"

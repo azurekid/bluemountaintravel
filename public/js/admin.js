@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // ⚠️ VULNERABILITY: Logging all sensitive admin credentials
 function logAdminCredentials() {
     console.log('=== ADMIN CREDENTIALS ===');
-    console.log('Admin Access Key:', 'BMT-ADMIN-KEY-2024-PROD-abc123xyz789');
+    console.log('Admin Access Key:', 'BMT-ADMIN-KEY-2026-PROD-abc123xyz789');
     console.log('Azure Subscription ID:', '12345678-1234-1234-1234-123456789012');
     console.log('Azure Tenant ID:', '87654321-4321-4321-4321-210987654321');
     console.log('Database Server:', 'bluemountaintravel.database.windows.net');
@@ -39,7 +39,7 @@ function logAdminCredentials() {
     console.log('Database Password:', 'P@ssw0rd123!');
     console.log('API Primary Key:', 'fake-api-key-12345');
     console.log('Entra Admin:', 'admin@bluemountain.onmicrosoft.com');
-    console.log('Entra Password:', 'AzureAdmin2024!@#');
+    console.log('Entra Password:', 'AzureAdmin2026!@#');
     console.log('Service Principal App ID:', 'a1b2c3d4-e5f6-7890-abcd-ef1234567890');
     console.log('Service Principal Secret:', 'SuperSecret123!@#$%');
     console.log('========================');

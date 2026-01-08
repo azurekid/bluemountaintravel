@@ -287,19 +287,19 @@ const user = users.find(u => u.email === email && u.password === password);
 ```javascript
 // Build email list
 const emails = [
-    "john.smith@company.com",
-    "sarah.johnson@enterprise.com",
-    "michael.chen@startups.io",
-    "emma.w@consulting.com",
-    "d.martinez@finance.com",
+   "john.smith@techcorp.com",
+   "sarah.johnson@globalind.com",
+   "michael.chen@innovlab.io",
+   "emma.williams@stratcon.com",
+   "david.martinez@invbank.com",
     "admin@bluemountaintravel.com"
 ];
 
 // Try common passwords
 attemptPasswordSpray(emails, "password123")
 attemptPasswordSpray(emails, "Password123")
-attemptPasswordSpray(emails, "Winter2024!")
-attemptPasswordSpray(emails, "Admin@BlueMountain2024!")
+attemptPasswordSpray(emails, "Winter2026!")
+attemptPasswordSpray(emails, "Admin@BlueMountain2026!")
 ```
 
 **Expected Results**:
@@ -346,9 +346,9 @@ attemptDatabasePasswordSpray(
 const azureUsers = getAllAzureUsernames()
 
 // Spray common passwords
-attemptEntraPasswordSpray(azureUsers, "Winter2024!")
-attemptEntraPasswordSpray(azureUsers, "Summer2024!")
-attemptEntraPasswordSpray(azureUsers, "AzureAdmin2024!@#")
+attemptEntraPasswordSpray(azureUsers, "Winter2026!")
+attemptEntraPasswordSpray(azureUsers, "Summer2026!")
+attemptEntraPasswordSpray(azureUsers, "AzureAdmin2026!@#")
 ```
 
 **Success Indicators**:
@@ -539,7 +539,7 @@ showServicePrincipalDetails()
 
 **SAS Token** (from page):
 ```
-?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T23:59:59Z&st=2024-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==
+?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2027-12-31T23:59:59Z&st=2026-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==
 ```
 
 **Steps**:

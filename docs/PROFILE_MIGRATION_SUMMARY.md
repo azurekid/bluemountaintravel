@@ -186,7 +186,7 @@ public/js/profile.js.backup   # Original 728-line version
 
 ### Test Scenarios:
 1. **Login and Profile Load**
-   - [ ] Login as john.smith@techcorp.com (Password: TechCorp@2024)
+  - [ ] Login as john.smith@techcorp.com (Password: TechCorp@2026)
    - [ ] Navigate to profile page
    - [ ] Verify profile loads from API (not localStorage)
    - [ ] Check browser console shows "Profile loaded from API"
@@ -199,7 +199,7 @@ public/js/profile.js.backup   # Original 728-line version
 
 3. **Multiple Users**
    - [ ] Test with sarah.johnson@globalind.com
-   - [ ] Test with michael.chen@innovatetech.com
+  - [ ] Test with michael.chen@innovlab.io
    - [ ] Verify each user sees their own passport data
 
 4. **Error Handling**

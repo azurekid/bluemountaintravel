@@ -65,7 +65,7 @@ This document provides a comprehensive mapping of all Azure resources used in th
 bookings/
 ├── booking-BK1704096000000.pdf
 ├── booking-BK1704096000001.pdf
-├── itinerary-USR001-20240115.pdf
+├── itinerary-USR001-20260115.pdf
 ├── receipt-BK1704096000000.json
 └── ...
 ```
@@ -185,7 +185,7 @@ profiles/
 Azure Subscription: 12345678-1234-1234-1234-123456789012
 Tenant ID: 87654321-4321-4321-4321-210987654321
 Admin Username: admin@bluemountain.onmicrosoft.com
-Admin Password: AzureAdmin2024!@#
+Admin Password: AzureAdmin2026!@#
 ```
 
 **`app-registrations.json`** (see dedicated section below):
@@ -306,7 +306,7 @@ passports/
 
 **SAS Token** (Shared Access Signature):
 ```
-?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T23:59:59Z&st=2024-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==
+?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2027-12-31T23:59:59Z&st=2026-01-01T00:00:00Z&spr=https&sig=FakeSignatureForDemo123456789==
 ```
 
 **Permissions**: rwdlacupiytfx
@@ -384,9 +384,9 @@ Server=tcp:bluemountaintravel.database.windows.net,1433;Initial Catalog=TravelDB
 UserID | Email                          | Password      | FirstName | MembershipTier
 -------|--------------------------------|---------------|-----------|---------------
 USR001 | john.smith@company.com         | password123   | John      | Platinum
-USR002 | sarah.johnson@enterprise.com   | Sarah@2024    | Sarah     | Gold
-USR003 | michael.chen@startups.io       | Chen#2024     | Michael   | Diamond
-USR004 | admin@bluemountaintravel.com   | Admin@...2024!| Admin     | Admin
+USR002 | sarah.johnson@globalind.com     | Sarah@2026    | Sarah     | Gold
+USR003 | michael.chen@innovlab.io        | Chen#2026     | Michael   | Diamond
+USR004 | admin@bluemountaintravel.com    | Admin@...2026!| Admin     | Admin
 ```
 
 **Row Count**: ~50 users
@@ -586,8 +586,8 @@ USR004 | admin@bluemountaintravel.com   | Admin@...2024!| Admin     | Admin
   "userId": "USR001",
   "bookingType": "flight",
   "flightId": "FL001",
-  "bookingDate": "2024-01-15T10:30:00Z",
-  "travelDate": "2024-02-01",
+  "bookingDate": "2026-01-15T10:30:00Z",
+  "travelDate": "2026-02-01",
   "status": "confirmed",
   "amount": 1250.00,
   "currency": "USD",
@@ -677,7 +677,7 @@ USR004 | admin@bluemountaintravel.com   | Admin@...2024!| Admin     | Admin
 - **Note**: ⚠️ Also exposed in public files
 
 #### 4.6 Secret: `EntraAdminPassword`
-- **Value**: `AzureAdmin2024!@#`
+- **Value**: `AzureAdmin2026!@#`
 - **Content Type**: Entra ID admin password
 - **Purpose**: Global administrator account
 - **Enabled**: Yes
@@ -730,7 +730,7 @@ Located at `/public` and accessible via web:
 
 #### 6.1 Global Administrator
 - **UPN**: `admin@bluemountain.onmicrosoft.com`
-- **Password**: `AzureAdmin2024!@#` (⚠️ exposed)
+- **Password**: `AzureAdmin2026!@#` (⚠️ exposed)
 - **Roles**: Global Administrator, Security Administrator
 - **MFA**: ⚠️ Disabled
 - **Risk Level**: CRITICAL
@@ -783,7 +783,7 @@ Sample users in Entra ID:
 
 ### 7.2 Service Principal: BlueMountainTravel-BackupService
 - **Application ID**: `b2c3d4e5-f6a7-8901-bcde-f23456789012`
-- **Client Secret**: `BackupSecret2024!@#`
+- **Client Secret**: `BackupSecret2026!@#`
 
 **Role Assignments**:
 - **Storage Account**: Storage Blob Data Owner
@@ -797,7 +797,7 @@ Sample users in Entra ID:
 
 ### 7.3 Service Principal: BlueMountainTravel-DataSync
 - **Application ID**: `c3d4e5f6-a7b8-9012-cdef-345678901234`
-- **Client Secret**: `DataSync2024Pass!@#`
+- **Client Secret**: `DataSync2026Pass!@#`
 
 **Role Assignments**:
 - **SQL Server**: SQL DB Contributor
@@ -1096,5 +1096,5 @@ Sample users in Entra ID:
 ---
 
 **Document Version**: 1.0
-**Last Updated**: 2024-01-15
+**Last Updated**: 2026-01-15
 **Status**: Complete Azure Resources and Data Mapping

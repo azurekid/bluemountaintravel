@@ -332,7 +332,7 @@ for i, user in enumerate(users):
     
     flight_pdf = generate_flight_booking(
         user, flight, booking_id, confirmation,
-        "January 15, 2024"
+        "January 15, 2026"
     )
     
     filename = f"sample-documents/generated/{booking_id}-{user['id']}-flight.pdf"
@@ -348,7 +348,7 @@ for i, user in enumerate(users):
     
     hotel_pdf = generate_hotel_booking(
         user, hotel, hotel_booking_id, hotel_confirmation,
-        "January 15, 2024", "February 1, 2024", "February 8, 2024", 7
+        "January 15, 2026", "February 1, 2026", "February 8, 2026", 7
     )
     
     hotel_filename = f"sample-documents/generated/{hotel_booking_id}-{user['id']}-hotel.pdf"

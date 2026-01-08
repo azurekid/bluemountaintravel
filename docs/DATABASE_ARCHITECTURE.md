@@ -235,5 +235,5 @@ This design is intentional and appropriate for a security training application, 
 ---
 
 **Document Version**: 1.0  
-**Last Updated**: 2024-01-06  
+**Last Updated**: 2026-01-06  
 **Purpose**: Clarify database architecture for security training

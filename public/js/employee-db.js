@@ -25,8 +25,8 @@ const employeeDatabase = [
         // ⚠️ IT credentials
         adUsername: "jsmith",
         azureUsername: "john.smith@bluemountain.onmicrosoft.com",
-        lastPasswordChange: "2024-01-15",
-        passwordExpiry: "2024-07-15",
+        lastPasswordChange: "2026-01-15",
+        passwordExpiry: "2026-07-15",
         vpnAccess: true,
         accessLevel: "Standard",
         // Security question answers
@@ -56,8 +56,8 @@ const employeeDatabase = [
         homeAddress: "456 Oak Ave, Chicago, IL 60601",
         adUsername: "sjohnson",
         azureUsername: "sarah.j@bluemountain.onmicrosoft.com",
-        lastPasswordChange: "2024-02-01",
-        passwordExpiry: "2024-08-01",
+        lastPasswordChange: "2026-02-01",
+        passwordExpiry: "2026-08-01",
         vpnAccess: true,
         accessLevel: "Manager",
         securityQuestions: {
@@ -87,7 +87,7 @@ const employeeDatabase = [
         adUsername: "mchen",
         azureUsername: "m.chen@bluemountain.onmicrosoft.com",
         lastPasswordChange: "2023-12-20",
-        passwordExpiry: "2024-06-20",
+        passwordExpiry: "2026-06-20",
         vpnAccess: true,
         accessLevel: "Elevated",
         securityQuestions: {
@@ -116,8 +116,8 @@ const employeeDatabase = [
         homeAddress: "321 Corporate Dr, Boston, MA 02101",
         adUsername: "ewilliams",
         azureUsername: "emma.williams@bluemountain.onmicrosoft.com",
-        lastPasswordChange: "2024-01-30",
-        passwordExpiry: "2024-07-30",
+        lastPasswordChange: "2026-01-30",
+        passwordExpiry: "2026-07-30",
         vpnAccess: true,
         accessLevel: "Standard",
         securityQuestions: {
@@ -146,8 +146,8 @@ const employeeDatabase = [
         homeAddress: "555 Wall St, New York, NY 10005",
         adUsername: "dmartinez",
         azureUsername: "david.m@bluemountain.onmicrosoft.com",
-        lastPasswordChange: "2024-02-10",
-        passwordExpiry: "2024-08-10",
+        lastPasswordChange: "2026-02-10",
+        passwordExpiry: "2026-08-10",
         vpnAccess: true,
         accessLevel: "Executive",
         securityQuestions: {
@@ -176,7 +176,7 @@ const employeeDatabase = [
         homeAddress: "1 Blue Mountain Plaza, Seattle, WA 98101",
         adUsername: "admin",
         azureUsername: "admin@bluemountain.onmicrosoft.com",
-        lastPasswordChange: "2024-01-01",
+        lastPasswordChange: "2026-01-01",
         passwordExpiry: "2099-12-31",
         vpnAccess: true,
         accessLevel: "Domain Admin",

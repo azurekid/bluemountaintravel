@@ -265,12 +265,12 @@ function logApiEndpoints() {
     console.log('   attemptEntraPasswordSpray(["user@bluemountain.onmicrosoft.com"], "password")');
     console.log('');
     console.log('3. Common Password Lists:');
-    console.log('   ["password123", "Password123", "Winter2024!", "Summer2024!", "Admin@123"]');
+    console.log('   ["password123", "Password123", "Winter2026!", "Summer2026!", "Admin@123"]');
     console.log('');
     console.log('4. Known Working Credentials:');
     console.log('   Database: admin / P@ssw0rd123!');
-    console.log('   Entra Admin: admin@bluemountain.onmicrosoft.com / AzureAdmin2024!@#');
-    console.log('   User: john.smith@bluemountain.onmicrosoft.com / Winter2024!');
+    console.log('   Entra Admin: admin@bluemountain.onmicrosoft.com / AzureAdmin2026!@#');
+    console.log('   User: john.smith@bluemountain.onmicrosoft.com / Winter2026!');
     console.log('');
     console.log('===========================================');
 }

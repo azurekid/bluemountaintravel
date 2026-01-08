@@ -123,7 +123,7 @@ https://bluemountaintravel.blob.core.windows.net/bookings/{filename}?{sas_token}
 
 Example:
 ```
-https://bluemountaintravel.blob.core.windows.net/bookings/BK1704096000000-USR001-flight.pdf?sv=2022-11-02&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T08:31:49Z&st=2024-12-29T00:31:49Z&spr=https,http&sig=O0o5ozFAVlIWvdTPWXpGaOFEyAjTpZM58U9IqvPHRLU%3D
+https://bluemountaintravel.blob.core.windows.net/bookings/BK1704096000000-USR001-flight.pdf?sv=2022-11-02&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2027-12-31T08:31:49Z&st=2026-12-29T00:31:49Z&spr=https,http&sig=O0o5ozFAVlIWvdTPWXpGaOFEyAjTpZM58U9IqvPHRLU%3D
 ```
 
 ## Verification
@@ -143,8 +143,8 @@ const bookings = [
     id: "BK1704096000000",
     userId: "USR001",
     type: "flight",
-    date: "2024-01-15",
-    documentUrl: "https://bluemountaintravel.blob.core.windows.net/bookings/BK1704096000000-USR001-flight.pdf?sv=2022-11-02&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-12-31T08:31:49Z&st=2024-12-29T00:31:49Z&spr=https,http&sig=O0o5ozFAVlIWvdTPWXpGaOFEyAjTpZM58U9IqvPHRLU%3D"
+    date: "2026-01-15",
+    documentUrl: "https://bluemountaintravel.blob.core.windows.net/bookings/BK1704096000000-USR001-flight.pdf?sv=2022-11-02&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2027-12-31T08:31:49Z&st=2026-12-29T00:31:49Z&spr=https,http&sig=O0o5ozFAVlIWvdTPWXpGaOFEyAjTpZM58U9IqvPHRLU%3D"
   },
   // ... more bookings
 ];
