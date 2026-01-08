@@ -6,7 +6,7 @@
       "direction": "in",
       "name": "req",
       "methods": ["get"],
-      "route": "flags/{name}"
+      "route": "flag"
     },
     {
       "type": "http",
