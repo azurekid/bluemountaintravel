@@ -91,5 +91,31 @@ BEGIN
 END;
 GO
 
+-- Create Passports table
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Passports]') AND type in (N'U'))
+BEGIN
+    CREATE TABLE [dbo].[Passports] (
+        [PassportID] VARCHAR(10) PRIMARY KEY,
+        [UserID] VARCHAR(10) NOT NULL,
+        [PassportNumber] VARCHAR(20) UNIQUE NOT NULL,
+        [IssuingCountry] VARCHAR(100),
+        [Nationality] VARCHAR(50),
+        [Surname] VARCHAR(50),
+        [GivenNames] VARCHAR(100),
+        [Sex] VARCHAR(1),
+        [DateOfBirth] DATE,
+        [PlaceOfBirth] VARCHAR(200),
+        [DateOfIssue] DATE,
+        [DateOfExpiry] DATE,
+        [IssuingAuthority] VARCHAR(200),
+        [PlaceOfIssue] VARCHAR(200),
+        [BlobStorageURL] VARCHAR(500), -- ⚠️ Passport scan PDF URL
+        [PhotoURL] VARCHAR(500), -- ⚠️ Passport photo URL
+        [CreatedDate] DATETIME DEFAULT GETDATE(),
+        FOREIGN KEY (UserID) REFERENCES Users(UserID)
+    );
+END;
+GO
+
 PRINT 'Database schema created successfully';
 PRINT '⚠️ WARNING: This schema contains intentional security vulnerabilities!';

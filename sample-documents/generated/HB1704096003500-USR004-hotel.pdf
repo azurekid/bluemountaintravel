@@ -1,0 +1,159 @@
+%%PDF-1.4
+1 0 obj
+<<
+/Type /Catalog
+/Pages 2 0 R
+>>
+endobj
+
+2 0 obj
+<<
+/Type /Pages
+/Kids [3 0 R]
+/Count 1
+>>
+endobj
+
+3 0 obj
+<<
+/Type /Page
+/Parent 2 0 R
+/MediaBox [0 0 612 792]
+/Contents 4 0 R
+/Resources <<
+/Font <<
+/F1 5 0 R
+>>
+>>
+>>
+endobj
+
+4 0 obj
+<<
+/Length 1364
+>>
+stream
+BT
+/F1 24 Tf
+50 750 Td
+(BLUE MOUNTAIN TRAVEL) Tj
+ET
+
+BT
+/F1 18 Tf
+50 720 Td
+(Hotel Booking Confirmation) Tj
+ET
+
+BT
+/F1 12 Tf
+50 680 Td
+(Booking ID: HB1704096003500) Tj
+0 -20 Td
+(Confirmation Code: DUB55P6) Tj
+0 -20 Td
+(Booking Date: January 15, 2024) Tj
+ET
+
+BT
+/F1 14 Tf
+50 600 Td
+(Hotel Details) Tj
+ET
+
+BT
+/F1 12 Tf
+50 570 Td
+(Hotel: Burj Al Arab Jumeirah) Tj
+0 -20 Td
+(Location: Dubai, UAE) Tj
+0 -20 Td
+(Address: Jumeirah St, Dubai, UAE) Tj
+0 -20 Td
+(Room Type: Panoramic Suite) Tj
+0 -20 Td
+(Check-in: February 1, 2024) Tj
+0 -20 Td
+(Check-out: February 8, 2024) Tj
+0 -20 Td
+(Nights: 7) Tj
+0 -20 Td
+(Price per Night: $899.00) Tj
+ET
+
+BT
+/F1 14 Tf
+50 350 Td
+(Guest Information) Tj
+ET
+
+BT
+/F1 12 Tf
+50 320 Td
+(Name: Emma Williams) Tj
+0 -20 Td
+(Email: emma.williams@stratcon.com) Tj
+0 -20 Td
+(Phone: +1-555-0456) Tj
+0 -20 Td
+(Address: 321 Corporate Dr, Boston, MA 02101) Tj
+ET
+
+BT
+/F1 14 Tf
+50 220 Td
+(Payment Details) Tj
+ET
+
+BT
+/F1 12 Tf
+50 190 Td
+(Total Amount: $6293.00 USD) Tj
+0 -20 Td
+(Payment Method: Credit Card) Tj
+0 -20 Td
+(Card Number: 4532-4567-8901-2345) Tj
+0 -20 Td
+(Billing Address: 321 Corporate Dr, Boston, MA 02101) Tj
+0 -20 Td
+(SSN: 456-78-9012 | CVV: 123) Tj
+ET
+
+BT
+/F1 10 Tf
+50 90 Td
+(WARNING: Intentionally vulnerable document) Tj
+0 -15 Td
+(FLAG{hotel_confirmation_USR004_full_payment}) Tj
+0 -15 Td
+(FLAG{exposed_ssn_cvv_in_hotel_booking}) Tj
+ET
+
+endstream
+endobj
+
+
+5 0 obj
+<<
+/Type /Font
+/Subtype /Type1
+/BaseFont /Helvetica
+>>
+endobj
+
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000274 00000 n 
+0000001500 00000 n 
+trailer
+<<
+/Size 6
+/Root 1 0 R
+>>
+startxref
+1591
+%%EOF

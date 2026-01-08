@@ -1,0 +1,157 @@
+%%PDF-1.4
+1 0 obj
+<<
+/Type /Catalog
+/Pages 2 0 R
+>>
+endobj
+
+2 0 obj
+<<
+/Type /Pages
+/Kids [3 0 R]
+/Count 1
+>>
+endobj
+
+3 0 obj
+<<
+/Type /Page
+/Parent 2 0 R
+/MediaBox [0 0 612 792]
+/Contents 4 0 R
+/Resources <<
+/Font <<
+/F1 5 0 R
+>>
+>>
+>>
+endobj
+
+4 0 obj
+<<
+/Length 1269
+>>
+stream
+BT
+/F1 24 Tf
+50 750 Td
+(BLUE MOUNTAIN TRAVEL) Tj
+ET
+
+BT
+/F1 18 Tf
+50 720 Td
+(Flight Booking Confirmation) Tj
+ET
+
+BT
+/F1 12 Tf
+50 680 Td
+(Booking ID: BK1704096005000) Tj
+0 -20 Td
+(Confirmation Code: LON65M5) Tj
+0 -20 Td
+(Booking Date: January 15, 2024) Tj
+ET
+
+BT
+/F1 14 Tf
+50 600 Td
+(Flight Details) Tj
+ET
+
+BT
+/F1 12 Tf
+50 570 Td
+(Airline: Delta Airlines) Tj
+0 -20 Td
+(Flight Number: DL1234) Tj
+0 -20 Td
+(Route: New York JFK -> London LHR) Tj
+0 -20 Td
+(Departure: 08:00 AM) Tj
+0 -20 Td
+(Arrival: 08:30 PM) Tj
+0 -20 Td
+(Duration: 7h 30m) Tj
+0 -20 Td
+(Class: Business) Tj
+ET
+
+BT
+/F1 14 Tf
+50 380 Td
+(Passenger Information) Tj
+ET
+
+BT
+/F1 12 Tf
+50 350 Td
+(Name: Lisa Anderson) Tj
+0 -20 Td
+(Email: lisa.anderson@medtech.com) Tj
+0 -20 Td
+(Phone: +1-555-0678) Tj
+0 -20 Td
+(Address: 234 Health Plaza, Seattle, WA 98101) Tj
+ET
+
+BT
+/F1 14 Tf
+50 250 Td
+(Payment Details) Tj
+ET
+
+BT
+/F1 12 Tf
+50 220 Td
+(Amount: $749.00 USD) Tj
+0 -20 Td
+(Payment Method: Credit Card) Tj
+0 -20 Td
+(Card: **** **** **** 4567) Tj
+0 -20 Td
+(Full Card Number: 4532-6789-0123-4567) Tj
+0 -20 Td
+(SSN: 678-90-1234) Tj
+ET
+
+BT
+/F1 10 Tf
+50 120 Td
+(WARNING: Intentionally vulnerable document) Tj
+0 -15 Td
+(FLAG{booking_document_USR006_contains_pii}) Tj
+0 -15 Td
+(FLAG{exposed_credit_card_ssn_in_booking}) Tj
+ET
+
+endstream
+endobj
+
+
+5 0 obj
+<<
+/Type /Font
+/Subtype /Type1
+/BaseFont /Helvetica
+>>
+endobj
+
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000274 00000 n 
+0000001500 00000 n 
+trailer
+<<
+/Size 6
+/Root 1 0 R
+>>
+startxref
+1591
+%%EOF

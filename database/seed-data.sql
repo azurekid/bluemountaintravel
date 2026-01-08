@@ -154,14 +154,33 @@ VALUES
 ('BK1705046400022', 'USR007', 'flight', 'FL020', NULL, '2024-02-10 12:30:00', '2024-03-01', NULL, 1, 199.00, 'USD', 'Cancelled', 'LAX7B3K1', 'Found better price');
 GO
 
+-- ============================================
+-- PASSPORTS - User passport information
+-- ============================================
+INSERT INTO Passports (PassportID, UserID, PassportNumber, IssuingCountry, Nationality, Surname, GivenNames, Sex, DateOfBirth, PlaceOfBirth, DateOfIssue, DateOfExpiry, IssuingAuthority, PlaceOfIssue, BlobStorageURL, PhotoURL)
+VALUES
+('PASS001', 'USR001', 'US123456789', 'United States of America', 'USA', 'SMITH', 'JOHN MICHAEL', 'M', '1985-03-15', 'Boston, Massachusetts, USA', '2022-01-15', '2032-01-14', 'U.S. Department of State', 'New York Passport Agency', 'https://bluemountaintravel.blob.core.windows.net/passports/US123456789-passport.pdf', 'https://bluemountaintravel.blob.core.windows.net/passports/US123456789-photo.jpg'),
+('PASS002', 'USR002', 'US234567890', 'United States of America', 'USA', 'JOHNSON', 'SARAH ELIZABETH', 'F', '1990-07-22', 'Seattle, Washington, USA', '2021-06-10', '2031-06-09', 'U.S. Department of State', 'Chicago Passport Agency', 'https://bluemountaintravel.blob.core.windows.net/passports/US234567890-passport.pdf', 'https://bluemountaintravel.blob.core.windows.net/passports/US234567890-photo.jpg'),
+('PASS003', 'USR003', 'US345678901', 'United States of America', 'USA', 'CHEN', 'MICHAEL JAMES', 'M', '1988-11-30', 'Los Angeles, California, USA', '2021-03-22', '2031-03-21', 'U.S. Department of State', 'San Francisco Passport Agency', 'https://bluemountaintravel.blob.core.windows.net/passports/US345678901-passport.pdf', 'https://bluemountaintravel.blob.core.windows.net/passports/US345678901-photo.jpg'),
+('PASS004', 'USR004', 'US456789012', 'United States of America', 'USA', 'WILLIAMS', 'EMMA GRACE', 'F', '1992-05-18', 'Houston, Texas, USA', '2022-09-15', '2032-09-14', 'U.S. Department of State', 'Boston Passport Agency', 'https://bluemountaintravel.blob.core.windows.net/passports/US456789012-passport.pdf', 'https://bluemountaintravel.blob.core.windows.net/passports/US456789012-photo.jpg'),
+('PASS005', 'USR005', 'US567890123', 'United States of America', 'USA', 'MARTINEZ', 'DAVID ALEJANDRO', 'M', '1987-09-25', 'Miami, Florida, USA', '2020-11-08', '2030-11-07', 'U.S. Department of State', 'Miami Passport Agency', 'https://bluemountaintravel.blob.core.windows.net/passports/US567890123-passport.pdf', 'https://bluemountaintravel.blob.core.windows.net/passports/US567890123-photo.jpg'),
+('PASS006', 'USR006', 'US678901234', 'United States of America', 'USA', 'ANDERSON', 'LISA MARIE', 'F', '1991-02-14', 'Portland, Oregon, USA', '2023-04-12', '2033-04-11', 'U.S. Department of State', 'Seattle Passport Agency', 'https://bluemountaintravel.blob.core.windows.net/passports/US678901234-passport.pdf', 'https://bluemountaintravel.blob.core.windows.net/passports/US678901234-photo.jpg'),
+('PASS007', 'USR007', 'US789012345', 'United States of America', 'USA', 'BROWN', 'ROBERT JAMES', 'M', '1983-12-08', 'Philadelphia, Pennsylvania, USA', '2021-08-20', '2031-08-19', 'U.S. Department of State', 'Washington DC Passport Agency', 'https://bluemountaintravel.blob.core.windows.net/passports/US789012345-passport.pdf', 'https://bluemountaintravel.blob.core.windows.net/passports/US789012345-photo.jpg'),
+('PASS008', 'USR008', 'US890123456', 'United States of America', 'USA', 'DAVIS', 'JENNIFER LYNN', 'F', '1989-08-19', 'Austin, Texas, USA', '2022-07-05', '2032-07-04', 'U.S. Department of State', 'Houston Passport Agency', 'https://bluemountaintravel.blob.core.windows.net/passports/US890123456-passport.pdf', 'https://bluemountaintravel.blob.core.windows.net/passports/US890123456-photo.jpg'),
+('PASS009', 'USR009', 'US901234567', 'United States of America', 'USA', 'WILSON', 'JAMES ALEXANDER', 'M', '1993-04-27', 'Denver, Colorado, USA', '2023-01-18', '2033-01-17', 'U.S. Department of State', 'Denver Passport Agency', 'https://bluemountaintravel.blob.core.windows.net/passports/US901234567-passport.pdf', 'https://bluemountaintravel.blob.core.windows.net/passports/US901234567-photo.jpg'),
+('PASS010', 'USR010', 'US012345678', 'United States of America', 'USA', 'GARCIA', 'MARIA ISABEL', 'F', '1986-06-11', 'San Diego, California, USA', '2021-12-09', '2031-12-08', 'U.S. Department of State', 'Los Angeles Passport Agency', 'https://bluemountaintravel.blob.core.windows.net/passports/US012345678-passport.pdf', 'https://bluemountaintravel.blob.core.windows.net/passports/US012345678-photo.jpg');
+GO
+
 PRINT 'Sample data inserted successfully';
 PRINT 'Total records:';
 PRINT '  Users: 11 (including 1 admin)';
 PRINT '  Flights: 20';
 PRINT '  Hotels: 12';
 PRINT '  Bookings: 22';
+PRINT '  Passports: 10';
 PRINT '';
 PRINT '⚠️ WARNING: All data is intentionally vulnerable for training!';
 PRINT '  - Passwords are in plain text';
 PRINT '  - PII data is exposed';
+PRINT '  - Passport details stored without encryption';
 PRINT '  - No encryption or security controls';
