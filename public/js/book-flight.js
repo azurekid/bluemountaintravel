@@ -227,34 +227,58 @@ async function processFlightBooking() {
     if (window.generateAndUploadBookingDocument) {
         documentResult = await window.generateAndUploadBookingDocument(bookingData, 'flight');
         if (documentResult.success) {
+            // Store the URL with SAS token for viewing
             bookingData.documentUrl = documentResult.documentUrlWithSas;
-            bookingData.confirmationUrl = documentResult.documentUrl;
+            bookingData.confirmationUrl = documentResult.documentUrlWithSas;
+            // Store plain URL for database (without SAS token)
+            bookingData.blobStorageUrl = documentResult.documentUrl;
             console.log('Booking document stored at:', documentResult.documentUrl);
         }
     }
     
-    // Store booking in localStorage
+    // Store booking in localStorage for immediate display
     let bookings = localStorage.getItem('bookings');
     bookings = bookings ? JSON.parse(bookings) : [];
     bookings.push(bookingData);
     localStorage.setItem('bookings', JSON.stringify(bookings));
     
-    // Make API call
+    // Save booking to SQL database via API
     const functionsKey = window.BMT_FUNCTION_KEY || window.AzureConfig?.apiConfig?.functionKey || window.AzureConfig?.apiConfig?.primaryKey;
-    fetch(`${window.AzureConfig.apiConfig.endpoint}/bookings`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-API-Key': window.AzureConfig.apiConfig.primaryKey,
-            ...(functionsKey ? { 'x-functions-key': functionsKey } : {}),
-            'X-Database-Connection': window.AzureConfig.databaseConfig.connectionString
-        },
-        body: JSON.stringify(bookingData)
-    }).then(response => {
-        console.log('Booking response:', response);
-    }).catch(error => {
-        console.error('Booking error:', error);
-    });
+    const userId = user?.UserID || user?.id || 'guest';
+    
+    try {
+        const dbBookingData = {
+            bookingId: bookingData.bookingId,
+            userId: userId,
+            bookingType: 'Flight',
+            flightId: flight.id,
+            travelDate: new Date().toISOString(), // Flight date would come from flight data
+            numberOfGuests: 1,
+            totalAmount: flight.price,
+            status: 'Confirmed',
+            confirmationCode: bookingData.bookingId,
+            specialRequests: passengerData.specialRequests || null,
+            documentUrl: bookingData.documentUrl || null
+        };
+        
+        const response = await fetch(`${window.AzureConfig.apiConfig.endpoint}/bookings`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                ...(functionsKey ? { 'x-functions-key': functionsKey } : {})
+            },
+            body: JSON.stringify(dbBookingData)
+        });
+        
+        if (response.ok) {
+            const result = await response.json();
+            console.log('Booking saved to database:', result);
+        } else {
+            console.error('Failed to save booking to database:', response.status);
+        }
+    } catch (error) {
+        console.error('Database booking error:', error);
+    }
     
     let successMessage = `Flight booked successfully!\n\nBooking ID: ${bookingData.bookingId}\nPassenger: ${passengerData.firstName} ${passengerData.lastName}\nFlight: ${flight.airline} ${flight.flightNumber}\nRoute: ${flight.from} → ${flight.to}\nPrice: $${flight.price}`;
     
