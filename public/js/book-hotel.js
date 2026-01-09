@@ -250,7 +250,7 @@ function initializeBookingForm() {
 }
 
 // Process the hotel booking
-function processHotelBooking() {
+async function processHotelBooking() {
     const hotelId = getHotelIdFromUrl();
     const hotel = window.HotelData.find(h => h.id === hotelId);
     
@@ -308,12 +308,21 @@ function processHotelBooking() {
             method: 'credit_card',
             cardNumber: user ? user.creditCard : '****-****-****-****',
             amount: totalPrice
-        },
-        documentUrl: `${window.AzureConfig.storageUrls.bookings}${Date.now()}-hotel-booking.pdf${window.AzureConfig.sasToken}`,
-        confirmationUrl: `${window.AzureConfig.storageUrls.documents}hotel-confirmation-${Date.now()}.pdf${window.AzureConfig.sasToken}`
+        }
     };
     
     console.log('Creating hotel booking:', bookingData);
+    
+    // Generate and upload booking document to Azure Storage
+    let documentResult = null;
+    if (window.generateAndUploadBookingDocument) {
+        documentResult = await window.generateAndUploadBookingDocument(bookingData, 'hotel');
+        if (documentResult.success) {
+            bookingData.documentUrl = documentResult.documentUrlWithSas;
+            bookingData.confirmationUrl = documentResult.documentUrl;
+            console.log('Booking document stored at:', documentResult.documentUrl);
+        }
+    }
     
     // Store booking in localStorage
     let bookings = localStorage.getItem('bookings');
@@ -338,7 +347,15 @@ function processHotelBooking() {
         console.error('Hotel booking error:', error);
     });
     
-    alert(`Hotel booked successfully!\n\nBooking ID: ${bookingData.bookingId}\nGuest: ${guestData.firstName} ${guestData.lastName}\nHotel: ${hotel.name}\nLocation: ${hotel.location}\nCheck-in: ${new Date(bookingData.checkIn).toLocaleDateString()}\nCheck-out: ${new Date(bookingData.checkOut).toLocaleDateString()}\nNights: ${nights}\nTotal: $${totalPrice}\n\nCheck "My Bookings" to view details.`);
+    let successMessage = `Hotel booked successfully!\n\nBooking ID: ${bookingData.bookingId}\nGuest: ${guestData.firstName} ${guestData.lastName}\nHotel: ${hotel.name}\nLocation: ${hotel.location}\nCheck-in: ${new Date(bookingData.checkIn).toLocaleDateString()}\nCheck-out: ${new Date(bookingData.checkOut).toLocaleDateString()}\nNights: ${nights}\nTotal: $${totalPrice}`;
+    
+    if (documentResult?.success) {
+        successMessage += `\n\n📄 Booking confirmation document has been generated and stored.`;
+    }
+    
+    successMessage += `\n\nCheck "My Bookings" to view details.`;
+    
+    alert(successMessage);
     
     // Redirect to bookings page
     setTimeout(() => {

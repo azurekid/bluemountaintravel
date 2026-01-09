@@ -1809,6 +1809,117 @@ function uploadToAzureStorage(file, containerName) {
     return blobUrl;
 }
 
+// ⚠️ VULNERABILITY: Generate and upload booking document to Azure Storage
+async function generateAndUploadBookingDocument(bookingData, bookingType = 'flight') {
+    const timestamp = Date.now();
+    const fileName = `${bookingData.bookingId}-${bookingType}-confirmation.json`;
+    
+    // Generate booking document content
+    const documentContent = {
+        documentType: `${bookingType.toUpperCase()}_BOOKING_CONFIRMATION`,
+        generatedAt: new Date().toISOString(),
+        bookingId: bookingData.bookingId,
+        status: bookingData.status,
+        ...(bookingType === 'flight' ? {
+            flightDetails: {
+                flightId: bookingData.flightId,
+                airline: bookingData.flight?.airline,
+                flightNumber: bookingData.flight?.flightNumber,
+                from: bookingData.flight?.from,
+                to: bookingData.flight?.to,
+                departure: bookingData.flight?.departure,
+                arrival: bookingData.flight?.arrival,
+                duration: bookingData.flight?.duration,
+                class: bookingData.flight?.class,
+                price: bookingData.flight?.price
+            },
+            passengerDetails: {
+                name: `${bookingData.passenger?.firstName} ${bookingData.passenger?.lastName}`,
+                email: bookingData.passenger?.email,
+                phone: bookingData.passenger?.phone,
+                passportNumber: bookingData.passenger?.passportNumber,
+                nationality: bookingData.passenger?.nationality,
+                seatPreference: bookingData.passenger?.seatPreference,
+                mealPreference: bookingData.passenger?.mealPreference
+            }
+        } : {
+            hotelDetails: {
+                hotelId: bookingData.hotelId,
+                name: bookingData.hotel?.name,
+                location: bookingData.hotel?.location,
+                roomType: bookingData.hotel?.roomType,
+                rating: bookingData.hotel?.rating,
+                pricePerNight: bookingData.hotel?.price
+            },
+            stayDetails: {
+                checkIn: bookingData.checkIn,
+                checkOut: bookingData.checkOut,
+                nights: bookingData.nights,
+                rooms: bookingData.rooms,
+                totalPrice: bookingData.payment?.amount
+            },
+            guestDetails: {
+                name: `${bookingData.guest?.firstName} ${bookingData.guest?.lastName}`,
+                email: bookingData.guest?.email,
+                phone: bookingData.guest?.phone,
+                numGuests: bookingData.guest?.numGuests,
+                bedType: bookingData.guest?.bedType,
+                arrivalTime: bookingData.guest?.arrivalTime
+            }
+        }),
+        payment: {
+            method: bookingData.payment?.method,
+            amount: bookingData.payment?.amount,
+            currency: 'USD'
+        },
+        bookingDate: bookingData.bookingDate
+    };
+
+    // ⚠️ VULNERABILITY: Using write SAS token exposed in client-side code
+    const sasToken = AZURE_STORAGE_SAS_TOKEN_DOCUMENTS_WRITE;
+    const blobUrl = `https://${STORAGE_ACCOUNT_NAME}.blob.core.windows.net/documents/${fileName}${sasToken}`;
+    
+    console.log('⚠️ Uploading booking document to Azure Storage:', blobUrl);
+    console.log('Document content:', documentContent);
+
+    try {
+        const response = await fetch(blobUrl, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-ms-blob-type': 'BlockBlob'
+            },
+            body: JSON.stringify(documentContent, null, 2)
+        });
+
+        if (response.ok) {
+            console.log('✅ Booking document uploaded successfully!');
+            const documentUrl = `https://${STORAGE_ACCOUNT_NAME}.blob.core.windows.net/documents/${fileName}`;
+            return {
+                success: true,
+                documentUrl: documentUrl,
+                documentUrlWithSas: `${documentUrl}${AZURE_STORAGE_SAS_TOKEN}`,
+                fileName: fileName
+            };
+        } else {
+            console.error('❌ Failed to upload booking document:', response.status, response.statusText);
+            return {
+                success: false,
+                error: `Upload failed: ${response.status} ${response.statusText}`
+            };
+        }
+    } catch (error) {
+        console.error('❌ Error uploading booking document:', error);
+        return {
+            success: false,
+            error: error.message
+        };
+    }
+}
+
+// Make the function available globally
+window.generateAndUploadBookingDocument = generateAndUploadBookingDocument;
+
 // ⚠️ VULNERABILITY: Function that constructs URLs with SAS tokens
 function getDocumentUrl(documentId) {
     return `${STORAGE_URLS.documents}/${documentId}`;

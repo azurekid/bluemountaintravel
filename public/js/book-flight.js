@@ -178,7 +178,7 @@ function initializeBookingForm() {
 }
 
 // Process the flight booking
-function processFlightBooking() {
+async function processFlightBooking() {
     const flightId = getFlightIdFromUrl();
     const flight = window.FlightData.find(f => f.id === flightId);
     
@@ -217,12 +217,21 @@ function processFlightBooking() {
             method: 'credit_card',
             cardNumber: user ? user.creditCard : '****-****-****-****',
             amount: flight.price
-        },
-        documentUrl: `${window.AzureConfig.storageUrls.bookings}${Date.now()}-booking.pdf${window.AzureConfig.sasToken}`,
-        confirmationUrl: `${window.AzureConfig.storageUrls.documents}confirmation-${Date.now()}.pdf${window.AzureConfig.sasToken}`
+        }
     };
     
     console.log('Creating booking:', bookingData);
+    
+    // Generate and upload booking document to Azure Storage
+    let documentResult = null;
+    if (window.generateAndUploadBookingDocument) {
+        documentResult = await window.generateAndUploadBookingDocument(bookingData, 'flight');
+        if (documentResult.success) {
+            bookingData.documentUrl = documentResult.documentUrlWithSas;
+            bookingData.confirmationUrl = documentResult.documentUrl;
+            console.log('Booking document stored at:', documentResult.documentUrl);
+        }
+    }
     
     // Store booking in localStorage
     let bookings = localStorage.getItem('bookings');
@@ -247,7 +256,15 @@ function processFlightBooking() {
         console.error('Booking error:', error);
     });
     
-    alert(`Flight booked successfully!\n\nBooking ID: ${bookingData.bookingId}\nPassenger: ${passengerData.firstName} ${passengerData.lastName}\nFlight: ${flight.airline} ${flight.flightNumber}\nRoute: ${flight.from} → ${flight.to}\nPrice: $${flight.price}\n\nCheck "My Bookings" to view details.`);
+    let successMessage = `Flight booked successfully!\n\nBooking ID: ${bookingData.bookingId}\nPassenger: ${passengerData.firstName} ${passengerData.lastName}\nFlight: ${flight.airline} ${flight.flightNumber}\nRoute: ${flight.from} → ${flight.to}\nPrice: $${flight.price}`;
+    
+    if (documentResult?.success) {
+        successMessage += `\n\n📄 Booking confirmation document has been generated and stored.`;
+    }
+    
+    successMessage += `\n\nCheck "My Bookings" to view details.`;
+    
+    alert(successMessage);
     
     // Redirect to bookings page
     setTimeout(() => {
