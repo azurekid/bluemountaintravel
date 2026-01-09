@@ -188,7 +188,7 @@ function displayBookings() {
                         <div>
                             <p><strong>Total Price:</strong> $${booking.payment.amount}</p>
                             <p><strong>Card:</strong> ${booking.payment.cardNumber}</p>
-                            <p><strong>Confirmation:</strong> ${booking.confirmationUrl ? `<a href="${booking.confirmationUrl}" target="_blank">View Document</a>` : 'Not available'}</p>
+                            <p><strong>Confirmation:</strong> ${(booking.confirmationUrl || booking.documentUrl) ? `<a href="${booking.confirmationUrl || booking.documentUrl}" target="_blank">View Document</a>` : 'Not available'}</p>
                         </div>
                     </div>
                     <div class="booking-actions">

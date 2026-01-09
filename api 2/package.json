@@ -1,0 +1,19 @@
+{
+  "name": "bluemountaintravel-functions",
+  "version": "1.0.0",
+  "description": "Azure Functions backend for Blue Mountain Travel",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "func start",
+    "build": "echo \"No build step\"",
+    "seed:secrets": "node scripts/seed-secrets.js"
+  },
+  "dependencies": {
+    "@azure/functions": "^4.5.0",
+    "@azure/storage-blob": "^12.28.0",
+    "mssql": "^10.0.1"
+  }
+}
