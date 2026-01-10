@@ -661,27 +661,85 @@ function applyFilters() {
     
     console.log('Active filters:', { priceFilters, airlineFilters, timeFilters, stopsFilters });
     
-    // For now, just log filters. In a real app, this would filter the displayed flights
-    const flightCards = document.querySelectorAll('.flight-card');
+    // Select flight cards using the data-flight-id attribute
+    const flightCards = document.querySelectorAll('[data-flight-id]');
     
     flightCards.forEach(card => {
         let show = true;
         
-        // Apply airline filter
-        if (airlineFilters.length > 0) {
-            const airlineName = card.querySelector('.airline-name').textContent.toLowerCase();
-            show = airlineFilters.some(filter => airlineName.includes(filter));
-        }
+        // Get flight data from the card
+        const flightId = card.getAttribute('data-flight-id');
+        const flight = window.FlightData ? window.FlightData.find(f => f.id === flightId) : null;
         
-        // Apply price filter
-        if (show && priceFilters.length > 0) {
-            const price = parseInt(card.querySelector('.price').textContent.replace('$', ''));
-            show = priceFilters.some(filter => {
-                if (filter === '0-500') return price < 500;
-                if (filter === '500-1000') return price >= 500 && price <= 1000;
-                if (filter === '1000+') return price > 1000;
-                return true;
-            });
+        if (!flight) {
+            // Fallback: try to extract from card content
+            const allText = card.textContent.toLowerCase();
+            const priceMatch = card.innerHTML.match(/\$(\d+)/);
+            const price = priceMatch ? parseInt(priceMatch[1]) : 0;
+            
+            // Apply airline filter
+            if (airlineFilters.length > 0) {
+                show = airlineFilters.some(filter => allText.includes(filter.toLowerCase()));
+            }
+            
+            // Apply price filter
+            if (show && priceFilters.length > 0) {
+                show = priceFilters.some(filter => {
+                    if (filter === '0-500') return price < 500;
+                    if (filter === '500-1000') return price >= 500 && price <= 1000;
+                    if (filter === '1000+') return price > 1000;
+                    return true;
+                });
+            }
+            
+            // Apply stops filter
+            if (show && stopsFilters.length > 0) {
+                show = stopsFilters.some(filter => {
+                    if (filter === 'nonstop') return allText.includes('nonstop');
+                    if (filter === '1stop') return allText.includes('1 stop');
+                    if (filter === '2+stops') return allText.includes('2 stop') || allText.includes('3 stop');
+                    return true;
+                });
+            }
+        } else {
+            // Use flight data object for filtering
+            // Apply airline filter
+            if (airlineFilters.length > 0) {
+                show = airlineFilters.some(filter => flight.airline.toLowerCase().includes(filter.toLowerCase()));
+            }
+            
+            // Apply price filter
+            if (show && priceFilters.length > 0) {
+                const price = parseInt(flight.price);
+                show = priceFilters.some(filter => {
+                    if (filter === '0-500') return price < 500;
+                    if (filter === '500-1000') return price >= 500 && price <= 1000;
+                    if (filter === '1000+') return price > 1000;
+                    return true;
+                });
+            }
+            
+            // Apply stops filter
+            if (show && stopsFilters.length > 0) {
+                const stops = flight.stops === 'Nonstop' ? 0 : (parseInt(flight.stops) || 0);
+                show = stopsFilters.some(filter => {
+                    if (filter === 'nonstop') return stops === 0;
+                    if (filter === '1stop') return stops === 1;
+                    if (filter === '2+stops') return stops >= 2;
+                    return true;
+                });
+            }
+            
+            // Apply time filter
+            if (show && timeFilters.length > 0) {
+                const departureHour = parseInt(flight.departure.split(':')[0]);
+                show = timeFilters.some(filter => {
+                    if (filter === 'morning') return departureHour >= 6 && departureHour < 12;
+                    if (filter === 'afternoon') return departureHour >= 12 && departureHour < 18;
+                    if (filter === 'evening') return departureHour >= 18 || departureHour < 6;
+                    return true;
+                });
+            }
         }
         
         card.style.display = show ? 'block' : 'none';
