@@ -453,11 +453,11 @@ function displayHotels(hotelsToDisplay) {
         const discountPercent = hasDiscount ? Math.round((1 - hotel.price / originalPrice) * 100) : null;
         
         html += `
-            <div class="hotel-card" data-hotel-id="${hotel.id}" style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: transform 0.2s, box-shadow 0.2s;" 
+            <div data-hotel-id="${hotel.id}" style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: transform 0.2s, box-shadow 0.2s;" 
                  onmouseenter="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.15)';" 
                  onmouseleave="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)';">
                 <div style="position: relative;">
-                    <img src="${imageUrl}" alt="${hotel.name}" style="width: 100%; height: 160px; object-fit: cover;" loading="lazy" />
+                    <img src="${imageUrl}" alt="${hotel.name}" style="width: 100%; height: 160px; object-fit: cover; display: block;" loading="lazy" />
                     ${discountPercent ? `<span style="position: absolute; top: 10px; left: 10px; background: #34a853; color: white; padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">${discountPercent}% off</span>` : ''}
                     <span style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.7rem;">via Blue Mountain</span>
                 </div>

@@ -583,7 +583,7 @@ function displayFlights(flightsToDisplay) {
         const isNonstop = stopsText === 'Nonstop';
         
         html += `
-            <div class="flight-card" data-flight-id="${flight.id}" style="background: white; border-radius: 8px; margin-bottom: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden; transition: transform 0.2s, box-shadow 0.2s;" 
+            <div data-flight-id="${flight.id}" style="background: white; border-radius: 8px; margin-bottom: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden; transition: transform 0.2s, box-shadow 0.2s;" 
                  onmouseenter="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.15)';" 
                  onmouseleave="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)';">
                 <div style="display: flex; flex-wrap: wrap;">
