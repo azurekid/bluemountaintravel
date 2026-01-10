@@ -5,7 +5,59 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeHotelSearch();
     displayHotels();
     initializeFilters();
+    initializeGoogleHotelsButton();
 });
+
+// Build Google Hotels search URL
+function buildGoogleHotelsUrl(location, checkIn, checkOut) {
+    // Google Hotels URL format
+    // https://www.google.com/travel/hotels?q=hotels+in+[location]
+    let searchQuery = 'hotels';
+    
+    if (location) {
+        searchQuery += ` in ${location}`;
+    }
+    
+    let url = `https://www.google.com/travel/hotels?q=${encodeURIComponent(searchQuery)}`;
+    
+    // Add dates if provided (Google uses specific date format)
+    if (checkIn) {
+        url += `&dates=${checkIn}`;
+        if (checkOut) {
+            url += `,${checkOut}`;
+        }
+    }
+    
+    return url;
+}
+
+// Initialize Google Hotels search button
+function initializeGoogleHotelsButton() {
+    const searchForm = document.getElementById('hotel-search-form');
+    if (!searchForm) return;
+    
+    // Add Google Hotels button after the form
+    const googleHotelsBtn = document.createElement('button');
+    googleHotelsBtn.type = 'button';
+    googleHotelsBtn.className = 'btn-google-hotels';
+    googleHotelsBtn.innerHTML = '\ud83d\udd0d Search on Google Hotels';
+    googleHotelsBtn.style.cssText = 'width: 100%; padding: 0.75rem; background: #4285f4; color: white; border: none; border-radius: 2px; font-size: 0.95rem; cursor: pointer; margin-top: 1rem;';
+    
+    googleHotelsBtn.addEventListener('click', function() {
+        const location = document.getElementById('search-location')?.value || '';
+        const checkIn = document.getElementById('search-checkin')?.value || '';
+        const checkOut = document.getElementById('search-checkout')?.value || '';
+        
+        const googleUrl = buildGoogleHotelsUrl(location, checkIn, checkOut);
+        window.open(googleUrl, '_blank');
+    });
+    
+    // Add hover effect
+    googleHotelsBtn.addEventListener('mouseenter', () => googleHotelsBtn.style.background = '#3367d6');
+    googleHotelsBtn.addEventListener('mouseleave', () => googleHotelsBtn.style.background = '#4285f4');
+    
+    searchForm.parentElement.appendChild(googleHotelsBtn);
+}
 
 // Initialize date fields with minimum dates
 function initializeDateFields() {
@@ -151,6 +203,9 @@ function displayHotels(hotelsToDisplay) {
         const stars = '⭐'.repeat(hotel.rating);
         const imageUrl = hotel.photoUrl || hotel.imageUrl || hotelImages[hotel.id] || 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80';
         
+        // Build Google Hotels URL for this specific hotel
+        const googleHotelUrl = buildGoogleHotelsUrl(`${hotel.name} ${hotel.location}`, '', '');
+        
         // Create amenity badges
         const amenitiesBadges = (hotel.amenities || []).map(amenity => 
             `<span class="amenity-badge">${amenity}</span>`
@@ -182,6 +237,7 @@ function displayHotels(hotelsToDisplay) {
                         </div>
                         <button class="btn-book" onclick="event.stopPropagation(); bookHotel('${hotel.id}')">Book Now</button>
                         <button class="btn-search" onclick="event.stopPropagation(); window.location.href='hotel-detail.html?id=${hotel.id}'" style="margin-left: 0.5rem;">View Details</button>
+                        <a href="${googleHotelUrl}" target="_blank" onclick="event.stopPropagation();" class="btn-compare" style="display: inline-block; margin-left: 0.5rem; padding: 0.5rem 0.8rem; background: #4285f4; color: white; text-decoration: none; border-radius: 2px; font-size: 0.85rem;">Compare on Google</a>
                     </div>
                 </div>
             </div>
