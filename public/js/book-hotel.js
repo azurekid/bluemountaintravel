@@ -108,7 +108,8 @@ function prefillUserData() {
     // ⚠️ SECURITY FIX: Don't prefill sensitive user data by default
     // Let users enter their information manually for better security
     
-    if (user) {
+    // Only show autofill button if user is actually logged in with valid email
+    if (user && user.email) {
         // Only prefill non-sensitive basic information if user explicitly requests it
         console.log('User data available but not auto-filled for security reasons');
         console.log('User can choose to autofill from their profile if needed');
@@ -138,7 +139,8 @@ function addAutofillButton(user) {
 function autofillHotelUserData() {
     const user = window.getCurrentUser ? window.getCurrentUser() : JSON.parse(localStorage.getItem('currentUser') || 'null');
     
-    if (user) {
+    // Check if user is actually logged in (has valid session)
+    if (user && user.email) {
         console.log('Autofilling hotel form with user data:', user);
         
         // Handle both database format (FirstName/LastName/Email/Phone) and sample format (firstName/lastName/email/phone)
