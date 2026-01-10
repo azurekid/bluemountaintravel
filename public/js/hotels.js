@@ -409,67 +409,90 @@ function displayHotels(hotelsToDisplay) {
     const hotels = hotelsToDisplay || window.HotelData || [];
     
     if (hotels.length === 0) {
-        hotelResults.innerHTML = '<p>No hotels available at this time.</p>';
+        hotelResults.innerHTML = `
+            <div style="text-align: center; padding: 3rem; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">🏨</div>
+                <p style="color: #666; font-size: 1.1rem;">No hotels available at this time.</p>
+            </div>
+        `;
         return;
     }
     
     // Hotel image URLs (legacy fallback for the original small dataset)
     const hotelImages = {
-        'HT001': 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800&q=80', // Grand Hyatt New York
-        'HT002': 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80', // The Ritz-Carlton London
-        'HT003': 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&q=80', // Park Hyatt Tokyo
-        'HT004': 'https://images.unsplash.com/photo-1455587734955-081b22074882?w=800&q=80', // Four Seasons George V Paris
-        'HT005': 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80', // Burj Al Arab Jumeirah
-        'HT006': 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&q=80'  // Marina Bay Sands
+        'HT001': 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800&q=80',
+        'HT002': 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80',
+        'HT003': 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&q=80',
+        'HT004': 'https://images.unsplash.com/photo-1455587734955-081b22074882?w=800&q=80',
+        'HT005': 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80',
+        'HT006': 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&q=80'
     };
     
-    let html = '<h2 class="text-primary mb-2">Available Hotels</h2>';
+    let html = `
+        <div style="margin-bottom: 1.5rem;">
+            <h2 style="color: #1a1a1a; font-size: 1.5rem; margin: 0 0 0.5rem 0;">Available Hotels</h2>
+            <p style="color: #666; margin: 0;">Found <strong>${hotels.length}</strong> hotels matching your criteria</p>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+    `;
     
     hotels.forEach(hotel => {
-        const stars = '⭐'.repeat(hotel.rating);
+        const starsHtml = '★'.repeat(Math.floor(hotel.rating)) + (hotel.rating % 1 >= 0.5 ? '½' : '');
         const imageUrl = hotel.photoUrl || hotel.imageUrl || hotelImages[hotel.id] || 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80';
         
         // Build Google Hotels URL for this specific hotel
         const googleHotelUrl = buildGoogleHotelsUrl(`${hotel.name} ${hotel.location}`, '', '');
         
-        // Create amenity badges
-        const amenitiesBadges = (hotel.amenities || []).map(amenity => 
-            `<span class="amenity-badge">${amenity}</span>`
-        ).join('');
+        // Create amenity badges (show up to 4)
+        const amenitiesHtml = (hotel.amenities || []).slice(0, 4).map(amenity => 
+            `<span style="background: #e8f0fe; color: #1967d2; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 500;">${amenity}</span>`
+        ).join(' ');
+        
+        // Random discount for some hotels (for demo purposes)
+        const hasDiscount = hotel.id.charCodeAt(hotel.id.length - 1) % 3 === 0;
+        const originalPrice = hasDiscount ? Math.round(hotel.price * 1.15) : null;
+        const discountPercent = hasDiscount ? Math.round((1 - hotel.price / originalPrice) * 100) : null;
         
         html += `
-            <div class="hotel-card" data-hotel-id="${hotel.id}" style="cursor: pointer;" onclick="window.location.href='hotel-detail.html?id=${hotel.id}'">
-                <div class="hotel-image">
-                    <img src="${imageUrl}" alt="${hotel.name}" loading="lazy" />
-                    <div class="hotel-rating">${stars} ${hotel.rating} Star</div>
+            <div class="hotel-card" data-hotel-id="${hotel.id}" 
+                 style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08); transition: transform 0.2s, box-shadow 0.2s; cursor: pointer;" 
+                 onmouseenter="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 12px 32px rgba(0,0,0,0.15)';" 
+                 onmouseleave="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 12px rgba(0,0,0,0.08)';"
+                 onclick="window.location.href='hotel-detail.html?id=${hotel.id}'">
+                <div style="position: relative;">
+                    <img src="${imageUrl}" alt="${hotel.name}" style="width: 100%; height: 180px; object-fit: cover;" loading="lazy" />
+                    ${discountPercent ? `<span style="position: absolute; top: 12px; left: 12px; background: #34a853; color: white; padding: 0.35rem 0.7rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600;">${discountPercent}% OFF</span>` : ''}
+                    <span style="position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.75); color: white; padding: 0.3rem 0.6rem; border-radius: 6px; font-size: 0.7rem;">✓ Available</span>
                 </div>
-                <div class="hotel-content">
-                    <div class="hotel-header">
-                        <h3 class="hotel-name">${hotel.name}</h3>
-                        <p class="hotel-location">📍 ${hotel.location}</p>
+                <div style="padding: 1.25rem;">
+                    <h4 style="margin: 0 0 0.5rem 0; color: #1a1a1a; font-size: 1.1rem; font-weight: 600;">${hotel.name}</h4>
+                    <p style="margin: 0 0 0.75rem 0; color: #666; font-size: 0.9rem;">📍 ${hotel.location}</p>
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                        <span style="color: #fbbc04; font-size: 1rem;">${starsHtml}</span>
+                        <span style="color: #1a1a1a; font-weight: 600; font-size: 0.9rem;">${hotel.rating}</span>
+                        <span style="color: #666; font-size: 0.8rem;">Star Hotel</span>
                     </div>
-                    <div class="hotel-details">
-                        <p><strong>Room Type:</strong> ${hotel.roomType}</p>
-                        <p><strong>Amenities:</strong></p>
-                        <div class="hotel-amenities">
-                            ${amenitiesBadges}
-                        </div>
-                        <p><strong>Status:</strong> <span class="status-available">✓ Available</span></p>
+                    <p style="margin: 0 0 0.75rem 0; color: #666; font-size: 0.85rem;"><strong>Room:</strong> ${hotel.roomType}</p>
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; min-height: 28px;">
+                        ${amenitiesHtml}
                     </div>
-                    <div class="hotel-footer">
-                        <div class="hotel-price">
-                            <span class="price-amount">$${hotel.price}</span>
-                            <span class="price-label">per night</span>
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; padding-top: 1rem;">
+                        <div>
+                            ${originalPrice ? `<span style="color: #999; text-decoration: line-through; font-size: 0.85rem;">$${originalPrice}</span> ` : ''}
+                            <span style="color: #1a1a1a; font-weight: 700; font-size: 1.25rem;">$${hotel.price}</span>
+                            <span style="color: #666; font-size: 0.8rem;">/night</span>
                         </div>
-                        <button class="btn-book" onclick="event.stopPropagation(); bookHotel('${hotel.id}')">Book Now</button>
-                        <button class="btn-search" onclick="event.stopPropagation(); window.location.href='hotel-detail.html?id=${hotel.id}'" style="margin-left: 0.5rem;">View Details</button>
-                        <a href="${googleHotelUrl}" target="_blank" onclick="event.stopPropagation();" class="btn-compare" style="display: inline-block; margin-left: 0.5rem; padding: 0.5rem 0.8rem; background: #4285f4; color: white; text-decoration: none; border-radius: 2px; font-size: 0.85rem;">Compare on Google</a>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button onclick="event.stopPropagation(); bookHotel('${hotel.id}')" style="background: #1967d2; color: white; border: none; padding: 0.6rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: background 0.2s;" onmouseenter="this.style.background='#1557b0'" onmouseleave="this.style.background='#1967d2'">Book</button>
+                            <a href="${googleHotelUrl}" target="_blank" onclick="event.stopPropagation();" style="background: #f1f3f4; color: #1967d2; border: none; padding: 0.6rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; text-decoration: none; display: flex; align-items: center;" title="Compare on Google">🔍</a>
+                        </div>
                     </div>
                 </div>
             </div>
         `;
     });
     
+    html += '</div>';
     hotelResults.innerHTML = html;
 }
 
