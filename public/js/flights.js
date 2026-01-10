@@ -534,9 +534,9 @@ function displayFlights(flightsToDisplay) {
     
     if (flights.length === 0) {
         flightResults.innerHTML = `
-            <div style="text-align: center; padding: 3rem; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                <div style="font-size: 3rem; margin-bottom: 1rem;">✈️</div>
-                <p style="color: #666; font-size: 1.1rem;">No flights available matching your criteria.</p>
+            <div style="text-align: center; padding: 2rem;">
+                <div style="font-size: 2rem; margin-bottom: 1rem;">🔍</div>
+                <p>No flights available matching your criteria.</p>
             </div>
         `;
         return;
@@ -564,21 +564,18 @@ function displayFlights(flightsToDisplay) {
     };
     
     let html = `
-        <div style="margin-bottom: 1.5rem;">
-            <h2 style="color: #1a1a1a; font-size: 1.5rem; margin: 0 0 0.5rem 0;">Available Flights</h2>
-            <p style="color: #666; margin: 0;">Found <strong>${flights.length}</strong> flights matching your criteria</p>
+        <div style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+            <p style="margin: 0; color: #666;">Found <strong>${flights.length}</strong> flights</p>
         </div>
     `;
     
     flights.forEach(flight => {
-        // Build Google Flights URL for this specific flight
-        const googleFlightUrl = buildGoogleFlightsUrl(flight.from, flight.to, '', '');
-        const airlineColor = airlineColors[flight.airline] || '#1967d2';
+        const airlineColor = airlineColors[flight.airline] || '#4285f4';
         
-        // Random discount for some flights (for demo purposes)
+        // Discount for some flights (for demo purposes)
         const hasDiscount = flight.id.charCodeAt(flight.id.length - 1) % 3 === 0;
         const originalPrice = hasDiscount ? Math.round(flight.price * 1.12) : null;
-        const savings = originalPrice ? originalPrice - flight.price : null;
+        const savings = originalPrice ? `Save $${originalPrice - flight.price}` : null;
         
         // Determine stops display
         const stopsText = flight.stops === 0 || flight.stops === 'Nonstop' || !flight.stops ? 'Nonstop' : 
@@ -586,60 +583,57 @@ function displayFlights(flightsToDisplay) {
         const isNonstop = stopsText === 'Nonstop';
         
         html += `
-            <div class="flight-card" data-flight-id="${flight.id}" 
-                 style="background: white; border-radius: 12px; margin-bottom: 1rem; box-shadow: 0 2px 12px rgba(0,0,0,0.08); overflow: hidden; transition: transform 0.2s, box-shadow 0.2s;" 
-                 onmouseenter="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.12)';" 
-                 onmouseleave="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 12px rgba(0,0,0,0.08)';">
+            <div class="flight-card" data-flight-id="${flight.id}" style="background: white; border-radius: 8px; margin-bottom: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden; transition: transform 0.2s, box-shadow 0.2s;" 
+                 onmouseenter="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.15)';" 
+                 onmouseleave="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)';">
                 <div style="display: flex; flex-wrap: wrap;">
                     <!-- Airline Badge -->
-                    <div style="width: 110px; background: ${airlineColor}; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.25rem 1rem;">
-                        <span style="font-size: 2rem; color: white;">✈️</span>
-                        <span style="color: white; font-weight: 600; font-size: 0.8rem; text-align: center; margin-top: 0.5rem;">${flight.airline}</span>
-                        <span style="color: rgba(255,255,255,0.8); font-size: 0.75rem;">${flight.flightNumber}</span>
+                    <div style="width: 100px; background: ${airlineColor}; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1rem;">
+                        <span style="font-size: 1.5rem; color: white;">✈️</span>
+                        <span style="color: white; font-weight: 600; font-size: 0.75rem; text-align: center; margin-top: 0.5rem;">${flight.airline}</span>
+                        <span style="color: rgba(255,255,255,0.8); font-size: 0.7rem;">${flight.flightNumber}</span>
                     </div>
                     
                     <!-- Flight Details -->
-                    <div style="flex: 1; padding: 1.25rem; display: flex; flex-wrap: wrap; align-items: center; gap: 1.5rem; min-width: 300px;">
+                    <div style="flex: 1; padding: 1rem; display: flex; flex-wrap: wrap; align-items: center; gap: 1rem;">
                         <!-- Departure -->
-                        <div style="text-align: center; min-width: 90px;">
-                            <div style="font-size: 1.5rem; font-weight: 700; color: #1a1a1a;">${flight.departure}</div>
-                            <div style="font-size: 0.9rem; color: #666; font-weight: 500;">${flight.from}</div>
+                        <div style="text-align: center; min-width: 80px;">
+                            <div style="font-size: 1.3rem; font-weight: 700; color: #1a1a1a;">${flight.departure}</div>
+                            <div style="font-size: 0.85rem; color: #666;">${flight.from}</div>
                         </div>
                         
                         <!-- Flight Path -->
-                        <div style="flex: 1; min-width: 140px; text-align: center;">
-                            <div style="color: #666; font-size: 0.8rem; margin-bottom: 0.3rem;">${flight.duration}</div>
+                        <div style="flex: 1; min-width: 120px; text-align: center;">
+                            <div style="color: #666; font-size: 0.75rem; margin-bottom: 0.25rem;">${flight.duration}</div>
                             <div style="display: flex; align-items: center; justify-content: center;">
                                 <div style="height: 2px; flex: 1; background: linear-gradient(90deg, ${airlineColor}, #ddd);"></div>
-                                <div style="width: 10px; height: 10px; border-radius: 50%; background: ${airlineColor}; margin: 0 -2px; position: relative; z-index: 1;"></div>
+                                <span style="margin: 0 0.5rem; color: ${airlineColor};">→</span>
                                 <div style="height: 2px; flex: 1; background: linear-gradient(90deg, #ddd, ${airlineColor});"></div>
                             </div>
-                            <div style="color: ${isNonstop ? '#34a853' : '#666'}; font-size: 0.8rem; margin-top: 0.3rem; font-weight: ${isNonstop ? '600' : '400'};">${stopsText}</div>
+                            <div style="color: ${isNonstop ? '#34a853' : '#666'}; font-size: 0.75rem; margin-top: 0.25rem;">${stopsText}</div>
                         </div>
                         
                         <!-- Arrival -->
-                        <div style="text-align: center; min-width: 90px;">
-                            <div style="font-size: 1.5rem; font-weight: 700; color: #1a1a1a;">${flight.arrival}</div>
-                            <div style="font-size: 0.9rem; color: #666; font-weight: 500;">${flight.to}</div>
+                        <div style="text-align: center; min-width: 80px;">
+                            <div style="font-size: 1.3rem; font-weight: 700; color: #1a1a1a;">${flight.arrival}</div>
+                            <div style="font-size: 0.85rem; color: #666;">${flight.to}</div>
                         </div>
                     </div>
                     
                     <!-- Price & Action -->
-                    <div style="padding: 1.25rem; border-left: 1px solid #eee; min-width: 160px; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #fafafa;">
-                        ${savings ? `<span style="background: #34a853; color: white; padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-bottom: 0.5rem;">Save $${savings}</span>` : ''}
-                        ${originalPrice ? `<span style="color: #999; text-decoration: line-through; font-size: 0.9rem;">$${originalPrice}</span>` : ''}
-                        <span style="font-size: 1.5rem; font-weight: 700; color: #1a1a1a;">$${flight.price}</span>
-                        <span style="color: #666; font-size: 0.8rem; margin-bottom: 1rem;">${flight.class}</span>
-                        <button onclick="bookFlight('${flight.id}')" style="background: #1967d2; color: white; border: none; padding: 0.6rem 1.5rem; border-radius: 6px; cursor: pointer; font-size: 0.9rem; font-weight: 500; width: 100%; transition: background 0.2s;" onmouseenter="this.style.background='#1557b0'" onmouseleave="this.style.background='#1967d2'">Book Now</button>
-                        <a href="${googleFlightUrl}" target="_blank" style="color: #1967d2; text-decoration: none; font-size: 0.8rem; margin-top: 0.5rem; display: flex; align-items: center; gap: 0.3rem;">🔍 Compare</a>
+                    <div style="padding: 1rem; border-left: 1px solid #eee; min-width: 140px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                        ${savings ? `<span style="background: #34a853; color: white; padding: 0.2rem 0.5rem; border-radius: 3px; font-size: 0.7rem; margin-bottom: 0.5rem;">${savings}</span>` : ''}
+                        ${originalPrice ? `<span style="color: #999; text-decoration: line-through; font-size: 0.85rem;">$${originalPrice}</span>` : ''}
+                        <span style="font-size: 1.3rem; font-weight: 700; color: #1a1a1a;">$${flight.price}</span>
+                        <span style="color: #666; font-size: 0.7rem; margin-bottom: 0.75rem;">${flight.class}</span>
+                        <button onclick="bookFlight('${flight.id}')" style="background: #4285f4; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-size: 0.85rem; width: 100%;">Select</button>
                     </div>
                 </div>
                 
-                <!-- Flight Info Footer -->
-                <div style="background: #f8f9fa; padding: 0.6rem 1.25rem; font-size: 0.8rem; color: #666; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; border-top: 1px solid #eee;">
-                    <span>💺 <strong>${flight.availableSeats}</strong> seats available</span>
-                    <span>🎫 ${flight.class}</span>
-                    <span style="color: #34a853;">✓ Flexible booking</span>
+                <!-- Aircraft Info -->
+                <div style="background: #f8f9fa; padding: 0.5rem 1rem; font-size: 0.75rem; color: #666; display: flex; justify-content: space-between;">
+                    <span>💺 ${flight.availableSeats} seats available</span>
+                    <span style="color: #999;">via Blue Mountain</span>
                 </div>
             </div>
         `;
