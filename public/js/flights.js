@@ -6,7 +6,60 @@ document.addEventListener('DOMContentLoaded', function() {
     displayFlights();
     initializeFilters();
     initializeSearchForm();
+    initializeGoogleFlightsButton();
 });
+
+// Build Google Flights search URL
+function buildGoogleFlightsUrl(from, to, departureDate, returnDate) {
+    // Google Flights URL format
+    // https://www.google.com/travel/flights?q=flights+from+[origin]+to+[destination]+on+[date]
+    let searchQuery = 'flights';
+    
+    if (from) {
+        searchQuery += ` from ${from}`;
+    }
+    if (to) {
+        searchQuery += ` to ${to}`;
+    }
+    if (departureDate) {
+        searchQuery += ` on ${departureDate}`;
+    }
+    if (returnDate) {
+        searchQuery += ` return ${returnDate}`;
+    }
+    
+    const encodedQuery = encodeURIComponent(searchQuery);
+    return `https://www.google.com/travel/flights?q=${encodedQuery}`;
+}
+
+// Initialize Google Flights search button
+function initializeGoogleFlightsButton() {
+    const searchForm = document.getElementById('flight-search-form');
+    if (!searchForm) return;
+    
+    // Add Google Flights button after the form
+    const googleFlightsBtn = document.createElement('button');
+    googleFlightsBtn.type = 'button';
+    googleFlightsBtn.className = 'btn-google-flights';
+    googleFlightsBtn.innerHTML = '🔍 Search on Google Flights';
+    googleFlightsBtn.style.cssText = 'width: 100%; padding: 0.75rem; background: #4285f4; color: white; border: none; border-radius: 2px; font-size: 0.95rem; cursor: pointer; margin-top: 1rem;';
+    
+    googleFlightsBtn.addEventListener('click', function() {
+        const from = document.getElementById('search-from').value;
+        const to = document.getElementById('search-to').value;
+        const departureDate = document.getElementById('search-departure-date')?.value || '';
+        const returnDate = document.getElementById('search-return-date')?.value || '';
+        
+        const googleUrl = buildGoogleFlightsUrl(from, to, departureDate, returnDate);
+        window.open(googleUrl, '_blank');
+    });
+    
+    // Add hover effect
+    googleFlightsBtn.addEventListener('mouseenter', () => googleFlightsBtn.style.background = '#3367d6');
+    googleFlightsBtn.addEventListener('mouseleave', () => googleFlightsBtn.style.background = '#4285f4');
+    
+    searchForm.parentElement.appendChild(googleFlightsBtn);
+}
 
 // Initialize date fields with minimum dates
 function initializeDateFields() {
@@ -200,6 +253,9 @@ function displayFlights(flightsToDisplay) {
     let html = `<h2 class="text-primary mb-2">Available Flights (${flights.length} results)</h2>`;
     
     flights.forEach(flight => {
+        // Build Google Flights URL for this specific flight
+        const googleFlightUrl = buildGoogleFlightsUrl(flight.from, flight.to, '', '');
+        
         html += `
             <div class="flight-card" data-flight-id="${flight.id}">
                 <div class="flight-header">
@@ -211,6 +267,7 @@ function displayFlights(flightsToDisplay) {
                         <div class="price">$${flight.price}</div>
                         <div class="price-label">per person</div>
                         <button class="btn-book" onclick="bookFlight('${flight.id}')">Book Now</button>
+                        <a href="${googleFlightUrl}" target="_blank" class="btn-compare" style="display: inline-block; margin-top: 0.5rem; padding: 0.4rem 0.8rem; background: #4285f4; color: white; text-decoration: none; border-radius: 2px; font-size: 0.8rem;">Compare on Google</a>
                     </div>
                 </div>
                 <div class="flight-details">
