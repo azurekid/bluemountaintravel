@@ -3,9 +3,9 @@
 
 // ⚠️ VULNERABILITY: Exposed Azure Storage SAS Token
 // NOTE: Token is intentionally long-lived for training.
-const AZURE_STORAGE_SAS_TOKEN = "?sv=2024-11-04&ss=bfqt&srt=c&sp=rlitfx&se=2027-01-08T20:04:11Z&st=2026-01-08T11:49:11Z&spr=https,http&sig=JZuBqq36vX1MdzJv11ED2wtUfGNVWSVUZx5rThhJrH4%3D";
+const AZURE_STORAGE_SAS_TOKEN = "?sv=2024-11-04&ss=b&srt=sco&sp=rltfx&se=2028-01-09T20:43:28Z&st=2026-01-09T12:28:28Z&spr=https&sig=YA2i1TA9Ujem7iKCcCz0Xg6PtKwvdqfXmcql2zKYMsw%3D";
 // Used when constructing write URLs specifically for the documents container.
-const AZURE_STORAGE_SAS_TOKEN_DOCUMENTS_WRITE = "?sv=2024-11-04&ss=b&srt=c&sp=wlactfx&se=2027-01-08T20:09:04Z&st=2026-01-08T11:54:04Z&spr=https,http&sig=WaESPWqHUs%2FqKX1Tm2QNQsuO4Drsj3V%2BjsI0ygHu6EE%3D";
+const AZURE_STORAGE_SAS_TOKEN_DOCUMENTS_WRITE = "?sv=2024-11-04&ss=b&srt=sco&sp=wlactf&se=2028-01-10T17:12:11Z&st=2026-01-10T08:57:11Z&spr=https,http&sig=3YfxbuuQ8WnUQ4xA1pLnC2rv6X0lr%2BUzZiUdPvmqVvc%3D";
 const STORAGE_ACCOUNT_NAME = "bluemountaintravel";
 
 // ⚠️ VULNERABILITY: Hardcoded API Keys
