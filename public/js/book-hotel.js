@@ -403,13 +403,7 @@ async function processHotelBooking() {
         console.error('Database booking error:', error);
     }
     
-    let successMessage = `Hotel booked successfully!\n\nBooking ID: ${bookingData.bookingId}\nGuest: ${guestData.firstName} ${guestData.lastName}\nHotel: ${hotel.name}\nLocation: ${hotel.location}\nCheck-in: ${new Date(bookingData.checkIn).toLocaleDateString()}\nCheck-out: ${new Date(bookingData.checkOut).toLocaleDateString()}\nNights: ${nights}\nTotal: $${totalPrice}`;
-    
-    if (documentResult?.success) {
-        successMessage += `\n\n📄 Booking confirmation document has been generated and stored.`;
-    }
-    
-    successMessage += `\n\nCheck "My Bookings" to view details.`;
+    let successMessage = `Hotel booked successfully!\n\nBooking ID: ${bookingData.bookingId}\nGuest: ${guestData.firstName} ${guestData.lastName}\nHotel: ${hotel.name}\nLocation: ${hotel.location}\nCheck-in: ${new Date(bookingData.checkIn).toLocaleDateString()}\nCheck-out: ${new Date(bookingData.checkOut).toLocaleDateString()}\nNights: ${nights}\nTotal: $${totalPrice}\n\nCheck "My Bookings" to view your confirmation.`;
     
     alert(successMessage);
     

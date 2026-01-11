@@ -59,6 +59,11 @@ function displayFlightSummary(flight) {
         </div>
         
         <div style="margin-bottom: 1.5rem;">
+            <p style="font-weight: 600; margin-bottom: 0.5rem;">Aircraft</p>
+            <p>${flight.aircraft || 'Boeing 787 Dreamliner'}</p>
+        </div>
+        
+        <div style="margin-bottom: 1.5rem;">
             <p style="font-weight: 600; margin-bottom: 0.5rem;">Available Seats</p>
             <p>${flight.availableSeats} seats remaining</p>
         </div>
@@ -358,13 +363,7 @@ async function processFlightBooking() {
         console.error('Database booking error:', error);
     }
     
-    let successMessage = `Flight booked successfully!\n\nBooking ID: ${bookingData.bookingId}\nPassenger: ${passengerData.firstName} ${passengerData.lastName}\nFlight: ${flight.airline} ${flight.flightNumber}\nRoute: ${flight.from} → ${flight.to}\nPrice: $${flight.price}`;
-    
-    if (documentResult?.success) {
-        successMessage += `\n\n📄 Booking confirmation document has been generated and stored.`;
-    }
-    
-    successMessage += `\n\nCheck "My Bookings" to view details.`;
+    let successMessage = `Flight booked successfully!\n\nBooking ID: ${bookingData.bookingId}\nPassenger: ${passengerData.firstName} ${passengerData.lastName}\nFlight: ${flight.airline} ${flight.flightNumber}\nAircraft: ${flight.aircraft || 'Boeing 787 Dreamliner'}\nRoute: ${flight.from} → ${flight.to}\nPrice: $${flight.price}\n\nCheck "My Bookings" to view your ticket.`;
     
     alert(successMessage);
     

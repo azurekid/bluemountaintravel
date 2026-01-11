@@ -56,7 +56,8 @@ const flightData = [
         duration: "7h 30m",
         class: "Business",
         price: 749,
-        availableSeats: 12
+        availableSeats: 12,
+        aircraft: "Boeing 787-9 Dreamliner"
     },
     {
         id: "FL002",
@@ -73,7 +74,8 @@ const flightData = [
         duration: "8h 00m",
         class: "Business",
         price: 699,
-        availableSeats: 15
+        availableSeats: 15,
+        aircraft: "Boeing 777-300ER"
     },
     {
         id: "FL003",
@@ -90,7 +92,8 @@ const flightData = [
         duration: "10h 00m",
         class: "Business",
         price: 829,
-        availableSeats: 8
+        availableSeats: 8,
+        aircraft: "Boeing 787-10 Dreamliner"
     },
     {
         id: "FL004",
