@@ -109,7 +109,8 @@ function prefillUserData() {
     // Let users enter their information manually for better security
     
     // Only show autofill button if user is actually logged in with valid email
-    if (user && user.email) {
+    // Check both lowercase and uppercase property names for compatibility with API responses
+    if (user && (user.email || user.Email)) {
         // Only prefill non-sensitive basic information if user explicitly requests it
         console.log('User data available but not auto-filled for security reasons');
         console.log('User can choose to autofill from their profile if needed');
