@@ -144,12 +144,21 @@ function autofillUserData() {
         const phone = user.phone || user.Phone || '';
         const dateOfBirth = user.dateOfBirth || user.DateOfBirth || '';
         
+        // Get passport data if available
+        const passport = user.passport || {};
+        const passportNumber = passport.passportNumber || user.passportNumber || user.PassportNumber || '';
+        const nationality = passport.nationality || user.nationality || user.Nationality || '';
+        const passportExpiry = passport.dateOfExpiry || user.passportExpiry || user.PassportExpiry || '';
+        
         // Set form values
         const firstNameField = document.getElementById('firstName');
         const lastNameField = document.getElementById('lastName');
         const emailField = document.getElementById('email');
         const phoneField = document.getElementById('phone');
         const dobField = document.getElementById('dateOfBirth');
+        const passportField = document.getElementById('passportNumber');
+        const nationalityField = document.getElementById('nationality');
+        const passportExpiryField = document.getElementById('passportExpiry');
         
         if (firstNameField) {
             firstNameField.value = firstName;
@@ -168,8 +177,24 @@ function autofillUserData() {
             console.log('Set phone:', phone);
         }
         if (dobField) {
-            dobField.value = dateOfBirth;
-            console.log('Set dateOfBirth:', dateOfBirth);
+            // Use passport DOB if available, otherwise user DOB
+            const dob = passport.dateOfBirth || dateOfBirth;
+            if (dob) {
+                dobField.value = dob.split('T')[0]; // Handle ISO date format
+                console.log('Set dateOfBirth:', dob);
+            }
+        }
+        if (passportField && passportNumber) {
+            passportField.value = passportNumber;
+            console.log('Set passportNumber:', passportNumber);
+        }
+        if (nationalityField && nationality) {
+            nationalityField.value = nationality;
+            console.log('Set nationality:', nationality);
+        }
+        if (passportExpiryField && passportExpiry) {
+            passportExpiryField.value = passportExpiry.split('T')[0]; // Handle ISO date format
+            console.log('Set passportExpiry:', passportExpiry);
         }
         
         console.log('User data autofilled from profile');
