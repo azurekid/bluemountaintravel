@@ -67,9 +67,13 @@ module.exports = async function (context, req) {
       return;
     }
 
-    // Generate UserID
+    // Generate UserID - only look at UserIDs that follow USRxxx pattern
     const idRequest = pool.request();
-    const idResult = await idRequest.query('SELECT MAX(CAST(SUBSTRING(UserID, 4, 3) AS INT)) as MaxId FROM Users');
+    const idResult = await idRequest.query(`
+      SELECT MAX(CAST(SUBSTRING(UserID, 4, LEN(UserID)-3) AS INT)) as MaxId 
+      FROM Users 
+      WHERE UserID LIKE 'USR%' AND ISNUMERIC(SUBSTRING(UserID, 4, LEN(UserID)-3)) = 1
+    `);
     const nextId = (idResult.recordset[0].MaxId || 0) + 1;
     const userId = `USR${String(nextId).padStart(3, '0')}`;
 
