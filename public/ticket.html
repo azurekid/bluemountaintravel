@@ -605,6 +605,7 @@
             const toCity = flight.to.replace(/\s*\([^)]*\)/, '');
             
             const bookingDate = new Date(data.bookingDate);
+            const aircraft = flight.aircraft || 'Boeing 787 Dreamliner';
             
             return `
                 <div class="ticket">
@@ -613,7 +614,10 @@
                             <h2>✈️ Blue Mountain Travel</h2>
                             <p>Business Class Experience</p>
                         </div>
-                        <span class="ticket-type">${flight.class}</span>
+                        <div style="text-align: right;">
+                            <span class="ticket-type">${flight.class}</span>
+                            <p style="color: white; font-size: 0.75rem; margin-top: 0.5rem; opacity: 0.8;">Booking Ref: ${data.bookingId}</p>
+                        </div>
                     </div>
                     
                     <div class="ticket-body">
@@ -648,6 +652,22 @@
                                 <div class="info-label">Arrival</div>
                                 <div class="info-value">${flight.arrival}</div>
                             </div>
+                        </div>
+                        
+                        <div class="flight-info" style="margin-top: 1rem;">
+                            <div class="info-block">
+                                <div class="info-label">Aircraft</div>
+                                <div class="info-value">${aircraft}</div>
+                            </div>
+                            <div class="info-block">
+                                <div class="info-label">Duration</div>
+                                <div class="info-value">${flight.duration || 'N/A'}</div>
+                            </div>
+                            <div class="info-block" style="grid-column: span 2;">
+                                <div class="info-label">Booked On</div>
+                                <div class="info-value">${bookingDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div>
+                            </div>
+                        </div>
                         </div>
                         
                         <div class="passenger-section">
