@@ -134,8 +134,9 @@ function addAutofillButton(user) {
 function autofillUserData() {
     const user = window.getCurrentUser ? window.getCurrentUser() : JSON.parse(localStorage.getItem('currentUser') || 'null');
     
-    // Check if user is actually logged in (has valid session) 
-    if (user && user.email) {
+    // Check if user is actually logged in (has valid session)
+    // Check both lowercase and uppercase property names for compatibility with API responses
+    if (user && (user.email || user.Email)) {
         console.log('Autofilling form with user data:', user);
         
         // Handle both database format (FirstName/LastName/Email/Phone) and sample format (firstName/lastName/email/phone)
