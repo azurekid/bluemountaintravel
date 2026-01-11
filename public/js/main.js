@@ -567,7 +567,8 @@ const flightData = [
         duration: "10h 00m",
         class: "Business",
         price: 849,
-        availableSeats: 12
+        availableSeats: 12,
+        aircraft: "Boeing 787-9 Dreamliner"
     },
     {
         id: "FL030",
@@ -584,7 +585,8 @@ const flightData = [
         duration: "7h 00m",
         class: "Business",
         price: 629,
-        availableSeats: 15
+        availableSeats: 15,
+        aircraft: "Boeing 737 MAX 9"
     },
     // More European Routes
     {
@@ -602,7 +604,8 @@ const flightData = [
         duration: "9h 00m",
         class: "Business",
         price: 779,
-        availableSeats: 10
+        availableSeats: 10,
+        aircraft: "Airbus A350-900"
     },
     {
         id: "FL032",
@@ -619,7 +622,8 @@ const flightData = [
         duration: "9h 00m",
         class: "Business",
         price: 759,
-        availableSeats: 11
+        availableSeats: 11,
+        aircraft: "Airbus A350-900"
     },
     {
         id: "FL033",
@@ -636,7 +640,8 @@ const flightData = [
         duration: "8h 00m",
         class: "Business",
         price: 689,
-        availableSeats: 14
+        availableSeats: 14,
+        aircraft: "Airbus A330-900neo"
     },
     {
         id: "FL034",
@@ -653,7 +658,8 @@ const flightData = [
         duration: "11h 00m",
         class: "Business",
         price: 839,
-        availableSeats: 9
+        availableSeats: 9,
+        aircraft: "Airbus A321LR"
     },
     // Middle East to Asia
     {
@@ -671,7 +677,8 @@ const flightData = [
         duration: "7h 00m",
         class: "Business",
         price: 729,
-        availableSeats: 8
+        availableSeats: 8,
+        aircraft: "Boeing 777-300ER"
     },
     {
         id: "FL036",
@@ -688,7 +695,8 @@ const flightData = [
         duration: "10h 00m",
         class: "Business",
         price: 979,
-        availableSeats: 7
+        availableSeats: 7,
+        aircraft: "Boeing 787-9 Dreamliner"
     },
     {
         id: "FL037",
@@ -705,7 +713,8 @@ const flightData = [
         duration: "8h 00m",
         class: "Business",
         price: 849,
-        availableSeats: 9
+        availableSeats: 9,
+        aircraft: "Boeing 787-9 Dreamliner"
     },
     // African Routes
     {
@@ -723,7 +732,8 @@ const flightData = [
         duration: "16h 00m",
         class: "Business",
         price: 1299,
-        availableSeats: 5
+        availableSeats: 5,
+        aircraft: "Airbus A350-900"
     },
     {
         id: "FL039",
@@ -740,7 +750,8 @@ const flightData = [
         duration: "14h 00m",
         class: "Business",
         price: 1149,
-        availableSeats: 6
+        availableSeats: 6,
+        aircraft: "Boeing 787-9 Dreamliner"
     },
     {
         id: "FL040",
@@ -757,7 +768,8 @@ const flightData = [
         duration: "9h 00m",
         class: "Business",
         price: 1029,
-        availableSeats: 8
+        availableSeats: 8,
+        aircraft: "Boeing 787-8 Dreamliner"
     },
     // Additional Premium Routes
     {
@@ -775,7 +787,8 @@ const flightData = [
         duration: "8h 00m",
         class: "Upper Class",
         price: 869,
-        availableSeats: 10
+        availableSeats: 10,
+        aircraft: "Airbus A350-1000"
     },
     {
         id: "FL042",
@@ -792,7 +805,8 @@ const flightData = [
         duration: "13h 30m",
         class: "Business",
         price: 1059,
-        availableSeats: 7
+        availableSeats: 7,
+        aircraft: "Boeing 787-9 Dreamliner"
     },
     {
         id: "FL043",
@@ -809,7 +823,8 @@ const flightData = [
         duration: "12h 00m",
         class: "Business",
         price: 1019,
-        availableSeats: 8
+        availableSeats: 8,
+        aircraft: "Boeing 777-300ER"
     },
     {
         id: "FL044",
@@ -826,7 +841,8 @@ const flightData = [
         duration: "11h 00m",
         class: "Business",
         price: 989,
-        availableSeats: 9
+        availableSeats: 9,
+        aircraft: "Airbus A350-900"
     },
     {
         id: "FL045",
@@ -843,7 +859,8 @@ const flightData = [
         duration: "12h 30m",
         class: "Business",
         price: 1039,
-        availableSeats: 7
+        availableSeats: 7,
+        aircraft: "Boeing 787-10 Dreamliner"
     },
     // More US to Asia routes
     {
@@ -861,7 +878,8 @@ const flightData = [
         duration: "16h 00m",
         class: "Business",
         price: 1129,
-        availableSeats: 6
+        availableSeats: 6,
+        aircraft: "Boeing 777-300ER"
     },
     {
         id: "FL047",
@@ -878,7 +896,8 @@ const flightData = [
         duration: "10h 00m",
         class: "Business",
         price: 979,
-        availableSeats: 10
+        availableSeats: 10,
+        aircraft: "Airbus A350-900"
     },
     {
         id: "FL048",
@@ -895,7 +914,8 @@ const flightData = [
         duration: "14h 00m",
         class: "Business",
         price: 1099,
-        availableSeats: 8
+        availableSeats: 8,
+        aircraft: "Boeing 787-9 Dreamliner"
     },
     {
         id: "FL049",
@@ -912,7 +932,8 @@ const flightData = [
         duration: "13h 00m",
         class: "Business",
         price: 1069,
-        availableSeats: 7
+        availableSeats: 7,
+        aircraft: "Boeing 777-300ER"
     },
     {
         id: "FL050",
@@ -929,7 +950,8 @@ const flightData = [
         duration: "12h 00m",
         class: "Business",
         price: 1009,
-        availableSeats: 9
+        availableSeats: 9,
+        aircraft: "Boeing 787-9 Dreamliner"
     }
 ];
 

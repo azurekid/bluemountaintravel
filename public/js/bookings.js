@@ -310,6 +310,7 @@ function renderBookingCard(booking) {
                             <div style="flex: 1; height: 2px; background: linear-gradient(90deg, #d69e2e, var(--primary-color));"></div>
                         </div>
                         <div style="color: #666; font-size: 0.8rem; margin-top: 0.25rem;">${flight.airline || 'N/A'} ${flight.flightNumber || ''}</div>
+                        ${flight.aircraft ? `<div style="color: #888; font-size: 0.75rem; margin-top: 0.25rem;">🛩️ ${flight.aircraft}</div>` : ''}
                     </div>
                     <div style="text-align: right;">
                         <div style="font-size: 1.5rem; font-weight: 700; color: #1a365d;">${extractCode(flight.to)}</div>
