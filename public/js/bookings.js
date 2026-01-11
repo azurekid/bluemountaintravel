@@ -100,43 +100,70 @@ async function loadBookings() {
     
     // Collect bookings from multiple sources
     let allBookings = [];
+    let sourceStatus = { database: 'pending', storage: 'pending', local: 'pending' };
     
     // 1. Try to fetch from database API
     try {
         const dbBookings = await fetchBookingsFromDatabase(userId);
         if (dbBookings && dbBookings.length > 0) {
-            console.log('Loaded bookings from database:', dbBookings.length);
+            console.log('✅ Loaded bookings from database:', dbBookings.length);
             allBookings = allBookings.concat(dbBookings.map(b => ({ ...b, source: 'database' })));
+            sourceStatus.database = 'success';
+        } else {
+            sourceStatus.database = 'empty';
         }
     } catch (error) {
-        console.warn('Could not fetch from database:', error);
+        console.warn('⚠️ Could not fetch from database:', error);
+        sourceStatus.database = 'error';
     }
     
     // 2. Try to fetch from Azure Storage documents container
     try {
         const storageBookings = await fetchBookingsFromStorage(userId, userEmail);
         if (storageBookings && storageBookings.length > 0) {
-            console.log('Loaded bookings from storage:', storageBookings.length);
+            console.log('✅ Loaded bookings from storage:', storageBookings.length);
             // Only add if not already in list (avoid duplicates)
             storageBookings.forEach(sb => {
                 if (!allBookings.find(b => b.BookingID === sb.bookingId || b.bookingId === sb.bookingId)) {
                     allBookings.push({ ...sb, source: 'storage' });
                 }
             });
+            sourceStatus.storage = 'success';
+        } else {
+            sourceStatus.storage = 'empty';
         }
     } catch (error) {
-        console.warn('Could not fetch from storage:', error);
+        console.warn('⚠️ Could not fetch from storage:', error);
+        sourceStatus.storage = 'error';
     }
     
     // 3. Add localStorage bookings (for offline/demo purposes)
-    const localBookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+    // Filter to only show bookings for this user
+    const allLocalBookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+    const localBookings = allLocalBookings.filter(lb => {
+        // Match by userId or email
+        const lbUserId = lb.userId;
+        const lbUserEmail = (lb.userEmail || lb.passenger?.email || lb.guest?.email || '').toLowerCase();
+        const matchesUser = 
+            (lbUserId && lbUserId === userId) ||
+            (lbUserEmail && userEmail && lbUserEmail === userEmail.toLowerCase());
+        return matchesUser;
+    });
+    
     localBookings.forEach(lb => {
         if (!allBookings.find(b => b.BookingID === lb.bookingId || b.bookingId === lb.bookingId)) {
             allBookings.push({ ...lb, source: 'local' });
         }
     });
     
-    console.log('Total bookings loaded:', allBookings.length);
+    if (localBookings.length > 0) {
+        console.log('✅ Loaded bookings from localStorage:', localBookings.length);
+        sourceStatus.local = 'success';
+    } else {
+        sourceStatus.local = 'empty';
+    }
+    
+    console.log('📊 Total bookings loaded:', allBookings.length, 'Sources:', sourceStatus);
     
     // Display bookings
     displayBookings(allBookings, bookingsList, user);
@@ -167,6 +194,8 @@ async function fetchBookingsFromStorage(userId, userEmail) {
     // List blobs in documents container
     const listUrl = `https://${storageAccount}.blob.core.windows.net/documents?restype=container&comp=list${sasToken}`;
     
+    console.log('📦 Fetching bookings from Azure Storage...');
+    
     try {
         const response = await fetch(listUrl);
         if (!response.ok) {
@@ -177,6 +206,8 @@ async function fetchBookingsFromStorage(userId, userEmail) {
         const parser = new DOMParser();
         const xml = parser.parseFromString(text, 'text/xml');
         const blobs = xml.querySelectorAll('Blob');
+        
+        console.log(`📋 Found ${blobs.length} documents in storage`);
         
         const bookings = [];
         
@@ -189,11 +220,25 @@ async function fetchBookingsFromStorage(userId, userEmail) {
                     const docResponse = await fetch(blobUrl);
                     if (docResponse.ok) {
                         const bookingData = await docResponse.json();
-                        // Check if this booking belongs to the user
-                        const passengerEmail = bookingData.passengerDetails?.email || bookingData.guestDetails?.email;
-                        if (passengerEmail && passengerEmail.toLowerCase() === userEmail.toLowerCase()) {
+                        
+                        // Check if this booking belongs to the user by multiple criteria:
+                        // 1. Direct userId match (new documents)
+                        // 2. Direct userEmail match (new documents)
+                        // 3. Passenger/guest email match (legacy documents)
+                        const docUserId = bookingData.userId;
+                        const docUserEmail = bookingData.userEmail?.toLowerCase();
+                        const passengerEmail = (bookingData.passengerDetails?.email || bookingData.guestDetails?.email || '').toLowerCase();
+                        const userEmailLower = userEmail?.toLowerCase();
+                        
+                        const isMatch = 
+                            (docUserId && docUserId === userId) ||
+                            (docUserEmail && userEmailLower && docUserEmail === userEmailLower) ||
+                            (passengerEmail && userEmailLower && passengerEmail === userEmailLower);
+                        
+                        if (isMatch) {
                             bookingData.documentUrl = blobUrl;
                             bookings.push(bookingData);
+                            console.log(`✅ Found matching booking: ${bookingData.bookingId}`);
                         }
                     }
                 } catch (e) {

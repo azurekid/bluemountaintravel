@@ -315,6 +315,8 @@ async function processHotelBooking() {
         hotel: hotel,
         guest: guestData,
         user: user,
+        userId: user?.UserID || user?.userId || user?.id || null,
+        userEmail: user?.Email || user?.email || guestData.email,
         bookingDate: new Date().toISOString(),
         checkIn: checkInDate.toISOString(),
         checkOut: checkOutDate.toISOString(),

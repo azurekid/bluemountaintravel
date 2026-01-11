@@ -280,6 +280,8 @@ async function processFlightBooking() {
         flight: flight,
         passenger: passengerData,
         user: user,
+        userId: user?.UserID || user?.userId || user?.id || null,
+        userEmail: user?.Email || user?.email || passengerData.email,
         bookingDate: new Date().toISOString(),
         status: 'confirmed',
         payment: {

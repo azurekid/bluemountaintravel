@@ -1864,12 +1864,20 @@ async function generateAndUploadBookingDocument(bookingData, bookingType = 'flig
     const timestamp = Date.now();
     const fileName = `${bookingData.bookingId}-${bookingType}-confirmation.json`;
     
+    // Get current user info for linking
+    const currentUser = localStorage.getItem('currentUser');
+    const user = currentUser ? JSON.parse(currentUser) : null;
+    const userId = user?.UserID || user?.userId || user?.id || null;
+    const userEmail = user?.Email || user?.email || null;
+    
     // Generate booking document content
     const documentContent = {
         documentType: `${bookingType.toUpperCase()}_BOOKING_CONFIRMATION`,
         generatedAt: new Date().toISOString(),
         bookingId: bookingData.bookingId,
         status: bookingData.status,
+        userId: userId,
+        userEmail: userEmail,
         ...(bookingType === 'flight' ? {
             flightDetails: {
                 flightId: bookingData.flightId,
