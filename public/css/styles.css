@@ -666,6 +666,46 @@ body {
     .content-with-sidebar {
         grid-template-columns: 1fr;
     }
+    
+    /* Hide filters sidebar on mobile to prevent overlay */
+    .filters-sidebar {
+        display: none;
+        position: relative;
+        top: 0;
+        max-height: none;
+        margin-bottom: 2rem;
+        animation: slideDown 0.3s ease;
+    }
+    
+    /* Show filters when toggled */
+    .filters-sidebar.show {
+        display: block;
+    }
+    
+    /* Filter toggle button styling */
+    .btn-filter-toggle {
+        transition: all 0.3s ease;
+    }
+    
+    .btn-filter-toggle:hover {
+        background: #1d4ed8 !important;
+        transform: translateY(-2px);
+    }
+    
+    .btn-filter-toggle:active {
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Luxury Cards */
@@ -912,6 +952,7 @@ body {
     max-height: calc(100vh - 120px);
     overflow-y: auto;
     border-top: 3px solid #d4af37;
+    transition: all 0.3s ease;
 }
 
 .filters-sidebar h3 {
@@ -1111,6 +1152,30 @@ body {
     .features-grid,
     .gallery-grid {
         grid-template-columns: 1fr;
+    }
+    
+    /* Make hotel and flight cards stack properly on mobile */
+    .hotel-card {
+        grid-template-columns: 1fr;
+    }
+    
+    .hotel-image {
+        height: 200px;
+    }
+    
+    .flight-card {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .flight-route {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-start;
+    }
+    
+    .flight-arrow {
+        transform: rotate(90deg);
     }
 
     /* Disable fixed backgrounds on mobile for better performance */

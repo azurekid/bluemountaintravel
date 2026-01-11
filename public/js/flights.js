@@ -761,3 +761,43 @@ function bookFlight(flightId) {
 
 // Make bookFlight available globally
 window.bookFlight = bookFlight;
+
+// Toggle filters visibility on mobile
+function toggleFilters() {
+    const sidebar = document.querySelector('.filters-sidebar');
+    const toggleBtn = document.getElementById('filter-toggle');
+    
+    if (sidebar && toggleBtn) {
+        sidebar.classList.toggle('show');
+        
+        if (sidebar.classList.contains('show')) {
+            toggleBtn.textContent = '❌ Hide Filters';
+        } else {
+            toggleBtn.textContent = '🔍 Show Filters';
+        }
+    }
+}
+
+// Make toggleFilters available globally
+window.toggleFilters = toggleFilters;
+
+// Show/hide filter toggle button based on screen size
+function handleFilterToggleButton() {
+    const toggleBtn = document.getElementById('filter-toggle');
+    if (toggleBtn) {
+        if (window.innerWidth <= 968) {
+            toggleBtn.style.display = 'block';
+        } else {
+            toggleBtn.style.display = 'none';
+            // Make sure sidebar is visible on desktop
+            const sidebar = document.querySelector('.filters-sidebar');
+            if (sidebar) {
+                sidebar.classList.remove('show');
+            }
+        }
+    }
+}
+
+// Initialize filter toggle button visibility
+window.addEventListener('resize', handleFilterToggleButton);
+window.addEventListener('DOMContentLoaded', handleFilterToggleButton);

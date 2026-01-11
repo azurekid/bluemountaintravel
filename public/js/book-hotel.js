@@ -121,18 +121,31 @@ function prefillUserData() {
 
 // Add button to allow users to optionally autofill their data
 function addAutofillButton(user) {
-    const form = document.getElementById('booking-form');
-    if (!form) return;
-    
-    const buttonHtml = `
-        <div style="margin-bottom: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 4px; border-left: 4px solid var(--primary-color);">
-            <p style="margin: 0 0 0.5rem 0; font-weight: 600;">Quick Fill</p>
-            <p style="margin: 0 0 0.5rem 0; font-size: 0.9rem; color: #666;">You can autofill your information from your profile</p>
-            <button type="button" onclick="autofillHotelUserData()" class="btn-search" style="padding: 0.5rem 1rem; font-size: 0.9rem;">Autofill My Data</button>
-        </div>
-    `;
-    
-    form.insertAdjacentHTML('afterbegin', buttonHtml);
+    // Wait a bit to ensure the form is fully loaded
+    setTimeout(() => {
+        const form = document.getElementById('booking-form');
+        if (!form) {
+            console.warn('Booking form not found, cannot add autofill button');
+            return;
+        }
+        
+        // Check if button already exists
+        if (form.querySelector('.autofill-button-container')) {
+            console.log('Autofill button already added');
+            return;
+        }
+        
+        const buttonHtml = `
+            <div class="autofill-button-container" style="margin-bottom: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 4px; border-left: 4px solid var(--primary-color);">
+                <p style="margin: 0 0 0.5rem 0; font-weight: 600;">Quick Fill</p>
+                <p style="margin: 0 0 0.5rem 0; font-size: 0.9rem; color: #666;">You can autofill your information from your profile</p>
+                <button type="button" onclick="autofillHotelUserData()" class="btn-search" style="padding: 0.5rem 1rem; font-size: 0.9rem;">Autofill My Data</button>
+            </div>
+        `;
+        
+        form.insertAdjacentHTML('afterbegin', buttonHtml);
+        console.log('Autofill button added successfully');
+    }, 100);
 }
 
 // Function to autofill data when user clicks the button
