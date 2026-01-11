@@ -131,26 +131,48 @@ function addAutofillButton(user) {
 }
 
 // Function to autofill data when user clicks the button
-function autofillUserData() {
+async function autofillUserData() {
     const user = window.getCurrentUser ? window.getCurrentUser() : JSON.parse(localStorage.getItem('currentUser') || 'null');
     
     // Check if user is actually logged in (has valid session)
     // Check both lowercase and uppercase property names for compatibility with API responses
-    if (user && (user.email || user.Email)) {
-        console.log('Autofilling form with user data:', user);
+    const userEmail = user?.email || user?.Email;
+    if (user && userEmail) {
+        console.log('Autofilling form with user data, fetching profile for passport details...');
+        
+        // Fetch full profile data including passport from API
+        let profileData = user;
+        try {
+            const apiBaseUrl = window.BMT_API_BASE_URL || 
+                (window.location.hostname === 'localhost' ? 'http://localhost:7071/api' : 'https://bluemountaintravel-func.azurewebsites.net/api');
+            const functionsKey = window.BMT_FUNCTION_KEY || window.AzureConfig?.apiConfig?.functionKey || window.AzureConfig?.apiConfig?.primaryKey;
+            
+            const response = await fetch(`${apiBaseUrl}/profile?email=${encodeURIComponent(userEmail)}`,
+                functionsKey ? { headers: { 'x-functions-key': functionsKey } } : undefined
+            );
+            
+            if (response.ok) {
+                profileData = await response.json();
+                console.log('Profile data fetched with passport:', profileData);
+            } else {
+                console.warn('Could not fetch profile, using localStorage data');
+            }
+        } catch (error) {
+            console.warn('Error fetching profile, using localStorage data:', error);
+        }
         
         // Handle both database format (FirstName/LastName/Email/Phone) and sample format (firstName/lastName/email/phone)
-        const firstName = user.firstName || user.FirstName || '';
-        const lastName = user.lastName || user.LastName || '';
-        const email = user.email || user.Email || '';
-        const phone = user.phone || user.Phone || '';
-        const dateOfBirth = user.dateOfBirth || user.DateOfBirth || '';
+        const firstName = profileData.firstName || profileData.FirstName || user.FirstName || '';
+        const lastName = profileData.lastName || profileData.LastName || user.LastName || '';
+        const email = profileData.email || profileData.Email || userEmail || '';
+        const phone = profileData.phone || profileData.Phone || user.Phone || '';
+        const dateOfBirth = profileData.dateOfBirth || profileData.DateOfBirth || user.DateOfBirth || '';
         
-        // Get passport data if available
-        const passport = user.passport || {};
-        const passportNumber = passport.passportNumber || user.passportNumber || user.PassportNumber || '';
-        const nationality = passport.nationality || user.nationality || user.Nationality || '';
-        const passportExpiry = passport.dateOfExpiry || user.passportExpiry || user.PassportExpiry || '';
+        // Get passport data if available (from profile API response)
+        const passport = profileData.passport || {};
+        const passportNumber = passport.passportNumber || profileData.passportNumber || profileData.PassportNumber || '';
+        const nationality = passport.nationality || profileData.nationality || profileData.Nationality || '';
+        const passportExpiry = passport.dateOfExpiry || profileData.passportExpiry || profileData.PassportExpiry || '';
         
         // Set form values
         const firstNameField = document.getElementById('firstName');
