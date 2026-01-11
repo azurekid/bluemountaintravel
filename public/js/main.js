@@ -1881,31 +1881,50 @@ async function generateAndUploadBookingDocument(bookingData, bookingType = 'flig
     
     console.log('⚠️ Uploading booking document to Azure Storage:', blobUrl);
     console.log('Document content:', documentContent);
+    console.log('Using WRITE SAS token with permissions: wlactf');
 
     try {
+        console.log('📤 Starting upload request...');
         const response = await fetch(blobUrl, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                'x-ms-blob-type': 'BlockBlob'
+                'x-ms-blob-type': 'BlockBlob',
+                'x-ms-version': '2024-11-04'
             },
             body: JSON.stringify(documentContent, null, 2)
         });
 
+        console.log('📥 Upload response received:', response.status, response.statusText);
+        console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+
         if (response.ok) {
             console.log('✅ Booking document uploaded successfully!');
             const documentUrl = `https://${STORAGE_ACCOUNT_NAME}.blob.core.windows.net/documents/${fileName}`;
+            const viewUrl = `${documentUrl}${AZURE_STORAGE_SAS_TOKEN}`;
+            console.log('📁 Document URL (no SAS):', documentUrl);
+            console.log('🔗 Document URL (with read SAS):', viewUrl);
             return {
                 success: true,
                 documentUrl: documentUrl,
-                documentUrlWithSas: `${documentUrl}${AZURE_STORAGE_SAS_TOKEN}`,
+                documentUrlWithSas: viewUrl,
                 fileName: fileName
             };
         } else {
-            console.error('❌ Failed to upload booking document:', response.status, response.statusText);
+            const errorText = await response.text().catch(() => 'No error details');
+            console.error('❌ Failed to upload booking document:', response.status, response.statusText, errorText);
+            
+            // Check for common issues
+            if (response.status === 403) {
+                console.error('⚠️ SAS token may be invalid, expired, or missing required permissions');
+                console.error('⚠️ Ensure the storage account has CORS enabled for your domain');
+            } else if (response.status === 404) {
+                console.error('⚠️ Storage account or container may not exist');
+            }
+            
             return {
                 success: false,
-                error: `Upload failed: ${response.status} ${response.statusText}`
+                error: `Upload failed: ${response.status} ${response.statusText} - ${errorText}`
             };
         }
     } catch (error) {
