@@ -66,8 +66,22 @@ async function handleLogin(event) {
         );
         
         if (!response.ok) {
-            console.error('Login failed:', response.statusText);
-            alert('Login failed. Please check your credentials.');
+            let bodyText = '';
+            try {
+                bodyText = await response.text();
+            } catch (_) {}
+
+            console.error('Login failed:', {
+                status: response.status,
+                statusText: response.statusText,
+                url: response.url,
+                body: bodyText
+            });
+
+            const msg = bodyText
+                ? `Login failed (${response.status}).\n\n${bodyText}`
+                : `Login failed (${response.status}). Please check your credentials.`;
+            alert(msg);
             return;
         }
         

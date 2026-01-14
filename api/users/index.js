@@ -42,7 +42,7 @@ module.exports = async function (context, req) {
     const email = (req.query && req.query.email) || (req.body && req.body.email);
     const password = (req.query && req.query.password) || (req.body && req.body.password);
 
-    // Basic diagnostics (logs only)
+    // Basic diagnostics
     const cfg = buildConfig();
     const usingConnectionString = typeof cfg === 'string';
     try {
@@ -172,10 +172,47 @@ module.exports = async function (context, req) {
     }
   } catch (err) {
     context.log('Login function error', err);
+
+    // Return helpful, non-secret diagnostics (CTF/training oriented).
+    // Do NOT include passwords.
+    let cfg;
+    try {
+      cfg = buildConfig();
+    } catch (_) {
+      cfg = null;
+    }
+
+    const usingConnectionString = typeof cfg === 'string';
+    const configSummary = usingConnectionString
+      ? { usingConnectionString: true }
+      : (cfg
+          ? {
+              usingConnectionString: false,
+              server: cfg.server,
+              database: cfg.database,
+              user: cfg.user
+            }
+          : null);
+
+    const errorDetails = {
+      message: err.message,
+      code: err.code || null,
+      number: err.number || null,
+      state: err.state || null,
+      class: err.class || null,
+      lineNumber: err.lineNumber || null,
+      serverName: err.serverName || null,
+      procName: err.procName || null
+    };
+
     context.res = {
       status: 500,
       headers,
-      body: { error: err.message, code: err.code || null }
+      body: {
+        error: 'Login function error',
+        details: errorDetails,
+        config: configSummary
+      }
     };
   }
 };
