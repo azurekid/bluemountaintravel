@@ -190,9 +190,20 @@ async function fetchBookingsFromDatabase(userId) {
 async function fetchBookingsFromStorage(userId, userEmail) {
     const storageAccount = window.AzureConfig?.storageAccount || STORAGE_ACCOUNT_NAME || 'bluemountaintravel';
     const sasToken = window.AzureConfig?.sasToken || AZURE_STORAGE_SAS_TOKEN;
+
+    // Normalize SAS token for different URL shapes.
+    // - For blob URLs: token should start with '?'
+    // - For container list URLs: token must start with '&' because the URL already has query params
+    const rawSas = typeof sasToken === 'string' ? sasToken.trim() : '';
+    const blobSas = rawSas
+        ? (rawSas.startsWith('?') ? rawSas : `?${rawSas.replace(/^&/, '')}`)
+        : '';
+    const listSas = rawSas
+        ? (rawSas.startsWith('?') ? `&${rawSas.slice(1)}` : `&${rawSas.replace(/^&/, '')}`)
+        : '';
     
     // List blobs in documents container
-    const listUrl = `https://${storageAccount}.blob.core.windows.net/documents?restype=container&comp=list${sasToken}`;
+    const listUrl = `https://${storageAccount}.blob.core.windows.net/documents?restype=container&comp=list${listSas}`;
     
     console.log('📦 Fetching bookings from Azure Storage...');
     
@@ -215,7 +226,7 @@ async function fetchBookingsFromStorage(userId, userEmail) {
             const name = blob.querySelector('Name')?.textContent;
             if (name && name.includes('-confirmation.json')) {
                 // Fetch the booking document
-                const blobUrl = `https://${storageAccount}.blob.core.windows.net/documents/${name}${sasToken}`;
+                const blobUrl = `https://${storageAccount}.blob.core.windows.net/documents/${name}${blobSas}`;
                 try {
                     const docResponse = await fetch(blobUrl);
                     if (docResponse.ok) {
