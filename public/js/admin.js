@@ -4,6 +4,13 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🔐 Admin Panel Loaded');
+
+    // Avoid showing the admin UI before access checks complete.
+    try {
+        document.body.style.visibility = 'hidden';
+    } catch (_) {
+        // ignore
+    }
     
     // Check authentication
     const currentUser = getCurrentUser();
@@ -13,12 +20,25 @@ document.addEventListener('DOMContentLoaded', function() {
         alert('Please log in to access the admin panel.');
         window.location.href = 'login.html';
         return;
-    } else if (currentUser.membershipTier !== 'Admin') {
+    }
+
+    // Support both demo users (membershipTier) and DB users (MembershipTier)
+    const tier = (currentUser.membershipTier || currentUser.MembershipTier || '').toString();
+    const isAdmin = tier.toLowerCase() === 'admin' || tier.toLowerCase() === 'administrator';
+
+    if (!isAdmin) {
         console.warn('Non-admin user attempting to access admin panel');
-        console.log('Current user tier:', currentUser.membershipTier);
+        console.log('Current user tier:', tier || '(none)');
         alert('Access denied. Admin privileges required.');
         window.location.href = 'index.html';
         return;
+    }
+
+    // Access granted
+    try {
+        document.body.style.visibility = 'visible';
+    } catch (_) {
+        // ignore
     }
     
     // Log all admin credentials on page load
