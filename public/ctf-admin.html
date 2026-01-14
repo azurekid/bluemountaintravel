@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blue Mountain Travel - CTF Admin Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .admin-header {
+            background: linear-gradient(135deg, #1a365d, #2d3748);
+            color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #1a365d;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .challenge-management {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .challenge-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .challenge-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1rem;
+            background: #f8f9fa;
+        }
+
+        .challenge-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .challenge-title {
+            font-weight: 600;
+            color: #1a365d;
+        }
+
+        .challenge-status {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .status-disabled {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+
+        .leaderboard {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .leaderboard-table th,
+        .leaderboard-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .leaderboard-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #1a365d;
+        }
+
+        .rank {
+            font-weight: bold;
+            color: #1a365d;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-admin {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #1a365d;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2d3748;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1>🚩 Blue Mountain Travel - CTF Admin Dashboard</h1>
+            <p>Manage CTF challenges, monitor participants, and oversee the competition</p>
+        </div>
+
+        <div class="controls">
+            <button class="btn-admin btn-primary" onclick="refreshStats()">Refresh Stats</button>
+            <button class="btn-admin btn-success" onclick="startCTF()">Start CTF</button>
+            <button class="btn-admin btn-danger" onclick="stopCTF()">Stop CTF</button>
+            <button class="btn-admin btn-primary" onclick="exportResults()">Export Results</button>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="total-participants">0</div>
+                <div class="stat-label">Total Participants</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="active-challenges">0</div>
+                <div class="stat-label">Active Challenges</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="flags-captured">0</div>
+                <div class="stat-label">Flags Captured</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="uptime">99.9%</div>
+                <div class="stat-label">Platform Uptime</div>
+            </div>
+        </div>
+
+        <div class="challenge-management">
+            <h2>🎯 Challenge Management</h2>
+            <div class="challenge-grid" id="challenges-grid">
+                <!-- Challenges will be loaded here -->
+            </div>
+        </div>
+
+        <div class="leaderboard">
+            <h2>🏆 Leaderboard</h2>
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Team/Player</th>
+                        <th>Score</th>
+                        <th>Challenges Solved</th>
+                        <th>Last Activity</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboard-body">
+                    <!-- Leaderboard will be loaded here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // CTF Admin Dashboard JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboard();
+            setInterval(refreshStats, 30000); // Refresh every 30 seconds
+        });
+
+        async function loadDashboard() {
+            try {
+                await Promise.all([
+                    loadStats(),
+                    loadChallenges(),
+                    loadLeaderboard()
+                ]);
+            } catch (error) {
+                console.error('Failed to load dashboard:', error);
+                showError('Failed to load dashboard data');
+            }
+        }
+
+        async function loadStats() {
+            try {
+                const response = await fetch('/api/admin/stats');
+                const stats = await response.json();
+
+                document.getElementById('total-participants').textContent = stats.totalParticipants || 0;
+                document.getElementById('active-challenges').textContent = stats.activeChallenges || 0;
+                document.getElementById('flags-captured').textContent = stats.flagsCaptured || 0;
+                document.getElementById('uptime').textContent = stats.uptime || '99.9%';
+            } catch (error) {
+                console.error('Failed to load stats:', error);
+            }
+        }
+
+        async function loadChallenges() {
+            try {
+                const response = await fetch('/api/admin/challenges');
+                const challenges = await response.json();
+
+                const grid = document.getElementById('challenges-grid');
+                grid.innerHTML = challenges.map(challenge => `
+                    <div class="challenge-card">
+                        <div class="challenge-header">
+                            <span class="challenge-title">${challenge.title}</span>
+                            <span class="challenge-status status-${challenge.active ? 'active' : 'disabled'}">
+                                ${challenge.active ? 'Active' : 'Disabled'}
+                            </span>
+                        </div>
+                        <p>${challenge.description}</p>
+                        <div style="margin-top: 0.5rem;">
+                            <strong>Points:</strong> ${challenge.points} |
+                            <strong>Solved:</strong> ${challenge.solvedCount || 0}
+                        </div>
+                        <div style="margin-top: 0.5rem;">
+                            <button class="btn-admin btn-primary" onclick="toggleChallenge('${challenge.id}')">
+                                ${challenge.active ? 'Disable' : 'Enable'}
+                            </button>
+                            <button class="btn-admin btn-danger" onclick="resetChallenge('${challenge.id}')">
+                                Reset
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Failed to load challenges:', error);
+            }
+        }
+
+        async function loadLeaderboard() {
+            try {
+                const response = await fetch('/api/admin/leaderboard');
+                const leaderboard = await response.json();
+
+                const tbody = document.getElementById('leaderboard-body');
+                tbody.innerHTML = leaderboard.map((entry, index) => `
+                    <tr>
+                        <td class="rank">#${index + 1}</td>
+                        <td>${entry.team || entry.player}</td>
+                        <td>${entry.score}</td>
+                        <td>${entry.challengesSolved}</td>
+                        <td>${new Date(entry.lastActivity).toLocaleString()}</td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Failed to load leaderboard:', error);
+            }
+        }
+
+        async function refreshStats() {
+            await loadStats();
+        }
+
+        async function startCTF() {
+            if (confirm('Are you sure you want to start the CTF? This will enable all challenges.')) {
+                try {
+                    const response = await fetch('/api/admin/ctf/start', { method: 'POST' });
+                    if (response.ok) {
+                        alert('CTF started successfully!');
+                        loadDashboard();
+                    } else {
+                        alert('Failed to start CTF');
+                    }
+                } catch (error) {
+                    alert('Error starting CTF: ' + error.message);
+                }
+            }
+        }
+
+        async function stopCTF() {
+            if (confirm('Are you sure you want to stop the CTF? This will disable all challenges.')) {
+                try {
+                    const response = await fetch('/api/admin/ctf/stop', { method: 'POST' });
+                    if (response.ok) {
+                        alert('CTF stopped successfully!');
+                        loadDashboard();
+                    } else {
+                        alert('Failed to stop CTF');
+                    }
+                } catch (error) {
+                    alert('Error stopping CTF: ' + error.message);
+                }
+            }
+        }
+
+        async function toggleChallenge(challengeId) {
+            try {
+                const response = await fetch(`/api/admin/challenges/${challengeId}/toggle`, { method: 'POST' });
+                if (response.ok) {
+                    loadChallenges();
+                } else {
+                    alert('Failed to toggle challenge');
+                }
+            } catch (error) {
+                alert('Error toggling challenge: ' + error.message);
+            }
+        }
+
+        async function resetChallenge(challengeId) {
+            if (confirm('Are you sure you want to reset this challenge? This will clear all solves.')) {
+                try {
+                    const response = await fetch(`/api/admin/challenges/${challengeId}/reset`, { method: 'POST' });
+                    if (response.ok) {
+                        loadChallenges();
+                        loadLeaderboard();
+                    } else {
+                        alert('Failed to reset challenge');
+                    }
+                } catch (error) {
+                    alert('Error resetting challenge: ' + error.message);
+                }
+            }
+        }
+
+        async function exportResults() {
+            try {
+                const response = await fetch('/api/admin/export');
+                const data = await response.json();
+
+                // Create and download JSON file
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `ctf-results-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            } catch (error) {
+                alert('Error exporting results: ' + error.message);
+            }
+        }
+
+        function showError(message) {
+            // Simple error display - could be enhanced with a proper notification system
+            alert('Error: ' + message);
+        }
+    </script>
+</body>
+</html>

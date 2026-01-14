@@ -43,21 +43,120 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Log all admin credentials on page load
     logAdminCredentials();
+
+    // Initialize dynamic values
+    initializeDynamicAdminValues();
     
     // Update user count
     updateUserCount();
 });
 
+function getApiBaseUrl() {
+    if (typeof window !== 'undefined' && window.BMT_API_BASE_URL) {
+        return window.BMT_API_BASE_URL;
+    }
+    if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
+        // Local Azure Functions
+        return 'http://localhost:7071/api';
+    }
+    return 'https://bluemountaintravel-func.azurewebsites.net/api';
+}
+
+function getFunctionsKey() {
+    return (
+        window.BMT_FUNCTION_KEY ||
+        window.AzureConfig?.apiConfig?.functionKey ||
+        window.AzureConfig?.apiConfig?.primaryKey ||
+        null
+    );
+}
+
+function generateGuid() {
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+        return crypto.randomUUID();
+    }
+
+    // Fallback UUIDv4 generator
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0;
+        const v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
+function base64EncodeAscii(value) {
+    // Value is ASCII by design for CTF flags/IDs.
+    try {
+        return btoa(value);
+    } catch (e) {
+        console.warn('btoa failed, returning raw value', e);
+        return value;
+    }
+}
+
+function getOrCreateAdminKeyBase64() {
+    const storageKey = 'bmt_admin_key_b64';
+    const existing = localStorage.getItem(storageKey);
+    if (existing) return existing;
+
+    // Embed a flag inside the base64 payload (CTF-style).
+    const hiddenFlag = 'FLAG{admin_key_exposed_in_panel}';
+    const payload = `BMT|ADMIN|${hiddenFlag}|${generateGuid()}|${Date.now()}`;
+    const encoded = base64EncodeAscii(payload);
+    localStorage.setItem(storageKey, encoded);
+    return encoded;
+}
+
+function getOrCreateApiKeys() {
+    const storageKey = 'bmt_api_keys';
+    const existing = localStorage.getItem(storageKey);
+    if (existing) {
+        try {
+            const parsed = JSON.parse(existing);
+            if (parsed?.primary && parsed?.secondary) return parsed;
+        } catch (_) {
+            // ignore
+        }
+    }
+
+    const created = {
+        primary: generateGuid(),
+        secondary: generateGuid(),
+        updatedAt: new Date().toISOString()
+    };
+    localStorage.setItem(storageKey, JSON.stringify(created));
+    return created;
+}
+
+function initializeDynamicAdminValues() {
+    // Admin Key
+    const adminKeyEl = document.getElementById('admin-key');
+    if (adminKeyEl) {
+        adminKeyEl.textContent = getOrCreateAdminKeyBase64();
+    }
+
+    // API keys
+    const keys = getOrCreateApiKeys();
+    const primaryEl = document.getElementById('api-primary-key');
+    const secondaryEl = document.getElementById('api-secondary-key');
+    if (primaryEl) primaryEl.textContent = keys.primary;
+    if (secondaryEl) secondaryEl.textContent = keys.secondary;
+}
+
 // ⚠️ VULNERABILITY: Logging all sensitive admin credentials
 function logAdminCredentials() {
+    const adminKey = getOrCreateAdminKeyBase64();
+    const keys = getOrCreateApiKeys();
+
     console.log('=== ADMIN CREDENTIALS ===');
-    console.log('Admin Access Key:', 'BMT-ADMIN-KEY-2026-PROD-abc123xyz789');
+    console.log('Admin Access Key (base64):', adminKey);
     console.log('Azure Subscription ID:', '12345678-1234-1234-1234-123456789012');
     console.log('Azure Tenant ID:', '87654321-4321-4321-4321-210987654321');
     console.log('Database Server:', 'bluemountaintravel.database.windows.net');
     console.log('Database Username:', 'admin');
     console.log('Database Password:', 'P@ssw0rd123!');
-    console.log('API Primary Key:', 'fake-api-key-12345');
+    console.log('API Primary Key:', keys.primary);
+    console.log('API Secondary Key:', keys.secondary);
     console.log('Entra Admin:', 'admin@bluemountain.onmicrosoft.com');
     console.log('Entra Password:', 'AzureAdmin2026!@#');
     console.log('Service Principal App ID:', 'a1b2c3d4-e5f6-7890-abcd-ef1234567890');
@@ -66,12 +165,40 @@ function logAdminCredentials() {
     // ctf_b64: RkxBR3thbGxfYWRtaW5fY3JlZGVudGlhbHNfbG9nZ2VkX3RvX2NvbnNvbGV9
 }
 
-function updateUserCount() {
-    const users = window.sampleUsers || [];
-    const registeredUsers = localStorage.getItem('registeredUsers');
-    const totalUsers = users.length + (registeredUsers ? JSON.parse(registeredUsers).length : 0);
-    
-    document.getElementById('user-count').textContent = `Total Users: ${totalUsers} (${users.length} system + ${registeredUsers ? JSON.parse(registeredUsers).length : 0} registered)`;
+async function updateUserCount() {
+    const el = document.getElementById('user-count');
+    if (!el) return;
+
+    const systemUsers = window.sampleUsers || [];
+    const registeredUsersRaw = localStorage.getItem('registeredUsers');
+    const registeredUsers = registeredUsersRaw ? JSON.parse(registeredUsersRaw) : [];
+    const localTotal = systemUsers.length + registeredUsers.length;
+
+    el.textContent = `Total Users: ${localTotal} (local: ${systemUsers.length} system + ${registeredUsers.length} registered, db: loading...)`;
+
+    try {
+        const base = getApiBaseUrl();
+        const functionsKey = getFunctionsKey();
+
+        const res = await fetch(`${base}/users?action=count`, {
+            headers: {
+                ...(functionsKey ? { 'x-functions-key': functionsKey } : {})
+            }
+        });
+
+        if (!res.ok) {
+            throw new Error(`Users count API returned ${res.status}`);
+        }
+
+        const data = await res.json();
+        const dbTotal = Number(data.total || 0);
+        const dbActive = Number(data.active || 0);
+
+        el.textContent = `Total Users: ${dbTotal + localTotal} (db: ${dbTotal} total / ${dbActive} active, local: ${localTotal})`;
+    } catch (error) {
+        console.warn('Could not fetch DB user count:', error);
+        el.textContent = `Total Users: ${localTotal} (local only; db count unavailable)`;
+    }
 }
 
 function showAzureCredentials() {
@@ -117,47 +244,72 @@ function showConnectionString() {
 }
 
 function viewAllUsers() {
+    viewAllUsersAsync();
+}
+
+async function viewAllUsersAsync() {
     const systemUsers = window.sampleUsers || [];
-    const registeredUsers = localStorage.getItem('registeredUsers');
-    const allUsers = [...systemUsers];
-    
-    if (registeredUsers) {
-        allUsers.push(...JSON.parse(registeredUsers));
+    const registeredUsersRaw = localStorage.getItem('registeredUsers');
+    const registeredUsers = registeredUsersRaw ? JSON.parse(registeredUsersRaw) : [];
+    const localUsers = [...systemUsers, ...registeredUsers];
+
+    let dbUsers = [];
+    try {
+        const base = getApiBaseUrl();
+        const functionsKey = getFunctionsKey();
+        const res = await fetch(`${base}/users?action=list`, {
+            headers: {
+                ...(functionsKey ? { 'x-functions-key': functionsKey } : {})
+            }
+        });
+        if (res.ok) {
+            dbUsers = await res.json();
+        }
+    } catch (e) {
+        console.warn('Could not fetch DB users:', e);
     }
-    
-    console.log('=== ALL USERS WITH FULL PII DATA ===');
+
+    const allUsers = [...dbUsers, ...localUsers];
+
+    console.log('=== ALL USERS (DB + LOCAL) ===');
     console.table(allUsers);
-    console.log('Total users:', allUsers.length);
-    
-    // ⚠️ VULNERABILITY: Log sensitive data
-    allUsers.forEach(user => {
-        console.log(`\nUser: ${user.email}`);
-        console.log('Password:', user.password);
-        console.log('SSN:', user.ssn);
-        console.log('Credit Card:', user.creditCard);
-        console.log('CVV:', user.cvv);
-        console.log('Azure Username:', user.azureUsername);
-        console.log('Azure Password:', user.azurePassword);
-        console.log('Entra ID:', user.entraId);
-    });
+    console.log('Total users:', allUsers.length, { db: dbUsers.length, local: localUsers.length });
     // ctf_b64: RkxBR3thbGxfdXNlcl9waWlfZHVtcGVkX2luY2x1ZGluZ19wYXNzd29yZHN9
-    
-    alert(`Found ${allUsers.length} users. Check console for full details including passwords, SSNs, and credit cards.`);
+
+    alert(`Found ${allUsers.length} users (db: ${dbUsers.length}, local: ${localUsers.length}). Check console for details.`);
 }
 
 function exportUserData() {
+    exportUserDataAsync();
+}
+
+async function exportUserDataAsync() {
     const systemUsers = window.sampleUsers || [];
-    const registeredUsers = localStorage.getItem('registeredUsers');
-    const allUsers = [...systemUsers];
-    
-    if (registeredUsers) {
-        allUsers.push(...JSON.parse(registeredUsers));
+    const registeredUsersRaw = localStorage.getItem('registeredUsers');
+    const registeredUsers = registeredUsersRaw ? JSON.parse(registeredUsersRaw) : [];
+    const localUsers = [...systemUsers, ...registeredUsers];
+
+    let dbUsers = [];
+    try {
+        const base = getApiBaseUrl();
+        const functionsKey = getFunctionsKey();
+        const res = await fetch(`${base}/users?action=list`, {
+            headers: {
+                ...(functionsKey ? { 'x-functions-key': functionsKey } : {})
+            }
+        });
+        if (res.ok) {
+            dbUsers = await res.json();
+        }
+    } catch (e) {
+        console.warn('Could not fetch DB users for export:', e);
     }
-    
-    // ⚠️ VULNERABILITY: Export all sensitive data as JSON
+
+    const allUsers = [...dbUsers, ...localUsers];
+
+    // ⚠️ VULNERABILITY: Export as JSON
     const userData = JSON.stringify(allUsers, null, 2);
-    
-    // Create download
+
     const blob = new Blob([userData], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -167,11 +319,11 @@ function exportUserData() {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    
-    console.log('User data exported with all PII, passwords, and Azure credentials');
+
+    console.log('User data exported (db + local)');
     // ctf_b64: RkxBR3t1c2VyX2RhdGFfZXhwb3J0X2NvbnRhaW5zX2V2ZXJ5dGhpbmd9
-    
-    alert('User data exported successfully!\n\nFile contains all passwords, SSNs, credit cards, and Azure credentials in plain text.');
+
+    alert(`User data exported successfully!\n\nUsers exported: ${allUsers.length} (db: ${dbUsers.length}, local: ${localUsers.length}).`);
 }
 
 function showSASToken() {
@@ -203,14 +355,26 @@ BlobEndpoint=https://${storageAccount}.blob.core.windows.net/;SharedAccessSignat
 
 function regenerateKeys() {
     console.warn('Regenerating API keys...');
-    
-    // ⚠️ VULNERABILITY: "Regenerated" keys are still predictable
-    const newPrimary = 'fake-api-key-' + Math.random().toString(36).substr(2, 9);
-    const newSecondary = 'fake-api-key-' + Math.random().toString(36).substr(2, 9);
-    
+
+    // Generate real GUID-style values
+    const newPrimary = generateGuid();
+    const newSecondary = generateGuid();
+
+    const stored = {
+        primary: newPrimary,
+        secondary: newSecondary,
+        updatedAt: new Date().toISOString()
+    };
+    localStorage.setItem('bmt_api_keys', JSON.stringify(stored));
+
+    const primaryEl = document.getElementById('api-primary-key');
+    const secondaryEl = document.getElementById('api-secondary-key');
+    if (primaryEl) primaryEl.textContent = newPrimary;
+    if (secondaryEl) secondaryEl.textContent = newSecondary;
+
     console.log('New Primary Key:', newPrimary);
     console.log('New Secondary Key:', newSecondary);
-    
+
     alert('API Keys Regenerated:\n\nPrimary: ' + newPrimary + '\nSecondary: ' + newSecondary + '\n\nOld keys will be invalidated in 24 hours.');
     // ctf_b64: RkxBR3thcGlfa2V5X3JlZ2VuZXJhdGlvbl9wcmVkaWN0YWJsZX0=
 }

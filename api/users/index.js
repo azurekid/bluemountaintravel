@@ -31,26 +31,34 @@ function buildConfig() {
 }
 
 module.exports = async function (context, req) {
+  // Add CORS headers (intentionally permissive for training)
+  const headers = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, x-functions-key, X-API-Key'
+  };
+
+  // Handle preflight
+  if (req.method === 'OPTIONS') {
+    context.res = { status: 204, headers };
+    return;
+  }
+
   try {
     if (sqlLoadError) {
       context.res = {
         status: 500,
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: { error: 'mssql module not loaded', details: sqlLoadError.message }
       };
       return;
     }
 
+    const action = (req.query && (req.query.action || req.query.mode)) || null;
+
     const email = (req.query && req.query.email) || (req.body && req.body.email);
     const password = (req.query && req.query.password) || (req.body && req.body.password);
-
-    if (!email || !password) {
-      context.res = {
-        status: 400,
-        body: { error: 'Email and password are required' }
-      };
-      return;
-    }
 
     // Basic diagnostics (logs only)
     const cfg = buildConfig();
@@ -69,6 +77,48 @@ module.exports = async function (context, req) {
 
     const pool = await new sql.ConnectionPool(cfg).connect();
     try {
+      // Admin-style operations (intentionally unauthenticated for training)
+      if (action === 'count') {
+        const result = await pool.request().query(`
+          SELECT
+            COUNT(1) AS total,
+            SUM(CASE WHEN IsActive = 1 THEN 1 ELSE 0 END) AS active
+          FROM Users
+        `);
+
+        context.res = {
+          status: 200,
+          headers,
+          body: result.recordset?.[0] || { total: 0, active: 0 }
+        };
+        return;
+      }
+
+      if (action === 'list') {
+        const result = await pool.request().query(`
+          SELECT UserID, Email, FirstName, LastName, MembershipTier, CreatedDate, LastLoginDate, IsActive
+          FROM Users
+          ORDER BY CreatedDate DESC
+        `);
+
+        context.res = {
+          status: 200,
+          headers,
+          body: result.recordset || []
+        };
+        return;
+      }
+
+      // Default behavior: login requires email/password
+      if (!email || !password) {
+        context.res = {
+          status: 400,
+          headers,
+          body: { error: 'Email and password are required' }
+        };
+        return;
+      }
+
       const request = pool.request();
       request.input('email', sql.VarChar, email);
       request.input('password', sql.VarChar, password);
@@ -86,7 +136,7 @@ module.exports = async function (context, req) {
 
       context.res = {
         status: 200,
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: result.recordset || []
       };
     } finally {
@@ -100,7 +150,7 @@ module.exports = async function (context, req) {
     context.log('Login function error', err);
     context.res = {
       status: 500,
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       body: { error: err.message, code: err.code || null }
     };
   }
