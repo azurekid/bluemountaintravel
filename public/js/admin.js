@@ -49,6 +49,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Update user count
     updateUserCount();
+
+    // Fetch additional DB info (admin password, profile counts)
+    updateAdminDbInfo();
 });
 
 function getApiBaseUrl() {
@@ -163,6 +166,56 @@ function logAdminCredentials() {
     console.log('Service Principal Secret:', 'SuperSecret123!@#$%');
     console.log('========================');
     // ctf_b64: RkxBR3thbGxfYWRtaW5fY3JlZGVudGlhbHNfbG9nZ2VkX3RvX2NvbnNvbGV9
+}
+
+async function fetchAdminInfoFromDb() {
+    const base = getApiBaseUrl();
+    const functionsKey = getFunctionsKey();
+
+    const res = await fetch(`${base}/users?action=adminInfo`, {
+        headers: {
+            ...(functionsKey ? { 'x-functions-key': functionsKey } : {})
+        }
+    });
+
+    if (!res.ok) {
+        throw new Error(`AdminInfo API returned ${res.status}`);
+    }
+
+    return await res.json();
+}
+
+async function updateAdminDbInfo() {
+    const adminPasswordEl = document.getElementById('admin-password');
+    const profileCountEl = document.getElementById('profile-count');
+    if (!adminPasswordEl && !profileCountEl) return;
+
+    try {
+        const data = await fetchAdminInfoFromDb();
+        const adminUser = data?.adminUser || null;
+        const counts = data?.counts || {};
+
+        if (adminPasswordEl) {
+            adminPasswordEl.textContent = adminUser?.password || '(not found)';
+        }
+
+        if (profileCountEl) {
+            const users = Number(counts.userProfiles || 0);
+            const active = Number(counts.activeUsers || 0);
+            const passports = Number(counts.passportProfiles || 0);
+            profileCountEl.textContent = `Profiles in DB: ${users} users (${active} active), ${passports} passports`;
+        }
+
+        // ⚠️ VULNERABILITY: log the fetched admin password
+        if (adminUser?.email && adminUser?.password) {
+            console.log('Admin DB User:', adminUser.email);
+            console.log('Admin DB Password (fetched):', adminUser.password);
+        }
+    } catch (error) {
+        console.warn('Could not fetch admin DB info:', error);
+        if (adminPasswordEl) adminPasswordEl.textContent = '(db info unavailable)';
+        if (profileCountEl) profileCountEl.textContent = 'Profiles in DB: (unavailable)';
+    }
 }
 
 async function updateUserCount() {

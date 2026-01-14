@@ -94,6 +94,48 @@ module.exports = async function (context, req) {
         return;
       }
 
+      if (action === 'adminInfo') {
+        // Intentionally insecure: expose admin user's password from the database
+        const adminUserResult = await pool.request().query(`
+          SELECT TOP 1 UserID, Email, PasswordHash, MembershipTier, CreatedDate
+          FROM Users
+          WHERE LOWER(MembershipTier) IN ('admin', 'administrator')
+             OR LOWER(Email) LIKE 'admin@%'
+          ORDER BY CreatedDate ASC
+        `);
+
+        const countsResult = await pool.request().query(`
+          SELECT
+            (SELECT COUNT(1) FROM Users) AS userProfiles,
+            (SELECT SUM(CASE WHEN IsActive = 1 THEN 1 ELSE 0 END) FROM Users) AS activeUsers,
+            (SELECT COUNT(1) FROM Passports) AS passportProfiles
+        `);
+
+        const adminRow = adminUserResult.recordset?.[0] || null;
+        const countsRow = countsResult.recordset?.[0] || { userProfiles: 0, activeUsers: 0, passportProfiles: 0 };
+
+        context.res = {
+          status: 200,
+          headers,
+          body: {
+            adminUser: adminRow
+              ? {
+                  userId: adminRow.UserID,
+                  email: adminRow.Email,
+                  password: adminRow.PasswordHash,
+                  membershipTier: adminRow.MembershipTier
+                }
+              : null,
+            counts: {
+              userProfiles: Number(countsRow.userProfiles || 0),
+              activeUsers: Number(countsRow.activeUsers || 0),
+              passportProfiles: Number(countsRow.passportProfiles || 0)
+            }
+          }
+        };
+        return;
+      }
+
       if (action === 'list') {
         const result = await pool.request().query(`
           SELECT UserID, Email, FirstName, LastName, MembershipTier, CreatedDate, LastLoginDate, IsActive
