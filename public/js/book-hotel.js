@@ -305,7 +305,9 @@ async function processHotelBooking() {
         specialRequests: document.getElementById('specialRequests').value
     };
     
-    const user = window.getCurrentUser ? getCurrentUser() : null;
+    const user = window.getCurrentUser ? getCurrentUser() : JSON.parse(localStorage.getItem('currentUser') || 'null');
+    const currentUserId = user?.UserID || user?.userId || user?.id || null;
+    const currentUserEmail = user?.Email || user?.email || guestData.email;
     const totalPrice = hotel.price * nights * numRooms;
     
     // Create booking data
@@ -314,9 +316,10 @@ async function processHotelBooking() {
         hotelId: hotel.id,
         hotel: hotel,
         guest: guestData,
+        guestDetails: guestData,  // For storage document matching
         user: user,
-        userId: user?.UserID || user?.userId || user?.id || null,
-        userEmail: user?.Email || user?.email || guestData.email,
+        userId: currentUserId,
+        userEmail: currentUserEmail,
         bookingDate: new Date().toISOString(),
         checkIn: checkInDate.toISOString(),
         checkOut: checkOutDate.toISOString(),
@@ -368,7 +371,16 @@ async function processHotelBooking() {
     
     // Save booking to SQL database via API
     const functionsKey = window.BMT_FUNCTION_KEY || window.AzureConfig?.apiConfig?.functionKey || window.AzureConfig?.apiConfig?.primaryKey;
-    const userId = user?.UserID || user?.id || 'guest';
+    
+    // Ensure we get the correct userId from the stored user session
+    const storedUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+    const userId = storedUser?.UserID || storedUser?.userId || user?.UserID || user?.userId || user?.id;
+    
+    if (!userId) {
+        console.warn('No valid user ID found - booking may not be retrievable later');
+        alert('Warning: You are not logged in. Your booking may not be saved to your account. Please log in first.');
+        return;
+    }
     
     try {
         const dbBookingData = {

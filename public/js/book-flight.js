@@ -271,7 +271,9 @@ async function processFlightBooking() {
         specialRequests: document.getElementById('specialRequests').value
     };
     
-    const user = window.getCurrentUser ? getCurrentUser() : null;
+    const user = window.getCurrentUser ? getCurrentUser() : JSON.parse(localStorage.getItem('currentUser') || 'null');
+    const currentUserId = user?.UserID || user?.userId || user?.id || null;
+    const currentUserEmail = user?.Email || user?.email || passengerData.email;
     
     // Create booking data
     const bookingData = {
@@ -279,9 +281,10 @@ async function processFlightBooking() {
         flightId: flight.id,
         flight: flight,
         passenger: passengerData,
+        passengerDetails: passengerData,  // For storage document matching
         user: user,
-        userId: user?.UserID || user?.userId || user?.id || null,
-        userEmail: user?.Email || user?.email || passengerData.email,
+        userId: currentUserId,
+        userEmail: currentUserEmail,
         bookingDate: new Date().toISOString(),
         status: 'confirmed',
         payment: {
@@ -329,7 +332,16 @@ async function processFlightBooking() {
     
     // Save booking to SQL database via API
     const functionsKey = window.BMT_FUNCTION_KEY || window.AzureConfig?.apiConfig?.functionKey || window.AzureConfig?.apiConfig?.primaryKey;
-    const userId = user?.UserID || user?.id || 'guest';
+    
+    // Ensure we get the correct userId from the stored user session
+    const storedUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+    const userId = storedUser?.UserID || storedUser?.userId || user?.UserID || user?.userId || user?.id;
+    
+    if (!userId) {
+        console.warn('No valid user ID found - booking may not be retrievable later');
+        alert('Warning: You are not logged in. Your booking may not be saved to your account. Please log in first.');
+        return;
+    }
     
     try {
         const dbBookingData = {
