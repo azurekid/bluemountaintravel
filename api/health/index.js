@@ -6,26 +6,10 @@ try {
   sqlLoadError = err;
 }
 
-function buildConfig() {
-  const connectionString = process.env.SQL_CONNECTION_STRING;
-  if (connectionString) {
-    return connectionString;
-  }
-  const server = process.env.SQL_SERVER || 'bluemountaintravel-sql.database.windows.net';
-  const database = process.env.SQL_DB || 'TravelDB';
-  const user = process.env.SQL_USER || 'dbadmin';
-  const password = process.env.SQL_PASSWORD || 'P@ssw0rd123!';
+const { buildSqlConfig } = require('../shared/sql-config');
 
-  return {
-    server,
-    database,
-    user,
-    password,
-    options: {
-      encrypt: true,
-      trustServerCertificate: false
-    }
-  };
+function buildConfig() {
+  return buildSqlConfig('read');
 }
 
 module.exports = async function (context, req) {

@@ -6,28 +6,11 @@ try {
   sqlLoadError = err;
 }
 
-function buildConfig() {
-  const connectionString = process.env.SQL_CONNECTION_STRING;
-  if (connectionString) {
-    return connectionString;
-  }
+const { buildSqlConfig } = require('../shared/sql-config');
 
-  const server = process.env.SQL_SERVER || 'bluemountaintravel-sql.database.windows.net';
-  const database = process.env.SQL_DB || 'TravelDB';
-  const user = process.env.SQL_USER || 'dbadmin';
-  const password = process.env.SQL_PASSWORD || 'P@ssw0rd123!';
-
-  return {
-    server,
-    database,
-    user,
-    password,
-    port: 1433,
-    options: {
-      encrypt: true,
-      trustServerCertificate: false
-    }
-  };
+function buildConfig(req) {
+  const access = req?.method === 'POST' ? 'write' : 'read';
+  return buildSqlConfig(access);
 }
 
 module.exports = async function (context, req) {
@@ -55,7 +38,7 @@ module.exports = async function (context, req) {
       return;
     }
 
-    const cfg = buildConfig();
+    const cfg = buildConfig(req);
     const pool = await new sql.ConnectionPool(cfg).connect();
 
     try {

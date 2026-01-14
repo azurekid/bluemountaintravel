@@ -6,6 +6,10 @@
     "SQL_SERVER": "bluemountaintravel-sql.database.windows.net",
     "SQL_DB": "TravelDB",
     "SQL_USER": "dbadmin",
-    "SQL_PASSWORD": "P@ssw0rd123!"
+    "SQL_PASSWORD": "P@ssw0rd123!",
+    "SQL_USER_READ": "bmt_reader",
+    "SQL_PASSWORD_READ": "REPLACE_ME",
+    "SQL_USER_WRITE": "bmt_writer",
+    "SQL_PASSWORD_WRITE": "REPLACE_ME"
   }
 }
