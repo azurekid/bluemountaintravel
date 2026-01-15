@@ -272,14 +272,14 @@ Portal URL: https://portal.azure.com/#@bluemountain.onmicrosoft.com
 }
 
 function showConnectionString() {
-    const connectionString = 'Server=tcp:bluemountaintravel.database.windows.net,1433;Initial Catalog=TravelDB;Persist Security Info=False;User ID=admin;Password=P@ssw0rd123!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;';
+    const connectionString = 'Server=tcp:bluemountaintravel.database.windows.net,1433;Initial Catalog=TravelDB;Persist Security Info=False;User ID=bmt_reader;Password=R3ad0nly2024!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;';
     
     alert('Database Connection String:\n\n' + connectionString);
     console.log('Full Connection String:', connectionString);
     
     // ⚠️ VULNERABILITY: Also show connection via different methods
     console.log('Connect via Azure CLI:');
-    console.log('az sql db show-connection-string --client ado.net --name TravelDB --server bluemountaintravel');
+    console.log('az sql db show-connection-string --client ado.net --name TravelDB --server bluemountaintravel-sql');
     console.log('\nDirect SQL Connection:');
     console.log('sqlcmd -S bluemountaintravel.database.windows.net -d TravelDB -U admin -P P@ssw0rd123!');
     // ctf_b64: RkxBR3tzcWxfY29ubmVjdGlvbl9zdHJpbmdfZnVsbHlfZXhwb3NlZH0=
@@ -398,9 +398,12 @@ BlobEndpoint=https://${storageAccount}.blob.core.windows.net/;SharedAccessSignat
 function regenerateKeys() {
     console.warn('Regenerating API keys...');
 
-    // Generate real GUID-style values
-    const newPrimary = generateGuid();
-    const newSecondary = generateGuid();
+    // Primary key: Use the real Azure Functions key from config
+    const realFunctionKey = getFunctionsKey();
+    const newPrimary = realFunctionKey || 'bmT_' + generateRandomString(52) + '==';
+    
+    // Secondary key: CTF flag
+    const newSecondary = 'FLAG{api_keys_exposed_in_admin_panel}';
 
     const stored = {
         primary: newPrimary,
@@ -414,11 +417,36 @@ function regenerateKeys() {
     if (primaryEl) primaryEl.textContent = newPrimary;
     if (secondaryEl) secondaryEl.textContent = newSecondary;
 
-    console.log('New Primary Key:', newPrimary);
-    console.log('New Secondary Key:', newSecondary);
+    console.log('New Primary Key (Function Key):', newPrimary);
+    console.log('New Secondary Key (CTF Flag):', newSecondary);
 
-    alert('API Keys Regenerated:\n\nPrimary: ' + newPrimary + '\nSecondary: ' + newSecondary + '\n\nOld keys will be invalidated in 24 hours.');
+    const keySource = realFunctionKey ? '(Real Azure Functions Key)' : '(Generated Key)';
+    
+    alert('API Keys Regenerated:\n\n' +
+          'Primary Key ' + keySource + ':\n' + newPrimary + '\n\n' +
+          'Secondary Key (Backup):\n' + newSecondary + '\n\n' +
+          'Use Primary Key with: curl -H "x-functions-key: ' + newPrimary + '" <endpoint>\n\n' +
+          'Example:\ncurl -H "x-functions-key: ' + newPrimary + '" http://localhost:7071/api/health\n\n' +
+          'Old keys will be invalidated in 24 hours.');
     // ctf_b64: RkxBR3thcGlfa2V5X3JlZ2VuZXJhdGlvbl9wcmVkaWN0YWJsZX0=
+}
+
+function generateRandomString(length) {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+    let result = '';
+    const randomArray = new Uint8Array(length);
+    if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
+        crypto.getRandomValues(randomArray);
+        for (let i = 0; i < length; i++) {
+            result += chars[randomArray[i] % chars.length];
+        }
+    } else {
+        // Fallback for environments without crypto
+        for (let i = 0; i < length; i++) {
+            result += chars[Math.floor(Math.random() * chars.length)];
+        }
+    }
+    return result;
 }
 
 function showServicePrincipalDetails() {
