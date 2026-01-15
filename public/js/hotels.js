@@ -5,99 +5,12 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeHotelSearch();
     displayHotels();
     initializeFilters();
-    initializeGoogleHotelsButton();
 });
 
-// Build Google Hotels search URL
-function buildGoogleHotelsUrl(location, checkIn, checkOut) {
-    // Google Hotels URL format
-    // https://www.google.com/travel/hotels?q=hotels+in+[location]
-    let searchQuery = 'hotels';
-    
-    if (location) {
-        searchQuery += ` in ${location}`;
-    }
-    
-    let url = `https://www.google.com/travel/hotels?q=${encodeURIComponent(searchQuery)}`;
-    
-    // Add dates if provided (Google uses specific date format)
-    if (checkIn) {
-        url += `&dates=${checkIn}`;
-        if (checkOut) {
-            url += `,${checkOut}`;
-        }
-    }
-    
-    return url;
-}
-
-// Initialize Google Hotels search button
-function initializeGoogleHotelsButton() {
-    const searchForm = document.getElementById('hotel-search-form');
-    if (!searchForm) return;
-    
-    // Add Google Hotels button after the form
-    const googleHotelsBtn = document.createElement('button');
-    googleHotelsBtn.type = 'button';
-    googleHotelsBtn.className = 'btn-google-hotels';
-    googleHotelsBtn.innerHTML = '🔍 Search on Google Hotels';
-    googleHotelsBtn.style.cssText = 'width: 100%; padding: 0.75rem; background: #4285f4; color: white; border: none; border-radius: 2px; font-size: 0.95rem; cursor: pointer; margin-top: 1rem;';
-    
-    googleHotelsBtn.addEventListener('click', function() {
-        const location = document.getElementById('search-location')?.value || '';
-        const checkIn = document.getElementById('search-checkin')?.value || '';
-        const checkOut = document.getElementById('search-checkout')?.value || '';
-        
-        // Fetch and display results in page instead of opening new tab
-        fetchGoogleHotelsResults(location, checkIn, checkOut);
-    });
-    
-    // Add hover effect
-    googleHotelsBtn.addEventListener('mouseenter', () => googleHotelsBtn.style.background = '#3367d6');
-    googleHotelsBtn.addEventListener('mouseleave', () => googleHotelsBtn.style.background = '#4285f4');
-    
-    searchForm.parentElement.appendChild(googleHotelsBtn);
-    
-    // Create a results container for Google Hotels results
-    createGoogleResultsContainer();
-}
-
-// Create container for Google Hotels results
-function createGoogleResultsContainer() {
+// Fetch Google Hotels results and display in cards
+async function fetchGoogleHotelsResults(location, checkIn, checkOut, localHotels = null) {
     const hotelResults = document.getElementById('hotel-results');
     if (!hotelResults) return;
-    
-    // Check if container already exists
-    if (document.getElementById('google-hotels-results')) return;
-    
-    const googleContainer = document.createElement('div');
-    googleContainer.id = 'google-hotels-results';
-    googleContainer.style.cssText = 'display: none; margin-bottom: 2rem;';
-    googleContainer.innerHTML = `
-        <div style="background: linear-gradient(135deg, #4285f4 0%, #34a853 100%); padding: 1rem 1.5rem; border-radius: 8px 8px 0 0; display: flex; align-items: center; justify-content: space-between;">
-            <div style="display: flex; align-items: center; gap: 0.75rem;">
-                <span style="font-size: 1.5rem;">🌐</span>
-                <h3 style="color: white; margin: 0; font-size: 1.1rem;">Google Hotels Results</h3>
-            </div>
-            <button id="close-google-results" style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 0.3rem 0.8rem; border-radius: 4px; cursor: pointer; font-size: 0.85rem;">✕ Close</button>
-        </div>
-        <div id="google-hotels-cards" style="background: rgba(66, 133, 244, 0.05); border: 2px solid #4285f4; border-top: none; border-radius: 0 0 8px 8px; padding: 1.5rem;"></div>
-    `;
-    
-    hotelResults.parentElement.insertBefore(googleContainer, hotelResults);
-    
-    // Add close button handler
-    document.getElementById('close-google-results').addEventListener('click', () => {
-        googleContainer.style.display = 'none';
-    });
-}
-
-// Fetch Google Hotels results and display in cards
-async function fetchGoogleHotelsResults(location, checkIn, checkOut) {
-    const googleContainer = document.getElementById('google-hotels-results');
-    const cardsContainer = document.getElementById('google-hotels-cards');
-    
-    if (!googleContainer || !cardsContainer) return;
     
     // Show container with loading state
     googleContainer.style.display = 'block';
@@ -119,9 +32,9 @@ async function fetchGoogleHotelsResults(location, checkIn, checkOut) {
         // In a real implementation, you would call an actual API here
         const results = simulateGoogleHotelsAPI(location, checkIn, checkOut);
         
-        displayGoogleHotelsResults(results, location);
+        displayGoogleHotelsResults(results, location, localHotels);
     } catch (error) {
-        cardsContainer.innerHTML = `
+        hotelResults.innerHTML = `
             <div style="text-align: center; padding: 2rem; color: #dc3545;">
                 <div style="font-size: 2rem; margin-bottom: 1rem;">⚠️</div>
                 <p>Error fetching results. Please try again.</p>
@@ -136,55 +49,62 @@ function simulateGoogleHotelsAPI(location, checkIn, checkOut) {
     // In reality, Google doesn't provide a public API for Hotels
     // You would need to use Amadeus, Booking.com, or similar APIs
     
+    // Random price generator with variation
+    const randomPrice = (basePrice, variance = 0.3) => {
+        const min = Math.floor(basePrice * (1 - variance));
+        const max = Math.floor(basePrice * (1 + variance));
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    };
+    
     const searchLocation = location.toLowerCase() || '';
     
     const allResults = [
         {
-            id: 'google-1',
+            id: 'gh-1',
             name: 'Marriott Marquis',
             location: location || 'New York, USA',
             rating: 4.5,
             reviewCount: 3421,
-            price: 289,
-            originalPrice: 349,
+            price: randomPrice(289),
+            originalPrice: Math.random() > 0.6 ? randomPrice(349) : null,
             imageUrl: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&q=80',
             amenities: ['Free WiFi', 'Pool', 'Spa', 'Restaurant'],
             source: 'Google Hotels',
             dealType: '17% off'
         },
         {
-            id: 'google-2',
+            id: 'gh-2',
             name: 'Hilton Garden Inn',
             location: location || 'New York, USA',
             rating: 4.2,
             reviewCount: 2156,
-            price: 199,
-            originalPrice: 229,
+            price: randomPrice(199),
+            originalPrice: Math.random() > 0.6 ? randomPrice(229) : null,
             imageUrl: 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=400&q=80',
             amenities: ['Free WiFi', 'Breakfast', 'Gym', 'Business Center'],
             source: 'Google Hotels',
             dealType: '13% off'
         },
         {
-            id: 'google-3',
+            id: 'gh-3',
             name: 'The Westin',
             location: location || 'New York, USA',
             rating: 4.6,
             reviewCount: 1876,
-            price: 359,
-            originalPrice: 399,
+            price: randomPrice(359),
+            originalPrice: Math.random() > 0.6 ? randomPrice(399) : null,
             imageUrl: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=400&q=80',
             amenities: ['Free WiFi', 'Spa', 'Pool', 'Fine Dining'],
             source: 'Google Hotels',
             dealType: '10% off'
         },
         {
-            id: 'google-4',
+            id: 'gh-4',
             name: 'Hyatt Place',
             location: location || 'New York, USA',
             rating: 4.3,
             reviewCount: 987,
-            price: 169,
+            price: randomPrice(169),
             originalPrice: null,
             imageUrl: 'https://images.unsplash.com/photo-1455587734955-081b22074882?w=400&q=80',
             amenities: ['Free WiFi', 'Breakfast', 'Parking', 'Pet Friendly'],
@@ -192,12 +112,13 @@ function simulateGoogleHotelsAPI(location, checkIn, checkOut) {
             dealType: null
         },
         {
-            id: 'google-5',
+            id: 'gh-5',
             name: 'Four Seasons',
             location: location || 'New York, USA',
             rating: 4.9,
             reviewCount: 4532,
-            price: 699,
+            price: randomPrice(699),
+            originalPrice: Math.random() > 0.5 ? randomPrice(799) : null,
             originalPrice: 799,
             imageUrl: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&q=80',
             amenities: ['Free WiFi', 'Spa', 'Pool', 'Butler Service', 'Fine Dining'],
@@ -214,50 +135,94 @@ function simulateGoogleHotelsAPI(location, checkIn, checkOut) {
     };
 }
 
-// Display Google Hotels results in cards
-function displayGoogleHotelsResults(response, searchLocation) {
-    const cardsContainer = document.getElementById('google-hotels-cards');
-    if (!cardsContainer) return;
+// Display Google Hotels results merged with local hotels
+function displayGoogleHotelsResults(response, searchLocation, localHotels = null) {
+    const hotelResults = document.getElementById('hotel-results');
+    if (!hotelResults) return;
     
     if (!response.success || response.hotels.length === 0) {
-        cardsContainer.innerHTML = `
-            <div style="text-align: center; padding: 2rem;">
-                <div style="font-size: 2rem; margin-bottom: 1rem;">🔍</div>
-                <p>No results found for "${searchLocation}". Try a different search.</p>
-            </div>
-        `;
+        // Show local hotels only if no Google results
+        const localHotelsToUse = localHotels || window.HotelData || [];
+        if (localHotelsToUse.length > 0) {
+            displayHotels(localHotelsToUse);
+        } else {
+            hotelResults.innerHTML = `
+                <div style="text-align: center; padding: 2rem;">
+                    <div style="font-size: 2rem; margin-bottom: 1rem;">🔍</div>
+                    <p>No hotels found.</p>
+                </div>
+            `;
+        }
         return;
     }
     
+    // Merge Google hotels with local HotelData
+    const googleHotels = response.hotels;
+    const localHotelsToUse = localHotels || window.HotelData || [];
+    
+    // Convert Google hotels to match local format
+    const convertedGoogleHotels = googleHotels.map(gh => ({
+        id: gh.id,
+        name: gh.name,
+        location: gh.location,
+        city: gh.location.split(',')[0].trim(),
+        country: gh.location.split(',')[1]?.trim() || 'USA',
+        rating: Math.floor(gh.rating),
+        roomType: 'Standard Room',
+        amenities: gh.amenities,
+        price: gh.price,
+        originalPrice: gh.originalPrice,
+        available: true,
+        imageUrl: gh.imageUrl,
+        reviewCount: gh.reviewCount,
+        dealType: gh.dealType,
+        source: gh.source
+    }));
+    
+    // Merge and store all hotels
+    const allHotels = [...convertedGoogleHotels, ...localHotelsToUse];
+    sessionStorage.setItem('lastGoogleHotels', JSON.stringify(googleHotels));
+    sessionStorage.setItem('allMergedHotels', JSON.stringify(allHotels));
+    
+    // Display merged results
+    displayMergedHotels(allHotels, `${searchLocation || 'all locations'} (${googleHotels.length} from Google Hotels, ${localHotelsToUse.length} local)`);
+}
+
+// Display merged hotels list
+function displayMergedHotels(hotels, description) {
+    const hotelResults = document.getElementById('hotel-results');
+    if (!hotelResults) return;
+    
     let html = `
-        <div style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
-            <p style="margin: 0; color: #666;">Found <strong>${response.resultCount}</strong> hotels${searchLocation ? ` in "${searchLocation}"` : ''}</p>
-            <a href="${buildGoogleHotelsUrl(searchLocation, '', '')}" target="_blank" style="color: #4285f4; text-decoration: none; font-size: 0.9rem;">View on Google Hotels →</a>
+        <div style="margin-bottom: 1.5rem; background: linear-gradient(135deg, #4285f4 0%, #34a853 100%); padding: 1rem; border-radius: 8px;">
+            <p style="margin: 0; color: white; font-weight: 600;">🏨 ${description}</p>
         </div>
         <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
     `;
     
-    response.hotels.forEach(hotel => {
+    hotels.forEach(hotel => {
+        const isGoogleHotel = hotel.id.startsWith('gh-');
+        const sourceLabel = hotel.source || (isGoogleHotel ? 'Google Hotels' : 'Blue Mountain');
         const starsHtml = '★'.repeat(Math.floor(hotel.rating)) + (hotel.rating % 1 >= 0.5 ? '½' : '');
-        const amenitiesHtml = hotel.amenities.slice(0, 3).map(a => 
+        const amenitiesHtml = (hotel.amenities || []).slice(0, 3).map(a => 
             `<span style="background: #e8f0fe; color: #4285f4; padding: 0.2rem 0.5rem; border-radius: 3px; font-size: 0.75rem;">${a}</span>`
         ).join(' ');
         
         html += `
-            <div class="google-hotel-card" style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: transform 0.2s, box-shadow 0.2s;" 
+            <div data-hotel-id="${hotel.id}" style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: transform 0.2s, box-shadow 0.2s; ${isGoogleHotel ? 'border: 2px solid #4285f4;' : ''}" 
                  onmouseenter="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.15)';" 
                  onmouseleave="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)';">
                 <div style="position: relative;">
-                    <img src="${hotel.imageUrl}" alt="${hotel.name}" style="width: 100%; height: 160px; object-fit: cover;" loading="lazy" />
+                    ${hotel.imageUrl ? `<img src="${hotel.imageUrl}" alt="${hotel.name}" style="width: 100%; height: 160px; object-fit: cover;" loading="lazy" />` : '<div style="width: 100%; height: 160px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>'}
                     ${hotel.dealType ? `<span style="position: absolute; top: 10px; left: 10px; background: #34a853; color: white; padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">${hotel.dealType}</span>` : ''}
-                    <span style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.7rem;">via ${hotel.source}</span>
+                    <span style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.7rem;">via ${sourceLabel}</span>
                 </div>
                 <div style="padding: 1rem;">
                     <h4 style="margin: 0 0 0.5rem 0; color: #1a1a1a; font-size: 1rem;">${hotel.name}</h4>
-                    <p style="margin: 0 0 0.5rem 0; color: #666; font-size: 0.85rem;">📍 ${hotel.location}</p>
+                    <p style="margin: 0 0 0.5rem 0; color: #666; font-size: 0.85rem;">📍 ${hotel.location || hotel.city}</p>
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
                         <span style="color: #fbbc04; font-size: 0.9rem;">${starsHtml}</span>
-                        <span style="color: #666; font-size: 0.8rem;">${hotel.rating} (${hotel.reviewCount.toLocaleString()} reviews)</span>
+                        ${hotel.reviewCount ? `<span style="color: #666; font-size: 0.8rem;">(${hotel.reviewCount.toLocaleString()} reviews)</span>` : ''}
                     </div>
                     <div style="display: flex; flex-wrap: wrap; gap: 0.3rem; margin-bottom: 1rem;">
                         ${amenitiesHtml}
@@ -268,7 +233,7 @@ function displayGoogleHotelsResults(response, searchLocation) {
                             <span style="color: #1a1a1a; font-weight: 700; font-size: 1.1rem;">$${hotel.price}</span>
                             <span style="color: #666; font-size: 0.75rem;">/night</span>
                         </div>
-                        <button onclick="selectGoogleHotel('${hotel.id}', '${hotel.name}')" style="background: #4285f4; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-size: 0.85rem;">Select</button>
+                        <button onclick="${isGoogleHotel ? 'selectGoogleHotel' : 'viewHotelDetails'}('${hotel.id}', '${hotel.name}')" style="background: #4285f4; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-size: 0.85rem;">Select</button>
                     </div>
                 </div>
             </div>
@@ -276,13 +241,25 @@ function displayGoogleHotelsResults(response, searchLocation) {
     });
     
     html += '</div>';
-    cardsContainer.innerHTML = html;
+    hotelResults.innerHTML = html;
 }
 
 // Handle hotel selection from Google results
 function selectGoogleHotel(hotelId, hotelName) {
     console.log('Selected Google hotel:', hotelId, hotelName);
-    alert(`You selected: ${hotelName}\n\nThis would typically redirect to booking or add to your cart.`);
+    
+    // Get the hotel data from merged hotels in sessionStorage
+    const allMergedHotels = JSON.parse(sessionStorage.getItem('allMergedHotels') || '[]');
+    const hotel = allMergedHotels.find(h => h.id === hotelId);
+    
+    if (hotel) {
+        // Store hotel data for booking flow
+        sessionStorage.setItem('selectedHotel', JSON.stringify(hotel));
+        alert(`You selected: ${hotelName}\n\nHotel booking integration coming soon!`);
+    } else {
+        alert('Hotel not found. Please try selecting again.');
+    }
+}
 }
 
 // Initialize date fields with minimum dates
@@ -354,7 +331,9 @@ function searchHotels() {
     let filteredHotels = executeVulnerableHotelQuery(sqlQuery);
     
     console.log(`Found ${filteredHotels.length} hotels matching criteria`);
-    displayHotels(filteredHotels);
+    
+    // Also fetch Google hotels and merge with local results
+    fetchGoogleHotelsResults(location, checkIn, checkOut, filteredHotels);
 }
 
 // ⚠️ VULNERABILITY: Building SQL query without parameterization

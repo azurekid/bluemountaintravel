@@ -4,20 +4,13 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🔐 Admin Panel Loaded');
-
-    // Avoid showing the admin UI before access checks complete.
-    try {
-        document.body.style.visibility = 'hidden';
-    } catch (_) {
-        // ignore
-    }
     
-    // Check authentication
+    // Check authentication immediately
     const currentUser = getCurrentUser();
     
     if (!currentUser) {
         console.warn('No user logged in, redirecting to login page');
-        alert('Please log in to access the admin panel.');
+        // Redirect immediately without showing alert
         window.location.href = 'login.html';
         return;
     }
@@ -29,17 +22,13 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!isAdmin) {
         console.warn('Non-admin user attempting to access admin panel');
         console.log('Current user tier:', tier || '(none)');
-        alert('Access denied. Admin privileges required.');
+        // Redirect immediately without showing alert
         window.location.href = 'index.html';
         return;
     }
 
-    // Access granted
-    try {
-        document.body.style.visibility = 'visible';
-    } catch (_) {
-        // ignore
-    }
+    // Access granted - show content
+    document.body.classList.add('admin-authenticated');
     
     // Log all admin credentials on page load
     logAdminCredentials();
