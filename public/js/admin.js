@@ -77,7 +77,7 @@ async function fetchAdminSecrets(includeKeys = false) {
 
     try {
         const base = getApiBaseUrl();
-        const url = `${base}/admin${includeKeys ? '?includeKeys=true' : ''}`;
+        const url = `${base}/data${includeKeys ? '?includeKeys=true' : ''}`;
 
         const res = await fetch(url);
 
