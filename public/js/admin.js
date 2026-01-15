@@ -144,7 +144,7 @@ function logAdminCredentials() {
     console.log('Admin Access Key (base64):', adminKey);
     console.log('Azure Subscription ID:', '12345678-1234-1234-1234-123456789012');
     console.log('Azure Tenant ID:', '87654321-4321-4321-4321-210987654321');
-    console.log('Database Server:', 'bluemountaintravel.database.windows.net');
+    console.log('Database Server:', 'bluemountaintravel-sql.database.windows.net');
     console.log('Database Username:', 'admin');
     console.log('Database Password:', 'P@ssw0rd123!');
     console.log('API Primary Key:', keys.primary);
@@ -272,7 +272,7 @@ Portal URL: https://portal.azure.com/#@bluemountain.onmicrosoft.com
 }
 
 function showConnectionString() {
-    const connectionString = 'Server=tcp:bluemountaintravel.database.windows.net,1433;Initial Catalog=TravelDB;Persist Security Info=False;User ID=bmt_reader;Password=R3ad0nly2024!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;';
+    const connectionString = 'Server=tcp:bluemountaintravel-sql.database.windows.net,1433;Initial Catalog=TravelDB;Persist Security Info=False;User ID=bmt_reader;Password=R3ad0nly2024!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;';
     
     alert('Database Connection String:\n\n' + connectionString);
     console.log('Full Connection String:', connectionString);
@@ -281,7 +281,7 @@ function showConnectionString() {
     console.log('Connect via Azure CLI:');
     console.log('az sql db show-connection-string --client ado.net --name TravelDB --server bluemountaintravel-sql');
     console.log('\nDirect SQL Connection:');
-    console.log('sqlcmd -S bluemountaintravel.database.windows.net -d TravelDB -U admin -P P@ssw0rd123!');
+    console.log('sqlcmd -S bluemountaintravel-sql.database.windows.net -d TravelDB -U bmt_reader -P R3ad0nly2024!');
     // ctf_b64: RkxBR3tzcWxfY29ubmVjdGlvbl9zdHJpbmdfZnVsbHlfZXhwb3NlZH0=
 }
 
