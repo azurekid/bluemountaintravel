@@ -345,8 +345,21 @@ function displayGoogleFlightsResults(response, searchDesc) {
 // Handle flight selection from Google results
 function selectGoogleFlight(flightId, flightName) {
     console.log('Selected Google flight:', flightId, flightName);
-    alert(`You selected: ${flightName}\n\nThis would typically redirect to booking or add to your cart.`);
+    
+    // Find the flight in the data
+    const flight = window.FlightData?.find(f => f.id === flightId);
+    
+    if (!flight) {
+        alert('Flight not found. Please try selecting from the regular flight list below.');
+        return;
+    }
+    
+    // Redirect to the booking page with flight ID
+    window.location.href = `book-flight.html?id=${flightId}`;
 }
+
+// Make selectGoogleFlight available globally
+window.selectGoogleFlight = selectGoogleFlight;
 
 // Initialize date fields with minimum dates
 function initializeDateFields() {

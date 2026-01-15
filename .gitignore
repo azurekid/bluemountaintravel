@@ -28,3 +28,15 @@ build/
 # Temporary files
 tmp/
 temp/
+*.backup
+*.old
+
+# Deployment archives
+*.zip
+
+# Test and utility scripts in api/
+api/check-*.js
+api/test-*.js
+api/cleanup-*.js
+api/create-*.js
+api/list-*.js

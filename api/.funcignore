@@ -1,0 +1,44 @@
+# Azure Functions ignore file
+# Files and directories that should not be deployed
+
+# Development tools
+*.js.map
+*.ts
+.git*
+.vscode
+.DS_Store
+
+# Local configuration
+local.settings.json
+.env
+.env.*
+
+# Test files
+**/test/**
+**/*.test.js
+**/*.spec.js
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+*.backup
+*.old
+
+# Build artifacts
+dist/
+build/
+
+# Documentation
+README.md
+*.md
+
+# Deployment archives
+*.zip
+
+# Test/utility scripts (if any are accidentally added)
+check-*.js
+test-*.js
+cleanup-*.js
+create-*.js
+list-*.js

@@ -8,8 +8,8 @@
     "SQL_USER": "dbadmin",
     "SQL_PASSWORD": "P@ssw0rd123!",
     "SQL_USER_READ": "bmt_reader",
-    "SQL_PASSWORD_READ": "",
+    "SQL_PASSWORD_READ": "R3ad0nly2024!",
     "SQL_USER_WRITE": "bmt_writer",
-    "SQL_PASSWORD_WRITE": ""
+    "SQL_PASSWORD_WRITE": "Wr1t3r2024!"
   }
 }
