@@ -10,7 +10,7 @@
         "get",
         "options"
       ],
-      "route": "admin/secrets"
+      "route": "admin-secrets"
     },
     {
       "type": "http",
