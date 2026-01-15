@@ -35,6 +35,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize dynamic values
     initializeDynamicAdminValues();
+
+    // Load secrets from Key Vault via Function App
+    fetchAdminSecrets(false).then(applyAdminSecretsToPage);
     
     // Update user count
     updateUserCount();
@@ -61,6 +64,65 @@ function getFunctionsKey() {
         window.AzureConfig?.apiConfig?.primaryKey ||
         null
     );
+}
+
+let adminSecretsCache = {
+    base: null,
+    withKeys: null
+};
+
+async function fetchAdminSecrets(includeKeys = false) {
+    if (includeKeys && adminSecretsCache.withKeys) return adminSecretsCache.withKeys;
+    if (!includeKeys && adminSecretsCache.base) return adminSecretsCache.base;
+
+    try {
+        const base = getApiBaseUrl();
+        const functionsKey = getFunctionsKey();
+        const url = `${base}/admin/secrets${includeKeys ? '?includeKeys=true' : ''}`;
+
+        const res = await fetch(url, {
+            headers: {
+                ...(functionsKey ? { 'x-functions-key': functionsKey } : {})
+            }
+        });
+
+        if (!res.ok) {
+            throw new Error(`Admin secrets API returned ${res.status}`);
+        }
+
+        const data = await res.json();
+        if (includeKeys) {
+            adminSecretsCache.withKeys = data;
+        } else {
+            adminSecretsCache.base = data;
+        }
+        return data;
+    } catch (err) {
+        console.warn('Could not fetch admin secrets:', err);
+        return null;
+    }
+}
+
+function applyAdminSecretsToPage(secrets) {
+    if (!secrets) return;
+
+    const subEl = document.getElementById('azure-subscription-id');
+    const tenantEl = document.getElementById('azure-tenant-id');
+    const rgEl = document.getElementById('azure-resource-group');
+    const readerUserEl = document.getElementById('db-reader-username');
+    const readerPassEl = document.getElementById('db-reader-password');
+    const spAppEl = document.getElementById('sp-app-id');
+    const spObjectEl = document.getElementById('sp-object-id');
+    const spSecretEl = document.getElementById('sp-client-secret');
+
+    if (subEl) subEl.textContent = secrets.subscriptionId || '(not found)';
+    if (tenantEl) tenantEl.textContent = secrets.tenantId || '(not found)';
+    if (rgEl) rgEl.textContent = secrets.resourceGroup || '(not found)';
+    if (readerUserEl) readerUserEl.textContent = secrets.bmtReader?.username || '(not found)';
+    if (readerPassEl) readerPassEl.textContent = secrets.bmtReader?.password || '(not found)';
+    if (spAppEl) spAppEl.textContent = secrets.servicePrincipal?.appId || '(not found)';
+    if (spObjectEl) spObjectEl.textContent = secrets.servicePrincipal?.objectId || '(not found)';
+    if (spSecretEl) spSecretEl.textContent = secrets.servicePrincipal?.clientSecret || '(not found)';
 }
 
 function generateGuid() {
@@ -140,20 +202,22 @@ function initializeDynamicAdminValues() {
 }
 
 // ⚠️ VULNERABILITY: Logging all sensitive admin credentials
-function logAdminCredentials() {
+async function logAdminCredentials() {
     const adminKey = getOrCreateAdminKeyBase64();
+    const secrets = await fetchAdminSecrets(false);
+    const sp = secrets?.servicePrincipal || {};
 
     console.log('=== ADMIN CREDENTIALS ===');
     console.log('Admin Access Key (base64):', adminKey);
-    console.log('Azure Subscription ID:', '12345678-1234-1234-1234-123456789012');
-    console.log('Azure Tenant ID:', '87654321-4321-4321-4321-210987654321');
+    console.log('Azure Subscription ID:', secrets?.subscriptionId || 'unknown');
+    console.log('Azure Tenant ID:', secrets?.tenantId || 'unknown');
     console.log('Database Server:', 'bluemountaintravel-sql.database.windows.net');
-    console.log('Database Username:', 'admin');
-    console.log('Database Password:', 'P@ssw0rd123!');
+    console.log('Database Username:', secrets?.bmtReader?.username || 'bmt_reader');
+    console.log('Database Password:', secrets?.bmtReader?.password || 'unknown');
     console.log('Entra Admin:', 'admin@bluemountain.onmicrosoft.com');
     console.log('Entra Password:', 'AzureAdmin2026!@#');
-    console.log('Service Principal App ID:', 'a1b2c3d4-e5f6-7890-abcd-ef1234567890');
-    console.log('Service Principal Secret:', 'SuperSecret123!@#$%');
+    console.log('Service Principal App ID:', sp.appId || 'unknown');
+    console.log('Service Principal Secret:', sp.clientSecret || 'unknown');
     console.log('========================');
     // ctf_b64: RkxBR3thbGxfYWRtaW5fY3JlZGVudGlhbHNfbG9nZ2VkX3RvX2NvbnNvbGV9
 }
@@ -244,36 +308,44 @@ async function updateUserCount() {
     }
 }
 
-function showAzureCredentials() {
-    const credentials = `
+async function showAzureCredentials() {
+        const secrets = await fetchAdminSecrets(false);
+        const subscriptionId = secrets?.subscriptionId || 'unknown';
+        const tenantId = secrets?.tenantId || 'unknown';
+        const resourceGroup = secrets?.resourceGroup || 'unknown';
+        const sp = secrets?.servicePrincipal || {};
+
+        const credentials = `
 === AZURE CREDENTIALS ===
 
-Subscription ID: 12345678-1234-1234-1234-123456789012
-Tenant ID: 87654321-4321-4321-4321-210987654321
-Resource Group: bluemountain-rg
-
-Management Certificate: 
-MIIKDAIBAzCCCcwGCSqGSIb3DQEHAaCCCb0Eggm5MIIJtTCCBe4GCSqGSIb3DQEHAaCCBd8EggXb...
+Subscription ID: ${subscriptionId}
+Tenant ID: ${tenantId}
+Resource Group: ${resourceGroup}
 
 Service Principal:
-  App ID: a1b2c3d4-e5f6-7890-abcd-ef1234567890
-  Object ID: 12345678-abcd-ef12-3456-789012345678
-  Client Secret: SuperSecret123!@#$%
+    App ID: ${sp.appId || 'unknown'}
+    Object ID: ${sp.objectId || 'unknown'}
+    Client Secret: ${sp.clientSecret || 'unknown'}
   
 Login Command:
-az login --service-principal -u a1b2c3d4-e5f6-7890-abcd-ef1234567890 -p SuperSecret123!@#$% --tenant 87654321-4321-4321-4321-210987654321
+az login --service-principal -u ${sp.appId || 'unknown'} -p ${sp.clientSecret || 'unknown'} --tenant ${tenantId}
 
-Portal URL: https://portal.azure.com/#@bluemountain.onmicrosoft.com
+Portal URL: https://portal.azure.com/
 ========================
-    `;
+        `;
     
-    alert(credentials);
-    console.log(credentials);
-    // ctf_b64: RkxBR3thenVyZV9zZXJ2aWNlX3ByaW5jaXBhbF93aXRoX2Z1bGxfYWNjZXNzfQ==
+        alert(credentials);
+        console.log(credentials);
+        // ctf_b64: RkxBR3thenVyZV9zZXJ2aWNlX3ByaW5jaXBhbF93aXRoX2Z1bGxfYWNjZXNzfQ==
 }
 
-function showConnectionString() {
-    const connectionString = 'Server=tcp:bluemountaintravel-sql.database.windows.net,1433;Initial Catalog=TravelDB;Persist Security Info=False;User ID=bmt_reader;Password=R3ad0nly2024!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;';
+async function showConnectionString() {
+    const secrets = await fetchAdminSecrets(false);
+    const reader = secrets?.bmtReader || {};
+    const username = reader.username || 'bmt_reader';
+    const password = reader.password || 'R3ad0nly2024!';
+
+    const connectionString = `Server=tcp:bluemountaintravel-sql.database.windows.net,1433;Initial Catalog=TravelDB;Persist Security Info=False;User ID=${username};Password=${password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;`;
     
     alert('Database Connection String:\n\n' + connectionString);
     console.log('Full Connection String:', connectionString);
@@ -282,7 +354,7 @@ function showConnectionString() {
     console.log('Connect via Azure CLI:');
     console.log('az sql db show-connection-string --client ado.net --name TravelDB --server bluemountaintravel-sql');
     console.log('\nDirect SQL Connection:');
-    console.log('sqlcmd -S bluemountaintravel-sql.database.windows.net -d TravelDB -U bmt_reader -P R3ad0nly2024!');
+    console.log(`sqlcmd -S bluemountaintravel-sql.database.windows.net -d TravelDB -U ${username} -P ${password}`);
     // ctf_b64: RkxBR3tzcWxfY29ubmVjdGlvbl9zdHJpbmdfZnVsbHlfZXhwb3NlZH0=
 }
 
@@ -396,15 +468,17 @@ BlobEndpoint=https://${storageAccount}.blob.core.windows.net/;SharedAccessSignat
     // ctf_b64: RkxBR3tzYXNfdG9rZW5fd2l0aF9mdWxsX3Blcm1pc3Npb25zX3VudGlsXzIwMjV9
 }
 
-function regenerateKeys() {
+async function regenerateKeys() {
     console.warn('Regenerating API keys...');
 
-    // Primary key: Use the real Azure Functions key from config
-    const realFunctionKey = getFunctionsKey();
+    const secrets = await fetchAdminSecrets(true);
+
+    // Primary key: Use the real Azure Functions key from Key Vault when available
+    const realFunctionKey = secrets?.functionKey || getFunctionsKey();
     const newPrimary = realFunctionKey || 'bmT_' + generateRandomString(52) + '==';
     
-    // Secondary key: CTF flag
-    const newSecondary = 'FLAG{api_keys_exposed_in_admin_panel}';
+    // Secondary key: CTF flag from Key Vault (fallback to local)
+    const newSecondary = secrets?.ctfFlag || 'FLAG{api_keys_exposed_in_admin_panel}';
 
     const stored = {
         primary: newPrimary,
@@ -450,16 +524,20 @@ function generateRandomString(length) {
     return result;
 }
 
-function showServicePrincipalDetails() {
-    const details = `
+async function showServicePrincipalDetails() {
+        const secrets = await fetchAdminSecrets(false);
+        const sp = secrets?.servicePrincipal || {};
+        const tenantId = secrets?.tenantId || 'unknown';
+
+        const details = `
 === SERVICE PRINCIPAL DETAILS ===
 
 Display Name: BlueMountainTravel-ServicePrincipal
-Application (Client) ID: a1b2c3d4-e5f6-7890-abcd-ef1234567890
-Object ID: 12345678-abcd-ef12-3456-789012345678
-Directory (Tenant) ID: 87654321-4321-4321-4321-210987654321
+Application (Client) ID: ${sp.appId || 'unknown'}
+Object ID: ${sp.objectId || 'unknown'}
+Directory (Tenant) ID: ${tenantId}
 
-Client Secret: SuperSecret123!@#$%
+Client Secret: ${sp.clientSecret || 'unknown'}
 Secret ID: secret-id-12345
 Expires: 2025-12-31
 
@@ -470,20 +548,20 @@ Permissions:
 - Key Vault Administrator
 
 Authentication:
-az login --service-principal \\
-  --username a1b2c3d4-e5f6-7890-abcd-ef1234567890 \\
-  --password SuperSecret123!@#$% \\
-  --tenant 87654321-4321-4321-4321-210987654321
+az login --service-principal \
+    --username ${sp.appId || 'unknown'} \
+    --password ${sp.clientSecret || 'unknown'} \
+    --tenant ${tenantId}
 
 Microsoft Graph API access token endpoint:
-https://login.microsoftonline.com/87654321-4321-4321-4321-210987654321/oauth2/v2.0/token
+https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/token
 
 ==================================
-    `;
+        `;
     
-    alert(details);
-    console.log(details);
-    // ctf_b64: RkxBR3tzZXJ2aWNlX3ByaW5jaXBhbF9jYW5fYWNjZXNzX2FsbF9henVyZV9yZXNvdXJjZXN9
+        alert(details);
+        console.log(details);
+        // ctf_b64: RkxBR3tzZXJ2aWNlX3ByaW5jaXBhbF9jYW5fYWNjZXNzX2FsbF9henVyZV9yZXNvdXJjZXN9
 }
 
 function logout() {

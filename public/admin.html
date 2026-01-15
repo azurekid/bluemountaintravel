@@ -71,10 +71,10 @@
                     <h3 style="color: var(--primary-color); margin-bottom: 1rem;">☁️ Azure Resources</h3>
                     <div style="font-size: 0.9rem; line-height: 1.8;">
                         <p><strong>Subscription ID:</strong><br/>
-                        <code style="font-size: 0.85rem;">12345678-1234-1234-1234-123456789012</code></p>
+                        <code id="azure-subscription-id" style="font-size: 0.85rem;">Loading...</code></p>
                         <p><strong>Tenant ID:</strong><br/>
-                        <code style="font-size: 0.85rem;">87654321-4321-4321-4321-210987654321</code></p>
-                        <p><strong>Resource Group:</strong> bluemountain-rg</p>
+                        <code id="azure-tenant-id" style="font-size: 0.85rem;">Loading...</code></p>
+                        <p><strong>Resource Group:</strong> <span id="azure-resource-group">Loading...</span></p>
                         <p><strong>Region:</strong> East US 2</p>
                         <button onclick="showAzureCredentials()" class="btn-search" style="margin-top: 1rem; width: 100%;">View Credentials</button>
                     </div>
@@ -90,8 +90,8 @@
 
                         <div style="margin-top: 1rem; padding: 0.75rem; background: rgba(40, 167, 69, 0.1); border-left: 3px solid #28a745; border-radius: 4px;">
                             <p style="margin: 0 0 0.5rem 0;"><strong style="color: #28a745;">Read-Only Account:</strong></p>
-                            <p style="margin: 0.25rem 0;"><strong>Username:</strong> bmt_reader</p>
-                            <p style="margin: 0.25rem 0;"><strong>Password:</strong> R3ad0nly2024!</p>
+                            <p style="margin: 0.25rem 0;"><strong>Username:</strong> <span id="db-reader-username">Loading...</span></p>
+                            <p style="margin: 0.25rem 0;"><strong>Password:</strong> <span id="db-reader-password">Loading...</span></p>
                         </div>
                         
                         <button onclick="showConnectionString()" class="btn-search" style="margin-top: 1rem; width: 100%;">Show Connection String</button>
@@ -158,9 +158,9 @@
                     </div>
                     <div>
                         <h4>Service Principal</h4>
-                        <p><strong>Application ID:</strong> a1b2c3d4-e5f6-7890-abcd-ef1234567890</p>
-                        <p><strong>Client Secret:</strong> SuperSecret123!@#$%</p>
-                        <p><strong>Object ID:</strong> 12345678-abcd-ef12-3456-789012345678</p>
+                        <p><strong>Application ID:</strong> <span id="sp-app-id">Loading...</span></p>
+                        <p><strong>Client Secret:</strong> <span id="sp-client-secret">Loading...</span></p>
+                        <p><strong>Object ID:</strong> <span id="sp-object-id">Loading...</span></p>
                         <button onclick="showServicePrincipalDetails()" class="btn-search" style="margin-top: 1rem; width: 100%;">View Full Details</button>
                     </div>
                 </div>
