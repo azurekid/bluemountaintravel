@@ -128,17 +128,15 @@ function initializeDynamicAdminValues() {
     }
 
     // API keys
-    const keys = getOrCreateApiKeys();
     const primaryEl = document.getElementById('api-primary-key');
     const secondaryEl = document.getElementById('api-secondary-key');
-    if (primaryEl) primaryEl.textContent = keys.primary;
-    if (secondaryEl) secondaryEl.textContent = keys.secondary;
+    if (primaryEl) primaryEl.textContent = 'Click Regenerate Keys';
+    if (secondaryEl) secondaryEl.textContent = 'Click Regenerate Keys';
 }
 
 // ⚠️ VULNERABILITY: Logging all sensitive admin credentials
 function logAdminCredentials() {
     const adminKey = getOrCreateAdminKeyBase64();
-    const keys = getOrCreateApiKeys();
 
     console.log('=== ADMIN CREDENTIALS ===');
     console.log('Admin Access Key (base64):', adminKey);
@@ -147,8 +145,6 @@ function logAdminCredentials() {
     console.log('Database Server:', 'bluemountaintravel-sql.database.windows.net');
     console.log('Database Username:', 'admin');
     console.log('Database Password:', 'P@ssw0rd123!');
-    console.log('API Primary Key:', keys.primary);
-    console.log('API Secondary Key:', keys.secondary);
     console.log('Entra Admin:', 'admin@bluemountain.onmicrosoft.com');
     console.log('Entra Password:', 'AzureAdmin2026!@#');
     console.log('Service Principal App ID:', 'a1b2c3d4-e5f6-7890-abcd-ef1234567890');
