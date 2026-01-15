@@ -12,16 +12,38 @@ function getFlightIdFromUrl() {
     return urlParams.get('id');
 }
 
+// Get source from URL
+function getFlightSourceFromUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('source');
+}
+
 // Load flight details from the flight data
 function loadFlightDetails() {
     const flightId = getFlightIdFromUrl();
+    const source = getFlightSourceFromUrl();
     
     if (!flightId) {
         displayFlightError('No flight selected. Please select a flight from the flights page.');
         return;
     }
     
-    const flight = window.FlightData.find(f => f.id === flightId);
+    let flight = null;
+    
+    // Check if this is a Google flight
+    if (source === 'google' || flightId.startsWith('gf-')) {
+        // Try to get from sessionStorage first
+        const storedFlight = sessionStorage.getItem('selectedFlight');
+        if (storedFlight) {
+            flight = JSON.parse(storedFlight);
+            console.log('Loaded Google flight from sessionStorage:', flight);
+        }
+    }
+    
+    // If not found in sessionStorage, try FlightData
+    if (!flight) {
+        flight = window.FlightData?.find(f => f.id === flightId);
+    }
     
     if (!flight) {
         displayFlightError('Flight not found. Please select a valid flight.');
@@ -249,7 +271,22 @@ function initializeBookingForm() {
 // Process the flight booking
 async function processFlightBooking() {
     const flightId = getFlightIdFromUrl();
-    const flight = window.FlightData.find(f => f.id === flightId);
+    const source = getFlightSourceFromUrl();
+    
+    let flight = null;
+    
+    // Check if this is a Google flight
+    if (source === 'google' || flightId.startsWith('gf-')) {
+        const storedFlight = sessionStorage.getItem('selectedFlight');
+        if (storedFlight) {
+            flight = JSON.parse(storedFlight);
+        }
+    }
+    
+    // If not found in sessionStorage, try FlightData
+    if (!flight) {
+        flight = window.FlightData?.find(f => f.id === flightId);
+    }
     
     if (!flight) {
         alert('Flight not found. Please try again.');

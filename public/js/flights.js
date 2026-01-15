@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', function() {
     displayFlights();
     initializeFilters();
     initializeSearchForm();
-    initializeGoogleFlightsButton();
 });
 
 // Build Google Flights search URL
@@ -32,88 +31,23 @@ function buildGoogleFlightsUrl(from, to, departureDate, returnDate) {
     return `https://www.google.com/travel/flights?q=${encodedQuery}`;
 }
 
-// Initialize Google Flights search button
-function initializeGoogleFlightsButton() {
-    const searchForm = document.getElementById('flight-search-form');
-    if (!searchForm) return;
-    
-    // Add Google Flights button after the form
-    const googleFlightsBtn = document.createElement('button');
-    googleFlightsBtn.type = 'button';
-    googleFlightsBtn.className = 'btn-google-flights';
-    googleFlightsBtn.innerHTML = '🔍 Search on Google Flights';
-    googleFlightsBtn.style.cssText = 'width: 100%; padding: 0.75rem; background: #4285f4; color: white; border: none; border-radius: 2px; font-size: 0.95rem; cursor: pointer; margin-top: 1rem;';
-    
-    googleFlightsBtn.addEventListener('click', function() {
-        const from = document.getElementById('search-from').value;
-        const to = document.getElementById('search-to').value;
-        const departureDate = document.getElementById('search-departure-date')?.value || '';
-        const returnDate = document.getElementById('search-return-date')?.value || '';
-        
-        // Fetch and display results in page instead of opening new tab
-        fetchGoogleFlightsResults(from, to, departureDate, returnDate);
-    });
-    
-    // Add hover effect
-    googleFlightsBtn.addEventListener('mouseenter', () => googleFlightsBtn.style.background = '#3367d6');
-    googleFlightsBtn.addEventListener('mouseleave', () => googleFlightsBtn.style.background = '#4285f4');
-    
-    searchForm.parentElement.appendChild(googleFlightsBtn);
-    
-    // Create a results container for Google Flights results
-    createGoogleFlightsResultsContainer();
-}
-
-// Create container for Google Flights results
-function createGoogleFlightsResultsContainer() {
+// Fetch Google Flights results and display in cards
+async function fetchGoogleFlightsResults(from, to, departureDate, returnDate, localFlights = null) {
     const flightResults = document.getElementById('flight-results');
     if (!flightResults) return;
     
-    // Check if container already exists
-    if (document.getElementById('google-flights-results')) return;
-    
-    const googleContainer = document.createElement('div');
-    googleContainer.id = 'google-flights-results';
-    googleContainer.style.cssText = 'display: none; margin-bottom: 2rem;';
-    googleContainer.innerHTML = `
-        <div style="background: linear-gradient(135deg, #4285f4 0%, #ea4335 100%); padding: 1rem 1.5rem; border-radius: 8px 8px 0 0; display: flex; align-items: center; justify-content: space-between;">
-            <div style="display: flex; align-items: center; gap: 0.75rem;">
-                <span style="font-size: 1.5rem;">✈️</span>
-                <h3 style="color: white; margin: 0; font-size: 1.1rem;">Google Flights Results</h3>
-            </div>
-            <button id="close-google-flights-results" style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 0.3rem 0.8rem; border-radius: 4px; cursor: pointer; font-size: 0.85rem;">✕ Close</button>
-        </div>
-        <div id="google-flights-cards" style="background: rgba(66, 133, 244, 0.05); border: 2px solid #4285f4; border-top: none; border-radius: 0 0 8px 8px; padding: 1.5rem;"></div>
-    `;
-    
-    flightResults.parentElement.insertBefore(googleContainer, flightResults);
-    
-    // Add close button handler
-    document.getElementById('close-google-flights-results').addEventListener('click', () => {
-        googleContainer.style.display = 'none';
-    });
-}
-
-// Fetch Google Flights results and display in cards
-async function fetchGoogleFlightsResults(from, to, departureDate, returnDate) {
-    const googleContainer = document.getElementById('google-flights-results');
-    const cardsContainer = document.getElementById('google-flights-cards');
-    
-    if (!googleContainer || !cardsContainer) return;
-    
     const searchDesc = `${from || 'Any'} → ${to || 'Any'}`;
     
-    // Show container with loading state
-    googleContainer.style.display = 'block';
-    cardsContainer.innerHTML = `
+    // Show loading state in main results area
+    flightResults.innerHTML = `
         <div style="text-align: center; padding: 2rem;">
             <div style="font-size: 2rem; margin-bottom: 1rem;">🔄</div>
-            <p style="color: #4285f4; font-weight: 500;">Searching Google Flights for "${searchDesc}"...</p>
+            <p style="color: #4285f4; font-weight: 500;">Searching flights for "${searchDesc}"...</p>
         </div>
     `;
     
     // Scroll to results
-    googleContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    flightResults.scrollIntoView({ behavior: 'smooth', block: 'start' });
     
     try {
         // Simulate API call delay
@@ -122,9 +56,9 @@ async function fetchGoogleFlightsResults(from, to, departureDate, returnDate) {
         // Simulate Google Flights API response
         const results = simulateGoogleFlightsAPI(from, to, departureDate, returnDate);
         
-        displayGoogleFlightsResults(results, searchDesc);
+        displayGoogleFlightsResults(results, searchDesc, localFlights);
     } catch (error) {
-        cardsContainer.innerHTML = `
+        flightResults.innerHTML = `
             <div style="text-align: center; padding: 2rem; color: #dc3545;">
                 <div style="font-size: 2rem; margin-bottom: 1rem;">⚠️</div>
                 <p>Error fetching results. Please try again.</p>
@@ -241,16 +175,19 @@ function simulateGoogleFlightsAPI(from, to, departureDate, returnDate) {
 }
 
 // Display Google Flights results in cards
-function displayGoogleFlightsResults(response, searchDesc) {
-    const cardsContainer = document.getElementById('google-flights-cards');
+function displayGoogleFlightsResults(response, searchDesc, localFlights = null) {
     const flightResults = document.getElementById('flight-results');
     
-    if (!cardsContainer || !response.success || response.flights.length === 0) {
-        if (cardsContainer) {
-            cardsContainer.innerHTML = `
+    if (!response.success || response.flights.length === 0) {
+        // Show local flights only if no Google results
+        const localFlightsToUse = localFlights || window.FlightData || [];
+        if (localFlightsToUse.length > 0) {
+            displayFlights(localFlightsToUse);
+        } else {
+            flightResults.innerHTML = `
                 <div style="text-align: center; padding: 2rem;">
                     <div style="font-size: 2rem; margin-bottom: 1rem;">🔍</div>
-                    <p>No additional flights found. Showing local results below.</p>
+                    <p>No flights found.</p>
                 </div>
             `;
         }
@@ -259,7 +196,7 @@ function displayGoogleFlightsResults(response, searchDesc) {
     
     // Merge Google flights with local FlightData
     const googleFlights = response.flights;
-    const localFlights = window.FlightData || [];
+    const localFlightsToUse = localFlights || window.FlightData || [];
     
     // Convert Google flights to match local format
     const convertedGoogleFlights = googleFlights.map(gf => ({
@@ -281,17 +218,12 @@ function displayGoogleFlightsResults(response, searchDesc) {
     }));
     
     // Merge and store all flights
-    const allFlights = [...convertedGoogleFlights, ...localFlights];
+    const allFlights = [...convertedGoogleFlights, ...localFlightsToUse];
     sessionStorage.setItem('lastGoogleFlights', JSON.stringify(googleFlights));
-    
-    // Hide the Google container and show merged results in main flight-results
-    const googleContainer = document.getElementById('google-flights-results');
-    if (googleContainer) {
-        googleContainer.style.display = 'none';
-    }
+    sessionStorage.setItem('allMergedFlights', JSON.stringify(allFlights));
     
     // Display merged results
-    displayMergedFlights(allFlights, `${searchDesc} (${googleFlights.length} from Google, ${localFlights.length} local)`);
+    displayMergedFlights(allFlights, `${searchDesc} (${googleFlights.length} from Google, ${localFlightsToUse.length} local)`);
 }
 
 // Display merged flights list
@@ -402,34 +334,25 @@ function selectGoogleFlight(flightId, flightName) {
     
     // First check if it's a Google flight (starts with 'gf-')
     if (flightId.startsWith('gf-')) {
-        // Find the Google flight from the last search results
-        const googleFlightsCards = document.getElementById('google-flights-cards');
-        if (!googleFlightsCards) {
-            alert('Flight data not found. Please try searching again.');
-            return;
-        }
-        
-        // Get the flight data from the last simulation
-        // We need to re-run the simulation to get the data
-        // Better approach: store it in sessionStorage when displayed
-        const lastGoogleFlights = JSON.parse(sessionStorage.getItem('lastGoogleFlights') || '[]');
-        const flight = lastGoogleFlights.find(f => f.id === flightId);
+        // Get the flight data from merged flights in sessionStorage
+        const allMergedFlights = JSON.parse(sessionStorage.getItem('allMergedFlights') || '[]');
+        const flight = allMergedFlights.find(f => f.id === flightId);
         
         if (flight) {
-            // Convert Google flight format to our FlightData format
+            // Flight is already in the correct format from the merge
             const formattedFlight = {
                 id: flight.id,
                 airline: flight.airline,
                 flightNumber: flight.flightNumber,
                 from: flight.from,
                 to: flight.to,
-                departure: flight.departureTime,
-                arrival: flight.arrivalTime,
+                departure: flight.departure,
+                arrival: flight.arrival,
                 duration: flight.duration,
-                class: flight.cabinClass,
+                class: flight.class,
                 price: flight.price,
                 aircraft: flight.aircraft,
-                availableSeats: 150 // Default value
+                availableSeats: flight.availableSeats || 150
             };
             
             // Store the formatted flight in sessionStorage for the booking page
@@ -567,7 +490,9 @@ function searchFlights() {
     let filteredFlights = executeVulnerableQuery(sqlQuery);
     
     console.log(`Found ${filteredFlights.length} flights matching criteria`);
-    displayFlights(filteredFlights);
+    
+    // Also fetch Google flights and merge with local results
+    fetchGoogleFlightsResults(from, to, departureDate, returnDate, filteredFlights);
 }
 
 // ⚠️ VULNERABILITY: Building SQL query without parameterization
