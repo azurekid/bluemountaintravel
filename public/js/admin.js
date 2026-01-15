@@ -128,6 +128,11 @@ function initializeDynamicAdminValues() {
     }
 
     // API keys
+    try {
+        localStorage.removeItem('bmt_api_keys');
+    } catch (_) {
+        // ignore
+    }
     const primaryEl = document.getElementById('api-primary-key');
     const secondaryEl = document.getElementById('api-secondary-key');
     if (primaryEl) primaryEl.textContent = 'Click Regenerate Keys';
