@@ -139,15 +139,15 @@ function simulateGoogleFlightsAPI(from, to, departureDate, returnDate) {
     // In reality, Google doesn't provide a public API for Flights
     // You would need to use Amadeus, Skyscanner, or similar APIs
     
-    const airlines = ['Delta', 'United', 'American', 'Southwest', 'JetBlue', 'Alaska'];
-    const airlineLogos = {
-        'Delta': '🔵',
-        'United': '⚪',
-        'American': '🔴',
-        'Southwest': '🟡',
-        'JetBlue': '🔵',
-        'Alaska': '🟢'
+    // Helper function to generate random price variations
+    const randomPrice = (base, variance = 0.3) => {
+        const min = Math.round(base * (1 - variance));
+        const max = Math.round(base * (1 + variance));
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     };
+    
+    // Base price calculation (rough estimate based on distance)
+    const basePrice = 200 + Math.floor(Math.random() * 300);
     
     const allResults = [
         {
@@ -160,8 +160,8 @@ function simulateGoogleFlightsAPI(from, to, departureDate, returnDate) {
             arrivalTime: '09:45',
             duration: '5h 15m',
             stops: 'Nonstop',
-            price: 289,
-            originalPrice: 349,
+            price: randomPrice(basePrice + 50),
+            originalPrice: Math.random() > 0.6 ? randomPrice(basePrice + 100) : null,
             cabinClass: 'Economy',
             aircraft: 'Boeing 737-900',
             source: 'Google Flights'
@@ -176,7 +176,7 @@ function simulateGoogleFlightsAPI(from, to, departureDate, returnDate) {
             arrivalTime: '12:30',
             duration: '6h 15m',
             stops: '1 stop (ORD)',
-            price: 219,
+            price: randomPrice(basePrice - 30),
             originalPrice: null,
             cabinClass: 'Economy',
             aircraft: 'Airbus A320',
@@ -192,8 +192,8 @@ function simulateGoogleFlightsAPI(from, to, departureDate, returnDate) {
             arrivalTime: '13:20',
             duration: '5h 20m',
             stops: 'Nonstop',
-            price: 315,
-            originalPrice: 389,
+            price: randomPrice(basePrice + 70),
+            originalPrice: Math.random() > 0.5 ? randomPrice(basePrice + 120) : null,
             cabinClass: 'Economy',
             aircraft: 'Boeing 777-200',
             source: 'Google Flights'
@@ -208,7 +208,7 @@ function simulateGoogleFlightsAPI(from, to, departureDate, returnDate) {
             arrivalTime: '17:45',
             duration: '5h 15m',
             stops: 'Nonstop',
-            price: 259,
+            price: randomPrice(basePrice + 20),
             originalPrice: null,
             cabinClass: 'Core',
             aircraft: 'Airbus A321',
@@ -224,7 +224,7 @@ function simulateGoogleFlightsAPI(from, to, departureDate, returnDate) {
             arrivalTime: '23:30',
             duration: '7h 30m',
             stops: '1 stop (DEN)',
-            price: 179,
+            price: randomPrice(basePrice - 60),
             originalPrice: null,
             cabinClass: 'Wanna Get Away',
             aircraft: 'Boeing 737 MAX 8',
@@ -243,47 +243,101 @@ function simulateGoogleFlightsAPI(from, to, departureDate, returnDate) {
 // Display Google Flights results in cards
 function displayGoogleFlightsResults(response, searchDesc) {
     const cardsContainer = document.getElementById('google-flights-cards');
-    if (!cardsContainer) return;
+    const flightResults = document.getElementById('flight-results');
     
-    if (!response.success || response.flights.length === 0) {
-        cardsContainer.innerHTML = `
-            <div style="text-align: center; padding: 2rem;">
-                <div style="font-size: 2rem; margin-bottom: 1rem;">🔍</div>
-                <p>No flights found for "${searchDesc}". Try a different search.</p>
-            </div>
-        `;
+    if (!cardsContainer || !response.success || response.flights.length === 0) {
+        if (cardsContainer) {
+            cardsContainer.innerHTML = `
+                <div style="text-align: center; padding: 2rem;">
+                    <div style="font-size: 2rem; margin-bottom: 1rem;">🔍</div>
+                    <p>No additional flights found. Showing local results below.</p>
+                </div>
+            `;
+        }
         return;
     }
     
-    const googleUrl = buildGoogleFlightsUrl(
-        response.query.from, 
-        response.query.to, 
-        response.query.departureDate, 
-        response.query.returnDate
-    );
+    // Merge Google flights with local FlightData
+    const googleFlights = response.flights;
+    const localFlights = window.FlightData || [];
+    
+    // Convert Google flights to match local format
+    const convertedGoogleFlights = googleFlights.map(gf => ({
+        id: gf.id,
+        airline: gf.airline,
+        flightNumber: gf.flightNumber,
+        from: gf.from,
+        to: gf.to,
+        departure: gf.departureTime,
+        arrival: gf.arrivalTime,
+        duration: gf.duration,
+        class: gf.cabinClass,
+        price: gf.price,
+        originalPrice: gf.originalPrice,
+        aircraft: gf.aircraft,
+        stops: gf.stops === 'Nonstop' ? 0 : (gf.stops.includes('1 stop') ? 1 : 2),
+        availableSeats: Math.floor(Math.random() * 100) + 50,
+        source: gf.source
+    }));
+    
+    // Merge and store all flights
+    const allFlights = [...convertedGoogleFlights, ...localFlights];
+    sessionStorage.setItem('lastGoogleFlights', JSON.stringify(googleFlights));
+    
+    // Hide the Google container and show merged results in main flight-results
+    const googleContainer = document.getElementById('google-flights-results');
+    if (googleContainer) {
+        googleContainer.style.display = 'none';
+    }
+    
+    // Display merged results
+    displayMergedFlights(allFlights, `${searchDesc} (${googleFlights.length} from Google, ${localFlights.length} local)`);
+}
+
+// Display merged flights list
+function displayMergedFlights(flights, description) {
+    const flightResults = document.getElementById('flight-results');
+    if (!flightResults) return;
+    
+    // Use the existing displayFlights logic but with merged data
+    const airlineColors = {
+        'Delta': '#003366',
+        'Delta Airlines': '#003366',
+        'United': '#002244',
+        'United Airlines': '#002244',
+        'American': '#B6001A',
+        'American Airlines': '#B6001A',
+        'Southwest': '#FFBF27',
+        'Southwest Airlines': '#FFBF27',
+        'JetBlue': '#003876',
+        'JetBlue Airways': '#003876',
+        'Alaska': '#00205B',
+        'Alaska Airlines': '#00205B',
+        'Emirates': '#D71921',
+        'Lufthansa': '#05164D',
+        'British Airways': '#075AAA',
+        'Air France': '#002157',
+        'KLM': '#00A1DE'
+    };
     
     let html = `
-        <div style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
-            <p style="margin: 0; color: #666;">Found <strong>${response.resultCount}</strong> flights for ${searchDesc}</p>
-            <a href="${googleUrl}" target="_blank" style="color: #4285f4; text-decoration: none; font-size: 0.9rem;">View on Google Flights →</a>
+        <div style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #4285f4 0%, #34a853 100%); padding: 1rem; border-radius: 8px;">
+            <p style="margin: 0; color: white; font-weight: 600;">✈️ ${description}</p>
         </div>
     `;
     
-    response.flights.forEach(flight => {
-        const airlineColors = {
-            'Delta': '#003366',
-            'United': '#002244',
-            'American': '#B6001A',
-            'Southwest': '#FFBF27',
-            'JetBlue': '#003876',
-            'Alaska': '#00205B'
-        };
-        
+    flights.forEach(flight => {
         const airlineColor = airlineColors[flight.airline] || '#4285f4';
         const savings = flight.originalPrice ? `Save $${flight.originalPrice - flight.price}` : null;
+        const stopsText = flight.stops === 0 || flight.stops === 'Nonstop' || !flight.stops ? 'Nonstop' : 
+                         (flight.stops === 1 ? '1 stop' : `${flight.stops} stops`);
+        const isNonstop = stopsText === 'Nonstop';
+        const isGoogleFlight = flight.id.startsWith('gf-');
+        const sourceLabel = isGoogleFlight ? 'Google Flights' : 'Blue Mountain';
+        const buttonFunction = isGoogleFlight ? 'selectGoogleFlight' : 'bookFlight';
         
         html += `
-            <div class="google-flight-card" style="background: white; border-radius: 8px; margin-bottom: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden; transition: transform 0.2s, box-shadow 0.2s;" 
+            <div data-flight-id="${flight.id}" style="background: white; border-radius: 8px; margin-bottom: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; ${isGoogleFlight ? 'border: 2px solid #4285f4;' : ''}" 
                  onmouseenter="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.15)';" 
                  onmouseleave="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)';">
                 <div style="display: flex; flex-wrap: wrap;">
@@ -298,7 +352,7 @@ function displayGoogleFlightsResults(response, searchDesc) {
                     <div style="flex: 1; padding: 1rem; display: flex; flex-wrap: wrap; align-items: center; gap: 1rem;">
                         <!-- Departure -->
                         <div style="text-align: center; min-width: 80px;">
-                            <div style="font-size: 1.3rem; font-weight: 700; color: #1a1a1a;">${flight.departureTime}</div>
+                            <div style="font-size: 1.3rem; font-weight: 700; color: #1a1a1a;">${flight.departure}</div>
                             <div style="font-size: 0.85rem; color: #666;">${flight.from}</div>
                         </div>
                         
@@ -310,12 +364,12 @@ function displayGoogleFlightsResults(response, searchDesc) {
                                 <span style="margin: 0 0.5rem; color: ${airlineColor};">→</span>
                                 <div style="height: 2px; flex: 1; background: linear-gradient(90deg, #ddd, ${airlineColor});"></div>
                             </div>
-                            <div style="color: ${flight.stops === 'Nonstop' ? '#34a853' : '#666'}; font-size: 0.75rem; margin-top: 0.25rem;">${flight.stops}</div>
+                            <div style="color: ${isNonstop ? '#34a853' : '#666'}; font-size: 0.75rem; margin-top: 0.25rem;">${stopsText}</div>
                         </div>
                         
                         <!-- Arrival -->
                         <div style="text-align: center; min-width: 80px;">
-                            <div style="font-size: 1.3rem; font-weight: 700; color: #1a1a1a;">${flight.arrivalTime}</div>
+                            <div style="font-size: 1.3rem; font-weight: 700; color: #1a1a1a;">${flight.arrival}</div>
                             <div style="font-size: 0.85rem; color: #666;">${flight.to}</div>
                         </div>
                     </div>
@@ -325,28 +379,69 @@ function displayGoogleFlightsResults(response, searchDesc) {
                         ${savings ? `<span style="background: #34a853; color: white; padding: 0.2rem 0.5rem; border-radius: 3px; font-size: 0.7rem; margin-bottom: 0.5rem;">${savings}</span>` : ''}
                         ${flight.originalPrice ? `<span style="color: #999; text-decoration: line-through; font-size: 0.85rem;">$${flight.originalPrice}</span>` : ''}
                         <span style="font-size: 1.3rem; font-weight: 700; color: #1a1a1a;">$${flight.price}</span>
-                        <span style="color: #666; font-size: 0.7rem; margin-bottom: 0.75rem;">${flight.cabinClass}</span>
-                        <button onclick="selectGoogleFlight('${flight.id}', '${flight.airline} ${flight.flightNumber}')" style="background: #4285f4; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-size: 0.85rem; width: 100%;">Select</button>
+                        <span style="color: #666; font-size: 0.7rem; margin-bottom: 0.75rem;">${flight.class}</span>
+                        <button onclick="${buttonFunction}('${flight.id}', '${flight.airline} ${flight.flightNumber}')" style="background: #4285f4; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-size: 0.85rem; width: 100%;">Select</button>
                     </div>
                 </div>
                 
                 <!-- Aircraft Info -->
-                <div style="background: #f8f9fa; padding: 0.5rem 1rem; font-size: 0.75rem; color: #666; display: flex; justify-content: space-between;">
+                <div style="background: ${isGoogleFlight ? '#e8f0fe' : '#f8f9fa'}; padding: 0.5rem 1rem; font-size: 0.75rem; color: #666; display: flex; justify-content: space-between;">
                     <span>✈️ ${flight.aircraft}</span>
-                    <span style="color: #999;">via ${flight.source}</span>
+                    <span style="color: ${isGoogleFlight ? '#4285f4' : '#999'}; font-weight: ${isGoogleFlight ? '600' : 'normal'};">💺 ${flight.availableSeats} seats • via ${sourceLabel}</span>
                 </div>
             </div>
         `;
     });
     
-    cardsContainer.innerHTML = html;
+    flightResults.innerHTML = html;
 }
 
 // Handle flight selection from Google results
 function selectGoogleFlight(flightId, flightName) {
     console.log('Selected Google flight:', flightId, flightName);
     
-    // Find the flight in the data
+    // First check if it's a Google flight (starts with 'gf-')
+    if (flightId.startsWith('gf-')) {
+        // Find the Google flight from the last search results
+        const googleFlightsCards = document.getElementById('google-flights-cards');
+        if (!googleFlightsCards) {
+            alert('Flight data not found. Please try searching again.');
+            return;
+        }
+        
+        // Get the flight data from the last simulation
+        // We need to re-run the simulation to get the data
+        // Better approach: store it in sessionStorage when displayed
+        const lastGoogleFlights = JSON.parse(sessionStorage.getItem('lastGoogleFlights') || '[]');
+        const flight = lastGoogleFlights.find(f => f.id === flightId);
+        
+        if (flight) {
+            // Convert Google flight format to our FlightData format
+            const formattedFlight = {
+                id: flight.id,
+                airline: flight.airline,
+                flightNumber: flight.flightNumber,
+                from: flight.from,
+                to: flight.to,
+                departure: flight.departureTime,
+                arrival: flight.arrivalTime,
+                duration: flight.duration,
+                class: flight.cabinClass,
+                price: flight.price,
+                aircraft: flight.aircraft,
+                availableSeats: 150 // Default value
+            };
+            
+            // Store the formatted flight in sessionStorage for the booking page
+            sessionStorage.setItem('selectedFlight', JSON.stringify(formattedFlight));
+            
+            // Redirect to booking page with the Google flight ID
+            window.location.href = `book-flight.html?id=${flightId}&source=google`;
+            return;
+        }
+    }
+    
+    // If not a Google flight, check regular FlightData
     const flight = window.FlightData?.find(f => f.id === flightId);
     
     if (!flight) {
