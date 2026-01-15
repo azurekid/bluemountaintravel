@@ -1,5 +1,11 @@
-const { DefaultAzureCredential } = require('@azure/identity');
-const { SecretClient } = require('@azure/keyvault-secrets');
+let DefaultAzureCredential;
+let SecretClient;
+try {
+  ({ DefaultAzureCredential } = require('@azure/identity'));
+  ({ SecretClient } = require('@azure/keyvault-secrets'));
+} catch (_) {
+  // Module load failures will be handled at runtime
+}
 
 function buildHeaders() {
   return {
@@ -45,6 +51,9 @@ module.exports = async function (context, req) {
 
   if (keyVaultUrl) {
     try {
+      if (!DefaultAzureCredential || !SecretClient) {
+        throw new Error('Key Vault SDK not available');
+      }
       const credential = new DefaultAzureCredential();
       client = new SecretClient(keyVaultUrl, credential);
     } catch (err) {
