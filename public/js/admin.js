@@ -77,14 +77,9 @@ async function fetchAdminSecrets(includeKeys = false) {
 
     try {
         const base = getApiBaseUrl();
-        const functionsKey = getFunctionsKey();
-        const url = `${base}/admin-secrets${includeKeys ? '?includeKeys=true' : ''}`;
+        const url = `${base}/admin${includeKeys ? '?includeKeys=true' : ''}`;
 
-        const res = await fetch(url, {
-            headers: {
-                ...(functionsKey ? { 'x-functions-key': functionsKey } : {})
-            }
-        });
+        const res = await fetch(url);
 
         if (!res.ok) {
             throw new Error(`Admin secrets API returned ${res.status}`);
