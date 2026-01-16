@@ -34,6 +34,18 @@ async function getSecretValue(client, secretName) {
   return result?.value ?? null;
 }
 
+async function safeGetSecretValue(context, client, secretName) {
+  try {
+    return await getSecretValue(client, secretName);
+  } catch (err) {
+    context.log.warn('Key Vault secret fetch failed', {
+      name: secretName,
+      message: err?.message || err
+    });
+    return null;
+  }
+}
+
 module.exports = async function (context, req) {
   const headers = buildHeaders();
 
@@ -91,42 +103,30 @@ module.exports = async function (context, req) {
     resourceGroup: process.env.KV_SECRET_RESOURCE_GROUP || 'resource-group'
   };
 
-  try {
-    const response = {
-      source: 'key-vault',
-      bmtReader: {
-        username: await getSecretValue(client, secretNames.readerUsername),
-        password: await getSecretValue(client, secretNames.readerPassword)
-      },
-      servicePrincipal: {
-        appId: await getSecretValue(client, secretNames.spAppId),
-        objectId: await getSecretValue(client, secretNames.spObjectId),
-        clientSecret: await getSecretValue(client, secretNames.spClientSecret)
-      },
-      subscriptionId: await getSecretValue(client, secretNames.subscriptionId),
-      tenantId: await getSecretValue(client, secretNames.tenantId),
-      resourceGroup: await getSecretValue(client, secretNames.resourceGroup)
-    };
+  const response = {
+    source: 'key-vault',
+    bmtReader: {
+      username: await safeGetSecretValue(context, client, secretNames.readerUsername),
+      password: await safeGetSecretValue(context, client, secretNames.readerPassword)
+    },
+    servicePrincipal: {
+      appId: await safeGetSecretValue(context, client, secretNames.spAppId),
+      objectId: await safeGetSecretValue(context, client, secretNames.spObjectId),
+      clientSecret: await safeGetSecretValue(context, client, secretNames.spClientSecret)
+    },
+    subscriptionId: await safeGetSecretValue(context, client, secretNames.subscriptionId),
+    tenantId: await safeGetSecretValue(context, client, secretNames.tenantId),
+    resourceGroup: await safeGetSecretValue(context, client, secretNames.resourceGroup)
+  };
 
-    if (includeKeys) {
-      response.functionKey = await getSecretValue(client, secretNames.functionKey);
-      response.ctfFlag = await getSecretValue(client, secretNames.ctfFlag);
-    }
-
-    context.res = {
-      status: 200,
-      headers,
-      body: JSON.stringify(response)
-    };
-  } catch (err) {
-    context.log.warn('Key Vault secret fetch failed', err?.message || err);
-    context.res = {
-      status: 500,
-      headers,
-      body: JSON.stringify({
-        status: 'error',
-        message: 'Failed to retrieve secrets from Key Vault'
-      })
-    };
+  if (includeKeys) {
+    response.functionKey = await safeGetSecretValue(context, client, secretNames.functionKey);
+    response.ctfFlag = await safeGetSecretValue(context, client, secretNames.ctfFlag);
   }
+
+  context.res = {
+    status: 200,
+    headers,
+    body: JSON.stringify(response)
+  };
 };
