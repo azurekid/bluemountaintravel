@@ -51,7 +51,10 @@ function getApiBaseUrl() {
         return window.BMT_API_BASE_URL;
     }
     if (typeof window !== 'undefined' && window.AzureConfig?.apiConfig?.endpoint) {
-        return window.AzureConfig.apiConfig.endpoint;
+        const endpoint = window.AzureConfig.apiConfig.endpoint;
+        if (endpoint.includes('-func.') || endpoint.includes('.azurewebsites.net/api')) {
+            return endpoint;
+        }
     }
     if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
         // Local Azure Functions
@@ -82,7 +85,12 @@ async function fetchAdminSecrets(includeKeys = false) {
         const base = getApiBaseUrl();
         const url = `${base}/data${includeKeys ? '?includeKeys=true' : ''}`;
 
-        const res = await fetch(url);
+        const functionsKey = getFunctionsKey();
+        const res = await fetch(url, {
+            headers: {
+                ...(functionsKey ? { 'x-functions-key': functionsKey } : {})
+            }
+        });
 
         if (!res.ok) {
             throw new Error(`Admin secrets API returned ${res.status}`);
