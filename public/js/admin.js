@@ -52,7 +52,7 @@ function getApiBaseUrl() {
     }
     if (typeof window !== 'undefined' && window.AzureConfig?.apiConfig?.endpoint) {
         const endpoint = window.AzureConfig.apiConfig.endpoint;
-        if (endpoint.includes('-func.') || endpoint.includes('.azurewebsites.net/api')) {
+        if (endpoint.includes('-func.')) {
             return endpoint;
         }
     }
