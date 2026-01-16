@@ -50,6 +50,9 @@ function getApiBaseUrl() {
     if (typeof window !== 'undefined' && window.BMT_API_BASE_URL) {
         return window.BMT_API_BASE_URL;
     }
+    if (typeof window !== 'undefined' && window.AzureConfig?.apiConfig?.endpoint) {
+        return window.AzureConfig.apiConfig.endpoint;
+    }
     if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
         // Local Azure Functions
         return 'http://localhost:7071/api';
