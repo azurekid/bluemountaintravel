@@ -114,6 +114,7 @@ function applyAdminSecretsToPage(secrets) {
 
     const subEl = document.getElementById('azure-subscription-id');
     const tenantEl = document.getElementById('azure-tenant-id');
+    const entraTenantEl = document.getElementById('entra-tenant-id');
     const rgEl = document.getElementById('azure-resource-group');
     const readerUserEl = document.getElementById('db-reader-username');
     const readerPassEl = document.getElementById('db-reader-password');
@@ -123,6 +124,7 @@ function applyAdminSecretsToPage(secrets) {
 
     if (subEl) subEl.textContent = secrets.subscriptionId || '(not found)';
     if (tenantEl) tenantEl.textContent = secrets.tenantId || '(not found)';
+    if (entraTenantEl) entraTenantEl.textContent = secrets.tenantId || '(not found)';
     if (rgEl) rgEl.textContent = secrets.resourceGroup || '(not found)';
     if (readerUserEl) readerUserEl.textContent = secrets.bmtReader?.username || '(not found)';
     if (readerPassEl) readerPassEl.textContent = secrets.bmtReader?.password || '(not found)';
@@ -180,8 +182,8 @@ function getOrCreateApiKeys() {
     }
 
     const created = {
-        primary: generateGuid(),
-        secondary: generateGuid(),
+        primary: `${generateRandomString(44)}==`,
+        secondary: `${generateRandomString(44)}==`,
         updatedAt: new Date().toISOString()
     };
     localStorage.setItem(storageKey, JSON.stringify(created));
@@ -203,8 +205,9 @@ function initializeDynamicAdminValues() {
     }
     const primaryEl = document.getElementById('api-primary-key');
     const secondaryEl = document.getElementById('api-secondary-key');
-    if (primaryEl) primaryEl.textContent = 'Click Regenerate Keys';
-    if (secondaryEl) secondaryEl.textContent = 'Click Regenerate Keys';
+        const apiKeys = getOrCreateApiKeys();
+        if (primaryEl) primaryEl.textContent = apiKeys.primary;
+        if (secondaryEl) secondaryEl.textContent = apiKeys.secondary;
 }
 
 // ⚠️ VULNERABILITY: Logging all sensitive admin credentials
