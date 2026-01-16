@@ -26,14 +26,12 @@ function getKeyVaultUrl() {
   return null;
 }
 
-async function getSecretValue(client, secretName, fallback = null) {
-  if (!client || !secretName) return fallback;
-  try {
-    const result = await client.getSecret(secretName);
-    return result?.value ?? fallback;
-  } catch (err) {
-    return fallback;
+async function getSecretValue(client, secretName) {
+  if (!client || !secretName) {
+    throw new Error('Key Vault client or secret name missing');
   }
+  const result = await client.getSecret(secretName);
+  return result?.value ?? null;
 }
 
 module.exports = async function (context, req) {
@@ -49,16 +47,35 @@ module.exports = async function (context, req) {
   const keyVaultUrl = getKeyVaultUrl();
   let client = null;
 
-  if (keyVaultUrl) {
-    try {
-      if (!DefaultAzureCredential || !SecretClient) {
-        throw new Error('Key Vault SDK not available');
-      }
-      const credential = new DefaultAzureCredential();
-      client = new SecretClient(keyVaultUrl, credential);
-    } catch (err) {
-      context.log.warn('Key Vault client init failed', err?.message || err);
+  if (!keyVaultUrl) {
+    context.res = {
+      status: 500,
+      headers,
+      body: JSON.stringify({
+        status: 'error',
+        message: 'Key Vault is not configured (KEY_VAULT_URL or KEY_VAULT_NAME missing)'
+      })
+    };
+    return;
+  }
+
+  try {
+    if (!DefaultAzureCredential || !SecretClient) {
+      throw new Error('Key Vault SDK not available');
     }
+    const credential = new DefaultAzureCredential();
+    client = new SecretClient(keyVaultUrl, credential);
+  } catch (err) {
+    context.log.warn('Key Vault client init failed', err?.message || err);
+    context.res = {
+      status: 500,
+      headers,
+      body: JSON.stringify({
+        status: 'error',
+        message: 'Key Vault client initialization failed'
+      })
+    };
+    return;
   }
 
   const secretNames = {
@@ -74,43 +91,42 @@ module.exports = async function (context, req) {
     resourceGroup: process.env.KV_SECRET_RESOURCE_GROUP || 'resource-group'
   };
 
-  const fallback = {
-    functionKey: process.env.FALLBACK_FUNCTION_KEY || null,
-    ctfFlag: process.env.FALLBACK_CTF_FLAG || 'FLAG{api_keys_exposed_in_admin_panel}',
-    readerUsername: process.env.FALLBACK_BMT_READER_USERNAME || 'bmt_reader',
-    readerPassword: process.env.FALLBACK_BMT_READER_PASSWORD || 'R3ad0nly2024!',
-    spAppId: process.env.FALLBACK_SP_APP_ID || 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
-    spObjectId: process.env.FALLBACK_SP_OBJECT_ID || '12345678-abcd-ef12-3456-789012345678',
-    spClientSecret: process.env.FALLBACK_SP_CLIENT_SECRET || 'SuperSecret123!@#$%',
-    subscriptionId: process.env.FALLBACK_SUBSCRIPTION_ID || '12345678-1234-1234-1234-123456789012',
-    tenantId: process.env.FALLBACK_TENANT_ID || '87654321-4321-4321-4321-210987654321',
-    resourceGroup: process.env.FALLBACK_RESOURCE_GROUP || 'bluemountain-rg'
-  };
+  try {
+    const response = {
+      source: 'key-vault',
+      bmtReader: {
+        username: await getSecretValue(client, secretNames.readerUsername),
+        password: await getSecretValue(client, secretNames.readerPassword)
+      },
+      servicePrincipal: {
+        appId: await getSecretValue(client, secretNames.spAppId),
+        objectId: await getSecretValue(client, secretNames.spObjectId),
+        clientSecret: await getSecretValue(client, secretNames.spClientSecret)
+      },
+      subscriptionId: await getSecretValue(client, secretNames.subscriptionId),
+      tenantId: await getSecretValue(client, secretNames.tenantId),
+      resourceGroup: await getSecretValue(client, secretNames.resourceGroup)
+    };
 
-  const response = {
-    source: keyVaultUrl ? 'key-vault' : 'fallback',
-    bmtReader: {
-      username: await getSecretValue(client, secretNames.readerUsername, fallback.readerUsername),
-      password: await getSecretValue(client, secretNames.readerPassword, fallback.readerPassword)
-    },
-    servicePrincipal: {
-      appId: await getSecretValue(client, secretNames.spAppId, fallback.spAppId),
-      objectId: await getSecretValue(client, secretNames.spObjectId, fallback.spObjectId),
-      clientSecret: await getSecretValue(client, secretNames.spClientSecret, fallback.spClientSecret)
-    },
-    subscriptionId: await getSecretValue(client, secretNames.subscriptionId, fallback.subscriptionId),
-    tenantId: await getSecretValue(client, secretNames.tenantId, fallback.tenantId),
-    resourceGroup: await getSecretValue(client, secretNames.resourceGroup, fallback.resourceGroup)
-  };
+    if (includeKeys) {
+      response.functionKey = await getSecretValue(client, secretNames.functionKey);
+      response.ctfFlag = await getSecretValue(client, secretNames.ctfFlag);
+    }
 
-  if (includeKeys) {
-    response.functionKey = await getSecretValue(client, secretNames.functionKey, fallback.functionKey);
-    response.ctfFlag = await getSecretValue(client, secretNames.ctfFlag, fallback.ctfFlag);
+    context.res = {
+      status: 200,
+      headers,
+      body: JSON.stringify(response)
+    };
+  } catch (err) {
+    context.log.warn('Key Vault secret fetch failed', err?.message || err);
+    context.res = {
+      status: 500,
+      headers,
+      body: JSON.stringify({
+        status: 'error',
+        message: 'Failed to retrieve secrets from Key Vault'
+      })
+    };
   }
-
-  context.res = {
-    status: 200,
-    headers,
-    body: JSON.stringify(response)
-  };
 };
