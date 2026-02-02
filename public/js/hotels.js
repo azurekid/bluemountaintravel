@@ -12,9 +12,8 @@ async function fetchGoogleHotelsResults(location, checkIn, checkOut, localHotels
     const hotelResults = document.getElementById('hotel-results');
     if (!hotelResults) return;
     
-    // Show container with loading state
-    googleContainer.style.display = 'block';
-    cardsContainer.innerHTML = `
+    // Show loading state
+    hotelResults.innerHTML = `
         <div style="text-align: center; padding: 2rem;">
             <div style="font-size: 2rem; margin-bottom: 1rem;">🔄</div>
             <p style="color: #4285f4; font-weight: 500;">Searching Google Hotels for "${location || 'all locations'}"...</p>
@@ -22,7 +21,7 @@ async function fetchGoogleHotelsResults(location, checkIn, checkOut, localHotels
     `;
     
     // Scroll to results
-    googleContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    hotelResults.scrollIntoView({ behavior: 'smooth', block: 'start' });
     
     try {
         // Simulate API call delay
@@ -193,6 +192,16 @@ function displayMergedHotels(hotels, description) {
     const hotelResults = document.getElementById('hotel-results');
     if (!hotelResults) return;
     
+    // Hotel image URLs (legacy fallback for local hotels)
+    const hotelImages = {
+        'HT001': 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800&q=80',
+        'HT002': 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80',
+        'HT003': 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&q=80',
+        'HT004': 'https://images.unsplash.com/photo-1455587734955-081b22074882?w=800&q=80',
+        'HT005': 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80',
+        'HT006': 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&q=80'
+    };
+    
     let html = `
         <div style="margin-bottom: 1.5rem; background: linear-gradient(135deg, #4285f4 0%, #34a853 100%); padding: 1rem; border-radius: 8px;">
             <p style="margin: 0; color: white; font-weight: 600;">🏨 ${description}</p>
@@ -207,13 +216,14 @@ function displayMergedHotels(hotels, description) {
         const amenitiesHtml = (hotel.amenities || []).slice(0, 3).map(a => 
             `<span style="background: #e8f0fe; color: #4285f4; padding: 0.2rem 0.5rem; border-radius: 3px; font-size: 0.75rem;">${a}</span>`
         ).join(' ');
+        const imageUrl = hotel.photoUrl || hotel.imageUrl || hotelImages[hotel.id] || 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80';
         
         html += `
-            <div data-hotel-id="${hotel.id}" style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: transform 0.2s, box-shadow 0.2s; ${isGoogleHotel ? 'border: 2px solid #4285f4;' : ''}" 
-                 onmouseenter="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.15)';" 
+            <div class="hotel-result-card" data-hotel-id="${hotel.id}" style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: transform 0.2s, box-shadow 0.2s; ${isGoogleHotel ? 'border: 2px solid #4285f4;' : ''}"
+                 onmouseenter="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.15)';"
                  onmouseleave="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)';">
                 <div style="position: relative;">
-                    ${hotel.imageUrl ? `<img src="${hotel.imageUrl}" alt="${hotel.name}" style="width: 100%; height: 160px; object-fit: cover;" loading="lazy" />` : '<div style="width: 100%; height: 160px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>'}
+                    <img src="${imageUrl}" alt="${hotel.name}" style="width: 100%; height: 160px; object-fit: cover;" loading="lazy" />
                     ${hotel.dealType ? `<span style="position: absolute; top: 10px; left: 10px; background: #34a853; color: white; padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">${hotel.dealType}</span>` : ''}
                     <span style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.7rem;">via ${sourceLabel}</span>
                 </div>
@@ -233,7 +243,7 @@ function displayMergedHotels(hotels, description) {
                             <span style="color: #1a1a1a; font-weight: 700; font-size: 1.1rem;">$${hotel.price}</span>
                             <span style="color: #666; font-size: 0.75rem;">/night</span>
                         </div>
-                        <button onclick="${isGoogleHotel ? 'selectGoogleHotel' : 'viewHotelDetails'}('${hotel.id}', '${hotel.name}')" style="background: #4285f4; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-size: 0.85rem;">Select</button>
+                        <button onclick="bookHotelFromSearch('${hotel.id}')" style="background: #4285f4; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-size: 0.85rem;">Select</button>
                     </div>
                 </div>
             </div>
@@ -244,22 +254,35 @@ function displayMergedHotels(hotels, description) {
     hotelResults.innerHTML = html;
 }
 
-// Handle hotel selection from Google results
-function selectGoogleHotel(hotelId, hotelName) {
-    console.log('Selected Google hotel:', hotelId, hotelName);
+// Handle hotel selection from search results (works for both Google and local hotels)
+function bookHotelFromSearch(hotelId) {
+    console.log('Booking hotel from search:', hotelId);
     
-    // Get the hotel data from merged hotels in sessionStorage
+    // Try to find hotel in merged hotels first (from search)
     const allMergedHotels = JSON.parse(sessionStorage.getItem('allMergedHotels') || '[]');
-    const hotel = allMergedHotels.find(h => h.id === hotelId);
+    let hotel = allMergedHotels.find(h => h.id === hotelId);
+    
+    // Fall back to HotelData if not found in merged
+    if (!hotel && window.HotelData) {
+        hotel = window.HotelData.find(h => h.id === hotelId);
+    }
     
     if (hotel) {
         // Store hotel data for booking flow
         sessionStorage.setItem('selectedHotel', JSON.stringify(hotel));
-        alert(`You selected: ${hotelName}\n\nHotel booking integration coming soon!`);
+        // Redirect to booking page
+        window.location.href = `book-hotel.html?id=${hotelId}`;
     } else {
         alert('Hotel not found. Please try selecting again.');
     }
 }
+
+// Make bookHotelFromSearch available globally
+window.bookHotelFromSearch = bookHotelFromSearch;
+
+// Legacy function for backwards compatibility
+function selectGoogleHotel(hotelId, hotelName) {
+    bookHotelFromSearch(hotelId);
 }
 
 // Initialize date fields with minimum dates
@@ -432,7 +455,7 @@ function displayHotels(hotelsToDisplay) {
         const discountPercent = hasDiscount ? Math.round((1 - hotel.price / originalPrice) * 100) : null;
         
         html += `
-            <div data-hotel-id="${hotel.id}" style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: transform 0.2s, box-shadow 0.2s;" 
+            <div class="hotel-result-card" data-hotel-id="${hotel.id}" style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: transform 0.2s, box-shadow 0.2s;" 
                  onmouseenter="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.15)';" 
                  onmouseleave="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)';">
                 <div style="position: relative;">
@@ -486,7 +509,7 @@ function applyFilters() {
     
     console.log('Active filters:', { priceFilters, ratingFilters, amenityFilters, locationFilters });
     
-    const hotelCards = document.querySelectorAll('.hotel-card');
+    const hotelCards = document.querySelectorAll('.hotel-result-card');
 
     const hotelsById = new Map((window.HotelData || []).map(h => [h.id, h]));
 
